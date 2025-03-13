@@ -105,7 +105,6 @@ export class RemoteTouchpad extends BaseRemoteElement {
 	}
 
 	async onPointerUp(e: PointerEvent) {
-		super.onPointerUp();
 		if (
 			!this.direction &&
 			this.renderTemplate(

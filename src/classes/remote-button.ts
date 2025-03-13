@@ -113,7 +113,6 @@ export class RemoteButton extends BaseRemoteElement {
 	}
 
 	async onPointerUp(e: PointerEvent) {
-		super.onPointerUp();
 		if (!this.swiping && this.pointers) {
 			if (
 				this.renderTemplate(

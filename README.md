@@ -2072,8 +2072,11 @@ custom_actions:
         border-radius: 4px;
         --height: 36px;
         --thumb-width: 18px;
-        --color: rgb({{ state_attr(config.entity, "rgb_color") }});
         --thumb-border-radius: 4px;
+        {% set rgb_color = state_attr(config.entity, "rgb_color") %}
+        {% if rgb_color %}
+        --color: rgb({{ rgb_color }});
+        {% endif %}
       }
       .background {
         height: 24px;

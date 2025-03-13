@@ -858,16 +858,8 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	buildLabel(label?: string, context?: object) {
-		if (label) {
-			const text: string = this.renderTemplate(
-				label as string,
-				context,
-			) as string;
-			if (text) {
-				return html`<pre class="label">${text}</pre>`;
-			}
-		}
-		return '';
+		const rendered = this.renderTemplate(label as string, context);
+		return rendered ? html`<pre class="label">${rendered}</pre>` : '';
 	}
 
 	buildRipple() {
@@ -875,10 +867,11 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	buildStyles(styles?: string, context?: object) {
-		return styles
+		const rendered = this.renderTemplate(styles as string, context);
+		return rendered
 			? html`
 					<style>
-						${(this.renderTemplate(styles, context) as string)
+						${(rendered as string)
 							.replace(/ !important/g, '')
 							.replace(/;/g, ' !important;')}
 					</style>
@@ -898,12 +891,7 @@ export class BaseRemoteElement extends LitElement {
 		}
 	}
 
-	onPointerUp(_e?: PointerEvent) {
-		const ripple = this.shadowRoot?.querySelector(
-			'md-ripple',
-		) as unknown as { endPressAnimation?: () => void };
-		ripple?.endPressAnimation?.();
-	}
+	onPointerUp(_e: PointerEvent) {}
 
 	onPointerMove(e: PointerEvent) {
 		if (this.currentX && this.currentY && e.isPrimary) {
@@ -917,7 +905,6 @@ export class BaseRemoteElement extends LitElement {
 	onPointerCancel(_e: PointerEvent) {
 		this.endAction();
 		this.swiping = true;
-		this.onPointerUp();
 	}
 
 	onPointerLeave(e: PointerEvent) {
@@ -933,6 +920,14 @@ export class BaseRemoteElement extends LitElement {
 		}
 	}
 
+	onTouchEnd(_e?: TouchEvent) {
+		// Stuck ripple fix
+		const ripple = this.shadowRoot?.querySelector(
+			'md-ripple',
+		) as unknown as { endPressAnimation?: () => void };
+		ripple?.endPressAnimation?.();
+	}
+
 	confirmationFailed() {
 		clearTimeout(this.getValueFromHassTimer);
 		this.getValueFromHass = true;
@@ -941,6 +936,7 @@ export class BaseRemoteElement extends LitElement {
 
 	firstUpdated() {
 		this.addEventListener('confirmation-failed', this.confirmationFailed);
+		this.addEventListener('touchend', this.onTouchEnd);
 	}
 
 	static get styles(): CSSResult | CSSResult[] {

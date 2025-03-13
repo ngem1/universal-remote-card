@@ -48,7 +48,7 @@ export class RemoteSlider extends BaseRemoteElement {
 	onInput(e: InputEvent) {
 		const slider = e.currentTarget as HTMLInputElement;
 
-		if (!this.swiping && this.initialX && this.initialY) {
+		if (!this.swiping && this.pointers) {
 			clearTimeout(this.getValueFromHassTimer);
 			this.getValueFromHass = false;
 			this.value = slider.value;
@@ -131,12 +131,11 @@ export class RemoteSlider extends BaseRemoteElement {
 	}
 
 	async onPointerUp(_e: PointerEvent) {
-		super.onPointerUp();
 		this.setThumbOffset();
 		this.showTooltip = false;
 		this.setValue();
 
-		if (!this.swiping && this.initialX && this.initialY) {
+		if (!this.swiping && this.pointers) {
 			if (!this.newValue && this.newValue != 0) {
 				this.newValue = Number(this.value);
 			}
@@ -163,7 +162,7 @@ export class RemoteSlider extends BaseRemoteElement {
 		super.onPointerMove(e);
 
 		// Disable swipe detection for vertical sliders
-		if (!this.vertical && this.initialX && this.initialY) {
+		if (!this.vertical && this.pointers) {
 			// Only consider significant enough movement
 			const sensitivity = 50;
 			if (
@@ -320,8 +319,8 @@ export class RemoteSlider extends BaseRemoteElement {
 
 		return html`
 			<input
+				class="slider"
 				type="range"
-				class="${this.sliderOn ? 'slider' : 'slider off'}"
 				min="${this.range[0]}"
 				max="${this.range[1]}"
 				step=${this.step}
@@ -412,7 +411,10 @@ export class RemoteSlider extends BaseRemoteElement {
 		);
 
 		return html`
-			<div class="container" style=${styleMap(containerStyle)}>
+			<div
+				class="container ${this.sliderOn ? 'on' : 'off'}"
+				style=${styleMap(containerStyle)}
+			>
 				${this.buildBackground()}${this.buildSlider(undefined, context)}
 				${this.buildIcon(this.config.icon, context)}
 				${this.buildLabel(this.config.label, context)}
@@ -482,8 +484,7 @@ export class RemoteSlider extends BaseRemoteElement {
 					);
 				}
 
-				.slider,
-				.off {
+				.slider {
 					position: absolute;
 					appearance: none;
 					-webkit-appearance: none;
@@ -527,10 +528,10 @@ export class RemoteSlider extends BaseRemoteElement {
 					border-radius: var(--thumb-border-radius, var(--height));
 				}
 
-				.off::-webkit-slider-thumb {
+				.off > ::-webkit-slider-thumb {
 					visibility: hidden;
 				}
-				.off::-moz-range-thumb {
+				.off > ::-moz-range-thumb {
 					visibility: hidden;
 				}
 
