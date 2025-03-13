@@ -59,10 +59,8 @@ export class RemoteButton extends BaseRemoteElement {
 	}
 
 	async onPointerDown(e: PointerEvent) {
-		this.swiping = false;
-
 		super.onPointerDown(e);
-		this.cancelRippleToggle();
+		this.swiping = false;
 
 		if (!this.swiping) {
 			if (
@@ -115,6 +113,7 @@ export class RemoteButton extends BaseRemoteElement {
 	}
 
 	async onPointerUp(e: PointerEvent) {
+		super.onPointerUp();
 		if (!this.swiping && this.pointers) {
 			if (
 				this.renderTemplate(
@@ -141,7 +140,6 @@ export class RemoteButton extends BaseRemoteElement {
 				await this.onClick(e);
 			}
 		}
-		this.toggleRipple();
 	}
 
 	onPointerMove(e: PointerEvent) {

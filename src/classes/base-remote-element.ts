@@ -27,12 +27,6 @@ export class BaseRemoteElement extends LitElement {
 	@property() config!: IElementConfig;
 	@property() icons: IIconConfig[] = [];
 
-	@state() renderRipple = true;
-	@state() renderRippleOff?: ReturnType<typeof setTimeout>;
-	@state() renderRippleOn?: ReturnType<typeof setTimeout>;
-	@state() renderRippleTransition?: ReturnType<typeof setTimeout>;
-	@state() rippleTransition?: boolean;
-
 	@state() value?: string | number | boolean = 0;
 	entityId?: string;
 	valueAttribute?: string;
@@ -877,13 +871,7 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	buildRipple() {
-		return this.renderRipple
-			? html`<md-ripple
-					class="${this.renderRippleTransition
-						? `transition-${this.rippleTransition ? 'on' : 'off'}`
-						: ''}"
-			  ></md-ripple>`
-			: '';
+		return html`<md-ripple></md-ripple>`;
 	}
 
 	buildStyles(styles?: string, context?: object) {
@@ -910,7 +898,12 @@ export class BaseRemoteElement extends LitElement {
 		}
 	}
 
-	onPointerUp(_e: PointerEvent) {}
+	onPointerUp(_e?: PointerEvent) {
+		const ripple = this.shadowRoot?.querySelector(
+			'md-ripple',
+		) as unknown as { endPressAnimation?: () => void };
+		ripple?.endPressAnimation?.();
+	}
 
 	onPointerMove(e: PointerEvent) {
 		if (this.currentX && this.currentY && e.isPrimary) {
@@ -924,7 +917,7 @@ export class BaseRemoteElement extends LitElement {
 	onPointerCancel(_e: PointerEvent) {
 		this.endAction();
 		this.swiping = true;
-		this.toggleRipple();
+		this.onPointerUp();
 	}
 
 	onPointerLeave(e: PointerEvent) {
@@ -938,30 +931,6 @@ export class BaseRemoteElement extends LitElement {
 			e.preventDefault();
 			e.stopPropagation();
 		}
-	}
-
-	toggleRipple() {
-		this.cancelRippleToggle();
-		this.renderRippleTransition = setTimeout(
-			() => (this.rippleTransition = false),
-			400,
-		);
-		this.renderRippleOff = setTimeout(
-			() => (this.renderRipple = false),
-			800,
-		);
-		this.renderRippleOn = setTimeout(() => this.cancelRippleToggle(), 850);
-	}
-
-	cancelRippleToggle() {
-		clearTimeout(this.renderRippleOff);
-		clearTimeout(this.renderRippleOn);
-		clearTimeout(this.renderRippleTransition);
-		this.renderRippleOff = undefined;
-		this.renderRippleOn = undefined;
-		this.renderRippleTransition = undefined;
-		this.rippleTransition = true;
-		this.renderRipple = true;
 	}
 
 	confirmationFailed() {
@@ -1013,15 +982,6 @@ export class BaseRemoteElement extends LitElement {
 					--ha-ripple-pressed-color,
 					var(--ha-ripple-color, var(--secondary-text-color))
 				);
-			}
-
-			md-ripple.transition-on {
-				opacity: 1
-				transition: opacity 375ms linear;
-			}
-			md-ripple.transition-off {
-				opacity: 0;
-				transition: opacity 375ms linear;
 			}
 
 			.icon {

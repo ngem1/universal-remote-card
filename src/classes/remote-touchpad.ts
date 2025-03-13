@@ -79,7 +79,6 @@ export class RemoteTouchpad extends BaseRemoteElement {
 
 	async onPointerDown(e: PointerEvent) {
 		super.onPointerDown(e);
-		this.cancelRippleToggle();
 		this.holdStart = true;
 		this.swiping = false;
 
@@ -106,6 +105,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 	}
 
 	async onPointerUp(e: PointerEvent) {
+		super.onPointerUp();
 		if (
 			!this.direction &&
 			this.renderTemplate(
@@ -139,7 +139,6 @@ export class RemoteTouchpad extends BaseRemoteElement {
 		} else if (!this.holdMove && (!('isPrimary' in e) || e.isPrimary)) {
 			await this.onClick(e);
 		}
-		this.toggleRipple();
 	}
 
 	async onPointerMove(e: PointerEvent) {
