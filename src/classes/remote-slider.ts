@@ -344,7 +344,6 @@ export class RemoteSlider extends BaseRemoteElement {
 			this.currentValue = this.value;
 		}
 		const context = {
-			VALUE: this.getValueFromHass ? this.value : this.currentValue,
 			value: this.getValueFromHass ? this.value : this.currentValue,
 		};
 
