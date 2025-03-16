@@ -198,9 +198,14 @@ export class BaseKeyboard extends BaseDialog {
 						() => (this.enabled = true),
 						100,
 					);
-					setTimeout(() => this.textarea?.focus(), 500);
 				},
 			);
+		}
+		if (
+			changedProperties.has('enabled') &&
+			!changedProperties.get('enabled')
+		) {
+			this.textarea?.focus();
 		}
 	}
 
