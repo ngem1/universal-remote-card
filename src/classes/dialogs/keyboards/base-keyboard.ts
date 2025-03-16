@@ -1,5 +1,5 @@
 import { CSSResult, PropertyValues, css, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 
 import { IAction } from '../../../models/interfaces';
 import { querySelectorAsync } from '../../../utils';
@@ -7,6 +7,8 @@ import { BaseDialog } from '../base-dialog';
 
 export class BaseKeyboard extends BaseDialog {
 	@property() action!: IAction;
+	@state() enabled: boolean = false;
+	enabledTimer?: ReturnType<typeof setTimeout> = undefined;
 
 	textarea?: HTMLTextAreaElement;
 	onKeyDownFired: boolean = false;
@@ -116,6 +118,9 @@ export class BaseKeyboard extends BaseDialog {
 			this.textarea.blur();
 		}
 		this.textarea = undefined;
+		clearTimeout(this.enabledTimer);
+		this.enabledTimer = undefined;
+		this.enabled = false;
 
 		this.dispatchEvent(
 			new Event('dialog-close', {
@@ -164,10 +169,12 @@ export class BaseKeyboard extends BaseDialog {
 		placeholder = this.action.keyboard_prompt ?? placeholder;
 
 		const textarea = html`<textarea
+			?disabled=${!this.enabled}
 			spellcheck="false"
 			autocorrect="off"
 			autocomplete="off"
 			autocapitalize="off"
+			autofocus="false"
 			placeholder="${placeholder}"
 			@input=${inputHandler}
 			@keydown=${keyDownHandler}
@@ -187,7 +194,11 @@ export class BaseKeyboard extends BaseDialog {
 			querySelectorAsync(this.shadowRoot!, 'textarea').then(
 				(textarea) => {
 					this.textarea = textarea as HTMLTextAreaElement;
-					setTimeout(() => this.textarea?.focus(), 100);
+					this.enabledTimer = setTimeout(
+						() => (this.enabled = true),
+						100,
+					);
+					setTimeout(() => this.textarea?.focus(), 500);
 				},
 			);
 		}
