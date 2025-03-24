@@ -187,6 +187,7 @@ export class RemoteDialog extends LitElement {
 				position: fixed;
 				border: none;
 				outline: none;
+				color: var(--primary-text-color);
 				background: var(
 					--ha-card-background,
 					var(--card-background-color, #fff)
@@ -195,22 +196,22 @@ export class RemoteDialog extends LitElement {
 			}
 			dialog[open] {
 				pointer-events: all;
-				transform: translateY(0);
-				height: fit-content;
+				translate: 0 0;
+				scale: 1 1;
 				opacity: 1;
 				transition:
-					transform 0.5s cubic-bezier(0.3, 0, 0, 1),
-					height 0.5s cubic-bezier(0.2, 0, 0, 1),
+					translate 0.5s cubic-bezier(0.3, 0, 0, 1),
+					scale 0.5s cubic-bezier(0.2, 0, 0, 1),
 					opacity 0.05s linear;
 			}
 			dialog.closed {
-				transform: translateY(-50px) !important;
-				height: 0 !important;
-				opacity: 0 !important;
+				translate: 0 -100px;
+				scale: 1 0;
+				opacity: 0;
 				transition:
-					transform 0.15s cubic-bezier(0.3, 0, 0, 1),
-					height 0.15s cubic-bezier(0.3, 0, 0.8, 0.15),
-					opacity 0.05s linear 0.025s !important;
+					translate 0.15s cubic-bezier(0.3, 0, 0, 1),
+					scale 0.15s cubic-bezier(0.3, 0, 0.8, 0.15),
+					opacity 0.05s linear 0.025s;
 			}
 
 			dialog::backdrop {
