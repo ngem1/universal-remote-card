@@ -1610,7 +1610,7 @@ custom_actions:
     icon: mdi:chevron-up
     styles: |-
       .icon {
-        transform:rotate(-45deg);
+        transform: rotate(-45deg);
         color: rgba(96,96,96,0.8);
       }
       button {
@@ -1626,7 +1626,7 @@ custom_actions:
     icon: mdi:chevron-down
     styles: |-
       .icon {
-        transform:rotate(-45deg);
+        transform: rotate(-45deg);
         color: rgba(96,96,96,0.8);
       }
       button {
@@ -1642,7 +1642,7 @@ custom_actions:
     icon: mdi:chevron-left
     styles: |-
       .icon {
-        transform:rotate(-45deg);
+        transform: rotate(-45deg);
         color: rgba(96,96,96,0.8);
       }
       button {
@@ -1658,7 +1658,7 @@ custom_actions:
     icon: mdi:chevron-right
     styles: |-
       .icon {
-        transform:rotate(-45deg);
+        transform: rotate(-45deg);
         color: rgba(96,96,96,0.8);
       }
       button {

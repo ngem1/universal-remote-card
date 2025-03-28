@@ -17,6 +17,7 @@ export class RemoteDialog extends LitElement {
 	@state() open: boolean = false;
 	@state() fadedIn: boolean = false;
 	fadedInTimer?: ReturnType<typeof setTimeout> = undefined;
+	tabIndex = -1;
 
 	showDialog(config: IDialog) {
 		this.config = config;
@@ -42,6 +43,16 @@ export class RemoteDialog extends LitElement {
 		clearTimeout(this.fadedInTimer);
 		this.fadedIn = false;
 		this.open = false;
+
+		if (e?.type == 'cancel' && this.config.type == 'confirmation') {
+			const event = new Event('confirmation-result', {
+				bubbles: true,
+				composed: true,
+			});
+			event.detail = false;
+
+			this.dispatchEvent(event);
+		}
 
 		const dialog = this.shadowRoot?.querySelector('dialog');
 		if (dialog) {

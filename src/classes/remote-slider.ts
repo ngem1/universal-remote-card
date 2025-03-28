@@ -320,6 +320,7 @@ export class RemoteSlider extends BaseRemoteElement {
 		return html`
 			<input
 				class="slider"
+				tabindex="-1"
 				type="range"
 				min="${this.range[0]}"
 				max="${this.range[1]}"
@@ -378,7 +379,6 @@ export class RemoteSlider extends BaseRemoteElement {
 
 		this.vertical =
 			this.renderTemplate(this.config.vertical ?? false, context) == true;
-		this.resizeObserver.observe(this);
 
 		// Thumb width, height, and vertical slider style adjustments
 		const containerStyle: StyleInfo = {};
@@ -423,6 +423,51 @@ export class RemoteSlider extends BaseRemoteElement {
 		`;
 	}
 
+	async onKeyDown(e: KeyboardEvent) {
+		const keys = this.vertical
+			? ['ArrowDown', 'ArrowUp']
+			: ['ArrowLeft', 'ArrowRight'];
+		if (keys.includes(e.key)) {
+			e.preventDefault();
+			this.getValueFromHass = false;
+			this.showTooltip = true;
+			this.currentValue = Math.min(
+				Math.max(
+					parseFloat(
+						(this.currentValue ??
+							this.value ??
+							this.range[0]) as string,
+					) +
+						(e.key == keys[!this.vertical && this.rtl ? 1 : 0]
+							? -1
+							: 1) *
+							this.step,
+					this.range[0],
+				),
+				this.range[1],
+			);
+		}
+	}
+
+	async onKeyUp(e: KeyboardEvent) {
+		const keys = this.vertical
+			? ['ArrowDown', 'ArrowUp']
+			: ['ArrowLeft', 'ArrowRight'];
+		if (keys.includes(e.key)) {
+			e.preventDefault();
+			this.showTooltip = false;
+			this.value = this.currentValue;
+			await this.sendAction('tap_action');
+			this.endAction();
+			this.resetGetValueFromHass();
+		}
+	}
+
+	connectedCallback(): void {
+		super.connectedCallback();
+		this.resizeObserver.observe(this);
+	}
+
 	disconnectedCallback(): void {
 		super.disconnectedCallback();
 		this.resizeObserver.disconnect();
@@ -451,9 +496,14 @@ export class RemoteSlider extends BaseRemoteElement {
 					font-size: inherit;
 					color: inherit;
 					pointer-events: none;
+					transition: box-shadow 180ms ease-in-out;
 
 					--color: var(--primary-text-color);
 					--height: 48px;
+				}
+				:host(:focus-visible) {
+					box-shadow: 0 0 0 2px
+						var(--icon-color, var(--primary-text-color));
 				}
 
 				.container {
@@ -472,7 +522,7 @@ export class RemoteSlider extends BaseRemoteElement {
 
 				.background {
 					position: absolute;
-					width: inherit;
+					width: 100%;
 					height: var(--background-height, 100%);
 					background: var(
 						--background,
@@ -494,6 +544,9 @@ export class RemoteSlider extends BaseRemoteElement {
 					background: none;
 					overflow: hidden;
 					touch-action: pan-y;
+				}
+				.slider:focus-visible {
+					outline: none;
 				}
 
 				.slider::-webkit-slider-thumb {

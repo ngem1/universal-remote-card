@@ -191,6 +191,7 @@ export class RemoteButton extends BaseRemoteElement {
 		this.setValue();
 		return html`
 			<button
+				tabindex="-1"
 				@pointerdown=${this.onPointerDown}
 				@pointerup=${this.onPointerUp}
 				@pointermove=${this.onPointerMove}
@@ -234,6 +235,27 @@ export class RemoteButton extends BaseRemoteElement {
 					align-items: center;
 					-webkit-tap-highlight-color: transparent;
 					-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				}
+				button:focus-visible {
+					outline: none;
+				}
+				button::after {
+					content: '';
+					position: absolute;
+					height: var(--ha-ripple-height, 100%);
+					width: var(--ha-ripple-width, 100%);
+					top: var(--ha-ripple-top, 0);
+					left: var(--ha-ripple-left, 0);
+					border-radius: var(--size, 48px);
+					background: var(
+						--ha-ripple-pressed-color,
+						var(--ha-ripple-color, var(--secondary-text-color))
+					);
+					opacity: 0;
+					transition: opacity 180ms ease-in-out;
+				}
+				:host(:focus-visible) button::after {
+					opacity: var(--ha-ripple-pressed-opacity, 0.12);
 				}
 			`,
 		];

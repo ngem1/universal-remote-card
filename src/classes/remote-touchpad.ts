@@ -304,6 +304,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 		this.setValue();
 		return html`
 			<toucharea
+				tabindex="0"
 				@pointerdown=${this.onPointerDown}
 				@pointerup=${this.onPointerUp}
 				@pointermove=${this.onPointerMove}
@@ -353,6 +354,104 @@ export class RemoteTouchpad extends BaseRemoteElement {
 		`;
 	}
 
+	async onKeyDown(e: KeyboardEvent) {
+		if (
+			[
+				'Enter',
+				' ',
+				'ArrowUp',
+				'ArrowDown',
+				'ArrowLeft',
+				'ArrowRight',
+			].includes(e.key)
+		) {
+			e.preventDefault();
+			if (!e.repeat) {
+				if (e.shiftKey) {
+					this.pointers++;
+				}
+				this.onPointerDown(
+					new window.PointerEvent('pointerdown', {
+						...e,
+						isPrimary: true,
+						clientX: 64,
+						clientY: 64,
+					}),
+				);
+				if (
+					[
+						'ArrowUp',
+						'ArrowDown',
+						'ArrowLeft',
+						'ArrowRight',
+					].includes(e.key)
+				) {
+					e.preventDefault();
+					if (!e.repeat) {
+						this.onPointerMove(
+							new window.PointerEvent('pointermove', {
+								...e,
+								isPrimary: true,
+								clientX:
+									64 +
+									(e.key == 'ArrowRight'
+										? 32
+										: e.key == 'ArrowLeft'
+										? -32
+										: 0),
+								clientY:
+									64 +
+									(e.key == 'ArrowUp'
+										? -32
+										: e.key == 'ArrowDown'
+										? 32
+										: 0),
+							}),
+						);
+					}
+				}
+			}
+		}
+	}
+
+	async onKeyUp(e: KeyboardEvent) {
+		if (
+			[
+				'Enter',
+				' ',
+				'ArrowUp',
+				'ArrowDown',
+				'ArrowLeft',
+				'ArrowRight',
+			].includes(e.key)
+		) {
+			e.preventDefault();
+			if (!e.repeat) {
+				if (e.shiftKey) {
+					this.pointers++;
+				}
+				this.onPointerUp(
+					new window.PointerEvent('pointerup', {
+						...e,
+						isPrimary: true,
+						clientX: 64,
+						clientY: 64,
+					}),
+				);
+			}
+		}
+	}
+
+	firstUpdated() {
+		super.firstUpdated();
+		this.removeAttribute('tabindex');
+		const children =
+			this.shadowRoot?.querySelectorAll('remote-icon-label') ?? [];
+		for (const child of children) {
+			child.removeAttribute('tabindex');
+		}
+	}
+
 	static get styles(): CSSResult | CSSResult[] {
 		return [
 			super.styles as CSSResult,
@@ -362,6 +461,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 
 					--mdc-ripple-press-opacity: 0.04;
 				}
+
 				toucharea {
 					border-radius: 32px;
 					flex-grow: 1;
@@ -381,7 +481,13 @@ export class RemoteTouchpad extends BaseRemoteElement {
 					flex-direction: column;
 					flex-wrap: nowrap;
 					justify-content: space-between;
+					transition: box-shadow 180ms ease-in-out;
 				}
+				toucharea:focus-visible {
+					box-shadow: 0 0 0 2px
+						var(--icon-color, var(--primary-text-color));
+				}
+
 				.toucharea-row {
 					min-height: var(--size, 48px);
 					display: flex;

@@ -18,6 +18,10 @@ export class BaseDialog extends LitElement {
 			:host {
 				-webkit-tap-highlight-color: transparent;
 				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				--background: var(
+					--mdc-ripple-color,
+					var(--mdc-theme-primary, #6200ee)
+				);
 			}
 
 			.buttons {
@@ -55,16 +59,7 @@ export class BaseDialog extends LitElement {
 			}
 			@media (hover: hover) {
 				button:hover {
-					background: var(
-						--ha-ripple-hover-color,
-						var(
-							--ha-ripple-color,
-							var(
-								--md-ripple-hover-color,
-								var(--secondary-text-color)
-							)
-						)
-					);
+					background: var(--background);
 					opacity: var(
 						--ha-ripple-hover-opacity,
 						var(--md-ripple-hover-opacity, 0.08)
@@ -72,21 +67,21 @@ export class BaseDialog extends LitElement {
 				}
 			}
 			button:active {
-				background: var(
-					--ha-ripple-pressed-color,
-					var(
-						--ha-ripple-color,
-						var(
-							--md-ripple-pressed-color,
-							var(--secondary-text-color)
-						)
-					)
-				);
+				background: var(--background);
 				opacity: var(
 					--ha-ripple-pressed-opacity,
 					var(--md-ripple-pressed-opacity, 0.12)
 				);
 			}
+			button:focus-visible {
+				outline: none;
+				background: var(--background);
+				opacity: var(
+					--ha-ripple-hover-opacity,
+					var(--md-ripple-hover-opacity, 0.08)
+				);
+			}
+
 			.button span {
 				font-family: inherit;
 				font-size: var(--mdc-typography-button-font-size, 0.875rem);

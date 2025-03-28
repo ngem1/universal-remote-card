@@ -51,6 +51,8 @@ export class BaseRemoteElement extends LitElement {
 	deltaX?: number;
 	deltaY?: number;
 
+	tabIndex: number = 0;
+
 	fireHapticEvent(haptic: HapticType) {
 		if (
 			this.renderTemplate(this.config.haptics as unknown as string) ??
@@ -897,7 +899,9 @@ export class BaseRemoteElement extends LitElement {
 		}
 	}
 
-	onTouchEnd(_e?: TouchEvent) {
+	onTouchEnd(e: TouchEvent) {
+		e.preventDefault();
+
 		// Stuck ripple fix
 		const ripple = this.shadowRoot?.querySelector(
 			'md-ripple',
@@ -911,9 +915,43 @@ export class BaseRemoteElement extends LitElement {
 		this.requestUpdate();
 	}
 
+	async onKeyDown(e: KeyboardEvent) {
+		if (['Enter', ' '].includes(e.key)) {
+			e.preventDefault();
+			if (!e.repeat) {
+				this.onPointerDown(
+					new window.PointerEvent('pointerdown', {
+						...e,
+						isPrimary: true,
+						clientX: 1,
+						clientY: 1,
+					}),
+				);
+			}
+		}
+	}
+
+	async onKeyUp(e: KeyboardEvent) {
+		if (['Enter', ' '].includes(e.key)) {
+			e.preventDefault();
+			if (!e.repeat) {
+				this.onPointerUp(
+					new window.PointerEvent('pointerup', {
+						...e,
+						isPrimary: true,
+						clientX: 1,
+						clientY: 1,
+					}),
+				);
+			}
+		}
+	}
+
 	firstUpdated() {
-		this.addEventListener('confirmation-failed', this.confirmationFailed);
+		this.addEventListener('keydown', this.onKeyDown);
+		this.addEventListener('keyup', this.onKeyUp);
 		this.addEventListener('touchend', this.onTouchEnd);
+		this.addEventListener('confirmation-failed', this.confirmationFailed);
 	}
 
 	static get styles(): CSSResult | CSSResult[] {
@@ -934,6 +972,9 @@ export class BaseRemoteElement extends LitElement {
 				color: inherit;
 				-webkit-tap-highlight-color: transparent;
 				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+			}
+			:host(:focus-visible) {
+				outline: none;
 			}
 
 			md-ripple {
