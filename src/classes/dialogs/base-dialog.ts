@@ -25,7 +25,7 @@ export class BaseDialog extends LitElement {
 			}
 
 			.buttons {
-				height: 36px;
+				height: var(--button-height, 36px);
 				width: fill-available;
 				width: -webkit-fill-available;
 				width: -moz-available;
@@ -40,7 +40,7 @@ export class BaseDialog extends LitElement {
 				min-width: 64px;
 				align-content: center;
 				cursor: pointer;
-				border-radius: var(--mdc-shape-small, 4px);
+				border-radius: var(--button-height, 4px);
 				overflow: hidden;
 				display: flex;
 				align-items: center;
@@ -56,41 +56,53 @@ export class BaseDialog extends LitElement {
 				cursor: pointer;
 				padding: 0;
 				position: absolute;
+				background: var(
+					--mdc-theme-primary,
+					var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))
+				);
+				opacity: 0;
+				transition: opacity 100ms ease-in-out;
 			}
 			@media (hover: hover) {
 				button:hover {
-					background: var(--background);
 					opacity: var(
 						--ha-ripple-hover-opacity,
 						var(--md-ripple-hover-opacity, 0.08)
 					);
 				}
 			}
-			button:active {
-				background: var(--background);
+			button:focus-visible {
+				outline: none;
 				opacity: var(
 					--ha-ripple-pressed-opacity,
 					var(--md-ripple-pressed-opacity, 0.12)
 				);
 			}
-			button:focus-visible {
-				outline: none;
-				background: var(--background);
-				opacity: var(
-					--ha-ripple-hover-opacity,
-					var(--md-ripple-hover-opacity, 0.08)
+			button:active {
+				opacity: calc(
+					2 *
+						var(
+							--ha-ripple-pressed-opacity,
+							var(--md-ripple-pressed-opacity, 0.12)
+						)
 				);
 			}
 
 			.button span {
-				font-family: inherit;
+				font-family: var(
+					--mdc-typography-button-font-family,
+					var(--mdc-typography-font-family, Roboto, sans-serif)
+				);
 				font-size: var(--mdc-typography-button-font-size, 0.875rem);
-				font-weight: 600;
+				font-weight: var(--mdc-typography-button-font-weight, 500);
 				letter-spacing: var(
 					--mdc-typography-button-letter-spacing,
 					0.0892857143em
 				);
-				text-transform: uppercase;
+				text-transform: var(
+					--mdc-typography-button-text-transform,
+					uppercase
+				);
 				color: var(--mdc-theme-primary, #6200ee);
 				user-select: none;
 				-webkit-user-select: none;
