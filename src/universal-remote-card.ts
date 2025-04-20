@@ -65,7 +65,7 @@ class UniversalRemoteCard extends LitElement {
 
 	static getStubConfig() {
 		return {
-			type: 'custom:android-tv-card',
+			type: 'custom:universal-remote-card',
 			rows: [],
 		};
 	}
@@ -765,11 +765,15 @@ customElements.define(
 	'universal-remote-card-editor',
 	UniversalRemoteCardEditor,
 );
-customElements.define('android-tv-card', UniversalRemoteCard); // Keep old name to not break old configs
+customElements.define('universal-remote-card', UniversalRemoteCard);
+customElements.define(
+	'android-tv-card',
+	class AndroidTVCard extends UniversalRemoteCard {},
+); // Keep old name to not break old configs
 
 window.customCards = window.customCards || [];
 window.customCards.push({
-	type: 'android-tv-card',
+	type: 'universal-remote-card',
 	name: 'Universal Remote Card',
 	description: 'Super customizable universal remote card',
 });

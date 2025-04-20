@@ -158,7 +158,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.entriesChanged(entries);
 	}
 
-	toggleGuiMode(_e: CustomEvent) {
+	toggleGuiMode(_e: Event) {
 		this.yamlString = undefined;
 		this.configChanged(this.config);
 		this.guiMode = !this.guiMode;
@@ -277,7 +277,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 	}
 
-	handleYamlCodeChanged(e: CustomEvent) {
+	handleYamlCodeChanged(e: Event) {
 		e.stopPropagation();
 		const yaml = e.detail.value;
 		if (yaml != this.yaml) {
@@ -285,7 +285,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 	}
 
-	handleStyleCodeChanged(e: CustomEvent) {
+	handleStyleCodeChanged(e: Event) {
 		e.stopPropagation();
 		const css = e.detail.value;
 		if (this.entryIndex > -1 && this.activeEntry) {
@@ -304,7 +304,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 	}
 
-	handleActionCodeChanged(e: CustomEvent) {
+	handleActionCodeChanged(e: Event) {
 		e.stopPropagation();
 		const actionType = (e.target as HTMLElement).id as ActionType;
 		const actionYaml = e.detail.value;
@@ -325,7 +325,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 	}
 
-	handleEvalCodeChanged(e: CustomEvent) {
+	handleEvalCodeChanged(e: Event) {
 		e.stopPropagation();
 		const actionType = (e.target as HTMLElement).id as ActionType;
 		const evalString = e.detail.value;
@@ -341,7 +341,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 	}
 
-	handleBaseTabSelected(e: CustomEvent) {
+	handleBaseTabSelected(e: Event) {
 		this.yamlStringsCache = {};
 		this.yamlString = undefined;
 		this.entryIndex = -1;
@@ -353,7 +353,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.baseTabIndex = i;
 	}
 
-	handleActionsTabSelected(e: CustomEvent) {
+	handleActionsTabSelected(e: Event) {
 		this.yamlStringsCache = {};
 		const i = e.detail.index;
 		if (this.actionsTabIndex == i) {
@@ -362,7 +362,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.actionsTabIndex = i;
 	}
 
-	handleTouchpadTabSelected(e: CustomEvent) {
+	handleTouchpadTabSelected(e: Event) {
 		this.yamlString = undefined;
 		this.yamlStringsCache = {};
 		const i = e.detail.index;
@@ -373,7 +373,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.setActionsTab(this.entryIndex);
 	}
 
-	handleSelectorChange(e: CustomEvent) {
+	handleSelectorChange(e: Event) {
 		this.yamlStringsCache = {};
 		const key = (e.target as HTMLElement).id;
 		let value = e.detail.value;
@@ -420,7 +420,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 	}
 
-	addEntry(e: CustomEvent) {
+	addEntry(e: Event) {
 		const i = e.detail.index as number;
 		let entries: IElementConfig[] | IIconConfig[];
 		switch (this.baseTabIndex) {
@@ -451,9 +451,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 	}
 
-	removeEntry(e: CustomEvent) {
+	removeEntry(e: Event) {
 		const i = (
-			e.currentTarget as unknown as CustomEvent & Record<'index', number>
+			e.currentTarget as unknown as Event & Record<'index', number>
 		).index;
 		let entries: IElementConfig[] | IIconConfig[];
 		switch (this.baseTabIndex) {
@@ -470,7 +470,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.entriesChanged(entries);
 	}
 
-	moveEntry(e: CustomEvent) {
+	moveEntry(e: Event) {
 		e.stopPropagation();
 		let entries: IElementConfig[] | IIconConfig[];
 		switch (this.baseTabIndex) {
@@ -492,7 +492,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.entriesChanged(entries);
 	}
 
-	copyEntry(e: CustomEvent) {
+	copyEntry(e: Event) {
 		let entries: IElementConfig[] | IIconConfig[];
 		switch (this.baseTabIndex) {
 			case 3:
@@ -505,7 +505,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 		entries = structuredClone(entries);
 		const i = (
-			e.currentTarget as unknown as CustomEvent & Record<'index', number>
+			e.currentTarget as unknown as Event & Record<'index', number>
 		).index;
 		const entry = structuredClone(entries[i]);
 		entry.name = `${entry['name' as keyof object]}_copy`;
@@ -518,11 +518,11 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.entriesChanged(entries);
 	}
 
-	editEntry(e: CustomEvent) {
+	editEntry(e: Event) {
 		this.yamlStringsCache = {};
 		this.yamlString = undefined;
 		const i = (
-			e.currentTarget as unknown as CustomEvent & Record<'index', number>
+			e.currentTarget as unknown as Event & Record<'index', number>
 		).index;
 		switch (this.baseTabIndex) {
 			case 3:
@@ -536,7 +536,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.entryIndex = i;
 	}
 
-	exitEditEntry(_e: CustomEvent) {
+	exitEditEntry(_e: Event) {
 		this.yamlStringsCache = {};
 		this.yamlString = undefined;
 		this.entryIndex = -1;
@@ -768,7 +768,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 						@click=${this.addEntry}
 						outlined
 						class="add-list-item"
-						.label="${'ADD SVG ICON'}"
+						.label="${'Add svg icon'}"
 					>
 						<ha-icon .icon=${'mdi:plus'} slot="icon"></ha-icon>
 					</ha-button>
@@ -780,12 +780,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 						fixed
 						class="add-list-item"
 						@action=${this.addEntry}
-						@closed=${(e: CustomEvent) => e.stopPropagation()}
+						@closed=${(e: Event) => e.stopPropagation()}
 					>
 						<ha-button
 							slot="trigger"
 							outlined
-							.label="${'ADD REMOTE ELEMENT'}"
+							.label="${'Add remote element'}"
 						>
 							<ha-icon .icon=${'mdi:plus'} slot="icon"></ha-icon>
 						</ha-button>
@@ -1410,11 +1410,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		</div>`;
 	}
 
-	buildTabBar(
-		index: number,
-		handler: (e: CustomEvent) => void,
-		tabs: string[],
-	) {
+	buildTabBar(index: number, handler: (e: Event) => void, tabs: string[]) {
 		return html`
 			<mwc-tab-bar .activeIndex=${index} @MDCTabBar:activated=${handler}>
 				${tabs.map((tab) => html`<mwc-tab .label=${tab}></mwc-tab>`)}
@@ -1786,7 +1782,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 	) {
 		let title: string | undefined;
 		let value: string;
-		let handler: (e: CustomEvent) => void;
+		let handler: (e: Event) => void;
 		let autocompleteEntities: boolean;
 		let autocompleteIcons: boolean;
 		let codeEditorMode: 'yaml' | 'jinja2';
@@ -2139,7 +2135,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 					<ha-button
 						@click=${this.handleUpdateDeprecatedConfig}
 						outlined
-						.label="${'UPDATE OLD CONFIG'}"
+						.label="${'Update old config'}"
 					>
 						<ha-icon .icon=${'mdi:cog'} slot="icon"></ha-icon>
 					</ha-button>
@@ -2592,6 +2588,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 
 	updateDeprecatedFields(config: IConfig = this.config): IConfig {
 		const updatedConfig = structuredClone(config);
+
+		// Update card type
+		updatedConfig.type = 'custom:universal-remote-card';
 
 		// Convert old root level key names to new
 		if ('adb_id' in updatedConfig) {

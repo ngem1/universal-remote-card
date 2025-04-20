@@ -8,6 +8,7 @@ export interface IIconConfig {
 }
 
 export interface IConfig {
+	type?: string;
 	title?: string;
 
 	platform?: Platform;

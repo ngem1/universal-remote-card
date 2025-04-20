@@ -38,4 +38,4 @@ Any new features should be documented in the README. This does not include new d
 
 ## Make a pull request
 
-Once you think your code is ready, make a pull request on the original repository! Make sure to use [the included PR template](https://github.com/Nerwyn/android-tv-card/blob/main/.github/PULL_REQUEST_TEMPLATE/pull_request.md).
+Once you think your code is ready, make a pull request on the original repository! Make sure to use [the included PR template](https://github.com/Nerwyn/universal-remote-card/blob/main/.github/PULL_REQUEST_TEMPLATE/pull_request.md).
