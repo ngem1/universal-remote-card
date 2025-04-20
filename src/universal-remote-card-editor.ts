@@ -3316,6 +3316,8 @@ export class UniversalRemoteCardEditor extends LitElement {
 			.action-list-container {
 				max-height: 285px;
 				overflow: scroll;
+				scrollbar-width: thin;
+				overflow-x: hidden;
 			}
 			.custom-action-list-container {
 				max-height: 190px;
