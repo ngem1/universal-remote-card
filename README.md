@@ -13,7 +13,7 @@
 
 _Formerly called Android TV Card_
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/screenshot.png" alt="example" width="300"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/screenshot.png" width="300"/>
 
 A super customizable universal remote card iterating on the work of several other projects. Featuring:
 
@@ -49,7 +49,7 @@ The editor has four tabs - General, Layout, Actions, and Icons.
 
 # General
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_general_tab.png" alt="editor general tab" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_general_tab.png" width="600"/>
 
 Platform, entity ID, and timing fields set in the general tab will be used for default keys and sources. If you do not set these fields for custom actions and autofill is enabled, they will also use these fields. If you explicitly set one of these fields in a custom action, it will not be overwritten if you change the matching general field until you clear the field in the custom action. To completely clear toggle fields, you must remove them from the config using the code editor.
 
@@ -141,7 +141,7 @@ remote-button {
 
 If you hover over the card preview window, a red dashed outline will appear along with a tooltip showing either the element name or the row, column, or pad ID selector.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_hover_id.png" alt="editor hover id" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_hover_id.png" width="600"/>
 
 ### Autofill and Haptics
 
@@ -157,7 +157,7 @@ If you are updating from an older version of this card, you may find that your c
 
 # Layout
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_layout_tab.png" alt="editor layout tab" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_layout_tab.png" width="600"/>
 
 The remote layout is defined using a series of nested arrays. The lowest level of arrays is each row. As you nest arrays further it switches between rows and columns, allowing you to create unique remote layouts.
 
@@ -198,7 +198,7 @@ The default keys and sources lists for your selected platform are displayed belo
 
 # Actions
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_tab.png" alt="editor actions tab" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_tab.png" width="600"/>
 
 In addition to the default keys and sources, you can create your own custom actions. You can also overwrite default keys and sources (including the default touchpad and slider) by setting the custom action name to match a default one. If you do so the default key or source information will be autopopulated if autofill is enabled.
 
@@ -210,7 +210,7 @@ Custom actions in this list can be reordered for organization, but doing so does
 
 ## General Options
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_general_options.png" alt="editor actions general options" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_general_options.png" width="600"/>
 
 Every remote element must have a name so that it can be added to your remote.
 
@@ -229,7 +229,7 @@ Haptics are enabled for remote elements by default, but can be toggled globally 
 
 ### Slider General Options
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_general_options_slider.png" alt="editor actions general options slider" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_general_options_slider.png" width="600"/>
 
 Sliders have some additional general options. They have a range `Min` and `Max` which defaults to 0 and 1 respectively. They also have a `Step` size which defaults to 0.01.
 
@@ -237,13 +237,13 @@ Sliders will wait one second before updating their internal values from Home Ass
 
 ### Touchpad Tabs
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_general_options_touchpad.png" alt="editor actions general options touchpad" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_general_options_touchpad.png" width="600"/>
 
 Touchpads have five tabs at the top of their actions page for each direction and it's center. Only the center tab has general options as these apply to the entire touchpad remote element. Each direction and center have their own options for appearance and interactions as described below.
 
 ## Appearance
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_appearance_options.png" alt="editor actions appearance options" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_appearance_options.png" width="600"/>
 
 All remote elements can have a `Label`, `Icon`, and `Units`. These fields can also be set using templates. Similar to the general tab, each remote element can have it's CSS styles set (also supports templates).
 
@@ -307,13 +307,13 @@ You can include touch location information in your templates using the values `i
 
 There are three traditional ways to trigger an action - tap, double tap, and hold. Buttons, touchpad center support all three, touchpad swipes only support tap and hold actions, and sliders only support tap actions. Defining a double tap action that is not `none` introduces a 200ms delay to single tap actions.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions.png" alt="editor actions interactions" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions.png" width="600"/>
 
 Each action also supports the `confirmation` field. More information on Home Assistant action confirmations can be found [here](https://www.home-assistant.io/dashboards/actions/#options-for-confirmation).
 
 When setting the action for a slider, you must use `value` within a template in the action data to use the feature value in action. For convenience, a codebox for the action will be displayed below the normal action options.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_slider.png" alt="editor actions interactions slider" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_slider.png" width="600"/>
 
 ### Action Types
 
@@ -359,7 +359,7 @@ While most default keys use the `key` action, some actions require more informat
 
 ### Momentary Mode
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_momentary.png" alt="editor actions interactions momentary" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_momentary.png" width="600"/>
 
 As an alternative to normal tap, hold, and double tap actions, buttons and the touchpad center can also be used in a momentary mode. Configuring this option disables the normal tap, hold, and double tap actions.
 
@@ -369,7 +369,7 @@ For momentary end actions you can include the number of seconds a button has bee
 
 ### Touchpad Actions
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_touchpad.png" alt="editor actions interactions touchpad" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_touchpad.png" width="600"/>
 
 The touchpad's center acts like a button, with support for the same actions. The touchpad's direction actions are activated when the user swipes in a direction, and do not support double tap actions or momentary mode.
 
@@ -393,13 +393,13 @@ If the user defined general platform is listed above, then any action set to a k
 
 When you use any keyboard action, a dialog will open that can be typed into.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/keyboard_dialog.png" alt="keyboard dialog" width="300"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/keyboard_dialog.png" width="300"/>
 
 You can change the prompt text that appears before you type anything using the `Prompt` field at the action level.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_keyboard_prompt.png" alt="editor actions interactions keyboard prompt" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_keyboard_prompt.png" width="600"/>
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/keyboard_dialog_custom_prompt.png" alt="keyboard dialog custom prompt" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/keyboard_dialog_custom_prompt.png" width="600"/>
 
 For Android TV you need to include the Android TV Remote integration remote entity ID at the general or action level as it is used to send the keys enter and delete (backspace).
 
@@ -425,11 +425,11 @@ Send a global search query to your media platform using the action or default bu
 
 ## Icons
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_icons.png" alt="editor icons" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_icons.png" width="600"/>
 
 You can add custom SVG path icons to use with this card using the icons tab. The custom icons list works the same as the custom actions list, except that there is only one type of custom icon you can add.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_icons_editor.png" alt="editor icons editor" width="600"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_icons_editor.png" width="600"/>
 
 Each custom icon has to have a name and a SVG path. The SVG path must generate a 24x24 pixel icon to properly render in the remote. A preview of the icon is shown below the path. I highly recommend using a tool like [this SVG path editor](https://yqnn.github.io/svg-path-editor/) to modify SVG paths to work with this card.
 
@@ -443,7 +443,7 @@ While all configuration can now be done through the user interface, these YAML e
 
 Playing with order, moving and repeating buttons.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/disorder.png" alt="disorder example" width="300"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/disorder.png" width="300"/>
 
 <details>
 
@@ -481,7 +481,7 @@ rows:
 
 Buttons, buttons everywhere!
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/buttons_everywhere.png" alt="buttons example" width="300"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/buttons_everywhere.png" width="300"/>
 
 <details>
 
@@ -516,7 +516,7 @@ rows:
 
 Using less and a vertical slider.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/using_less.png" alt="less example" width="300"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/using_less.png" width="300"/>
 
 <details>
 
@@ -559,7 +559,7 @@ custom_actions:
 
 In any row, if you add a `null` item, there will be an empty button sized space.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/empty_buttons.png" alt="empty buttons example" width="300"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/empty_buttons.png" width="300"/>
 
 <details>
 
@@ -583,7 +583,7 @@ rows:
 
 A tablet layout using nested rows and columns.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/tablet.png" alt="tablet example" width="800"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/tablet.png" width="800"/>
 
 <details>
 
@@ -662,7 +662,7 @@ custom_actions:
 
 Combining Apple TVs `wakeup` and `suspend` keys into one custom power action and using an icon for the touchpad background.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/apple_tv.png" alt="apple tv example" width="400"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/apple_tv.png" width="400"/>
 
 <details>
 
@@ -751,7 +751,7 @@ custom_actions:
 
 A user's Kodi remote.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/kodi.png" alt="kodi example" width="400"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/kodi.png" width="400"/>
 
 <details>
 
@@ -889,7 +889,7 @@ custom_actions:
 
 Even more disorder with columns and special elements in the same row as buttons, stylized everything, and a label to display the slider value.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/more_disorder.png" alt="more disorder example" width="500"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/more_disorder.png" width="500"/>
 
 <details>
 
@@ -1041,7 +1041,7 @@ custom_actions:
 
 A simple gamepad with a custom button grid
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/gamepad.png" alt="gamepad example" width="500"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/gamepad.png" width="500"/>
 
 <details>
 
@@ -1145,7 +1145,7 @@ haptics: false
 
 Conditional layouts using templating and an input select.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/conditional_layouts.png" alt="conditional layouts example" width="500"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/conditional_layouts.png" width="500"/>
 
 <details>
 
@@ -1187,7 +1187,7 @@ custom_actions:
 
 RGB Remote using Broadlink RM4 Pro.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/rgb.png" alt="rgb remote example" width="500"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/rgb.png" width="500"/>
 
 <details>
 
@@ -1441,7 +1441,7 @@ custom_actions:
 
 Style `dpad` to be like the Google TV app remote. **Note**: You have to add the provided overall styles including matching the row number. You can find the CSS IDs of your navigation button rows by hovering over the remote in the editor as described [in this section](#css-styles).
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/google_tv_dpad.png" alt="google tv app styled dpad" width="500"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/google_tv_dpad.png" width="500"/>
 
 <details>
 
@@ -1578,7 +1578,7 @@ custom_icons: []
 
 Style `dpad` to be like a traditional tv remote. **Note**: You have to add the provided overall styles.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/traditional_dpad.png" alt="traditional remote styled dpad" width="500"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/traditional_dpad.png" width="500"/>
 
 <details>
 
@@ -1709,7 +1709,7 @@ custom_icons:
 
 A Spotify app influenced music controller, with album art, album colored background, song info, media position information, controls, and a hidden vertical volume slider. Set `--max-album-height` in the global styles to reduce its size.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/music_controls.png" alt="music controls" width="500"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/music_controls.png" width="500"/>
 
 <details>
 
@@ -2049,7 +2049,7 @@ haptics: false
 
 Multiple sliders for light color control.
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/color_controls.png" alt="color controls" width="500"/>
+<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/color_controls.png" width="500"/>
 
 <details>
 
