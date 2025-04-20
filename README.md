@@ -337,6 +337,16 @@ Actions follow the [Home Assistant actions](https://www.home-assistant.io/dashbo
 | Repeat         | Repeat the tap action ten times a second while held. Only applicable to hold.                                                                                                                                                                                                                                                                            |
 | Nothing        | Explicilty set a command to do nothing.                                                                                                                                                                                                                                                                                                                  |
 
+The entire action `data` and `target` fields are templatable, meaning that you can define the entire field as a YAML string in a template like so:
+
+```yaml
+action: light.turn_{{ iif(checked, 'on', 'off') }}
+data: |
+  {% if value == 'off' %}
+  brightness_pct: 100
+  {% endif %}
+```
+
 ### Key and Source
 
 `Key` and `Source` are shortcuts for `perform-action` actions and vary by platform. Read the Home Assistant documentation as linked above [in this table](#media-platform-and-entity-ids) for more information on the actions performed by each platform. You can also look at the default key and source map files [here](https://github.com/Nerwyn/universal-remote-card/tree/main/src/models/maps). They will use the general remote or media player ID if set but can be overridden at the custom action level.
