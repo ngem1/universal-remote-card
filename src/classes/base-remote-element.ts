@@ -9,6 +9,7 @@ import {
 	IDialog,
 } from '../models/interfaces';
 
+import { load } from 'js-yaml';
 import { UPDATE_AFTER_ACTION_DELAY } from '../models/constants';
 import {
 	ActionType,
@@ -598,14 +599,18 @@ export class BaseRemoteElement extends LitElement {
 		const res = structuredClone(obj);
 		const keys = getDeepKeys(res);
 		for (const key of keys) {
-			deepSet(
-				res,
-				key,
-				this.renderTemplate(
-					deepGet(res, key) as unknown as string,
-					context,
-				),
+			const prerendered = deepGet(res, key);
+			let rendered = this.renderTemplate(
+				prerendered as unknown as string,
+				context,
 			);
+			if (
+				typeof prerendered === 'string' &&
+				(key.endsWith('data') || key.endsWith('target'))
+			) {
+				rendered = load(rendered as string) as string;
+			}
+			deepSet(res, key, rendered);
 		}
 		return res;
 	}

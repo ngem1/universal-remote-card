@@ -106,7 +106,7 @@ The following default keys have hold actions set to `repeat` by default. You can
 
 Double tap actions have a default window of 200ms to trigger before a single tap action is triggered instead. You can change this by setting `Double tap window` in the double tap action to a different number.
 
-**NOTE**: Setting `Double tap window` above or too close to `Hold time` can result in undesirable behavior, as the hold timer expires before the double tap timer does. If you increase the `Double tap window` you should also increase `Hold time` to not be too close to it by at least 100ms if not more. In a custom action without a hold action defined, you can set `Hold behavior` explicitly to `Nothing` to render the `Hold time` field.
+**Note**: Setting `Double tap window` above or too close to `Hold time` can result in undesirable behavior, as the hold timer expires before the double tap timer does. If you increase the `Double tap window` you should also increase `Hold time` to not be too close to it by at least 100ms if not more. In a custom action without a hold action defined, you can set `Hold behavior` explicitly to `Nothing` to render the `Hold time` field.
 
 ## Miscellaneous
 
@@ -187,8 +187,8 @@ The default keys and sources lists for your selected platform are displayed belo
 | ------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | touchpad           | touchpad    | A touchpad for swipe navigation.                                                                                                                                                                |
 | dragpad            | touchpad    | A touchpad for drag navigation. Use two fingers for faster movement.                                                                                                                            |
-| mousepad           | touchpad    | A touchpad for mouse navigation. **NOTE**: mousepad support is dependent on the platform supporting mouse movement via a Home Assistant action.                                                 |
-| slider             | slider      | A slider that controls the volume of the entity defined by `media_player_id`. **NOTE**: Volume slider support is dependent on the media player supporting the `media_player.volume_set` action. |
+| mousepad           | touchpad    | A touchpad for mouse navigation. **Note**: mousepad support is dependent on the platform supporting mouse movement via a Home Assistant action.                                                 |
+| slider             | slider      | A slider that controls the volume of the entity defined by `media_player_id`. **Note**: Volume slider support is dependent on the media player supporting the `media_player.volume_set` action. |
 | volume_buttons     | button rows | Shorthand to generate a set of volume down, volume mute, and volume up buttons in a row or column.                                                                                              |
 | navigation_buttons | button rows | Shorthand to generate a set of up, down, left, right, and center buttons across three rows within a column.                                                                                     |
 | dpad               | button grid | Shorthand to generate a set of up, down, left, right, and center buttons arranged in a square grid.                                                                                             |
@@ -202,7 +202,7 @@ The default keys and sources lists for your selected platform are displayed belo
 
 In addition to the default keys and sources, you can create your own custom actions. You can also overwrite default keys and sources (including the default touchpad and slider) by setting the custom action name to match a default one. If you do so the default key or source information will be autopopulated if autofill is enabled.
 
-**NOTE**: If the remote element (default or custom) actions targets are not explicitly set in the UI they will be autofilled (if autofill is enabled) using the custom action entity or global IDs depending on which best matches the `perform-action` domain.
+**Note**: If the remote element (default or custom) actions targets are not explicitly set in the UI they will be autofilled (if autofill is enabled) using the custom action entity or global IDs depending on which best matches the `perform-action` domain.
 
 Click the `ADD REMOTE ELEMENT` button to add a custom action remote element. Custom action remote elements can be buttons, sliders, or touchpads.
 
@@ -221,7 +221,7 @@ Some additional value logic is applied for certain attributes:
 - `brightness` - Converted from the default range of 0-255 to 0-100.
 - `media_position` - Updated twice per second using the current timestamp and the attribute `media_position_updated_at` when the entity state is `playing`, and locked to a max value using the attribute `media_duration`.
 - `elapsed` - Only for timer entities. Updated twice per second using the the current timestamp and the attributes `duration`, `remaining`, and `finishes_at`, and locked to a max value using the attribute `duration`.
-  - **NOTE**: `elapsed` is not an actual attribute of timer entities, but is a possible attribute for timer entities in this card for the purpose of displaying accurate timer elapsed values. Timer entities do have an attribute `remaining`, which only updates when the timer state changes. The actual `remaining` attribute can be calculated using the elapsed value and the timer duration attribute.
+  - **Note**: `elapsed` is not an actual attribute of timer entities, but is a possible attribute for timer entities in this card for the purpose of displaying accurate timer elapsed values. Timer entities do have an attribute `remaining`, which only updates when the timer state changes. The actual `remaining` attribute can be calculated using the elapsed value and the timer duration attribute.
 
 If you find that the autofilling of fields in actions or remote element values is causing issues, setting `Autofill` to false may help. Just remember to set the entity ID of the remote element and the entity, device, area, or label ID of the action target.
 
@@ -319,22 +319,23 @@ When setting the action for a slider, you must use `value` within a template in 
 
 Actions follow the [Home Assistant actions](https://www.home-assistant.io/dashboards/actions/) syntax. All Home Assistant actions are supported along with some additional ones.
 
-| Action         | Description                                                                                                                                                                                                                             |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| More info      | Open the more info dialog.                                                                                                                                                                                                              |
-| Toggle         | Toggle between the target's on and off (or similar) states.                                                                                                                                                                             |
-| Navigate       | Navigate to another Home Assistant page.                                                                                                                                                                                                |
-| URL            | Navigate to an external URL.                                                                                                                                                                                                            |
-| Perform action | Call any Home Assistant service action.                                                                                                                                                                                                 |
-| Assist         | Open the assist dialog. Uses the mobile dialog if available, like in the Home Assistant app. The pipeline ID and start listening options only work in the mobile assist dialog.                                                         |
-| Key            | Send a key to the media platform via the action `remote.send_command`. If no hold action is defined, then `hold_secs: 1` is added when a hold action is fired.                                                                          |
-| Source         | Open a source via the action `remote.turn_on`.                                                                                                                                                                                          |
-| Keyboard       | Open a dialog for sending seamless keyboard input.                                                                                                                                                                                      |
-| Textbox        | Open a dialog for sending bulk keyboard input.                                                                                                                                                                                          |
-| Search         | Open a dialog for sending a global search query.                                                                                                                                                                                        |
-| Fire DOM event | Fire a browser dom event using the action object as the event detail. Useful for opening [browser mod popup cards](https://github.com/thomasloven/hass-browser_mod?tab=readme-ov-file#how-do-i-update-a-popup-from-the-browser-mod-15). |
-| Repeat         | Repeat the tap action ten times a second while held. Only applicable to hold.                                                                                                                                                           |
-| Nothing        | Explicilty set a command to do nothing.                                                                                                                                                                                                 |
+| Action         | Description                                                                                                                                                                                                                                                                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| More info      | Open the more info dialog.                                                                                                                                                                                                                                                                                                                               |
+| Toggle         | Toggle between the target's on and off (or similar) states.                                                                                                                                                                                                                                                                                              |
+| Navigate       | Navigate to another Home Assistant page.                                                                                                                                                                                                                                                                                                                 |
+| URL            | Navigate to an external URL.                                                                                                                                                                                                                                                                                                                             |
+| Perform action | Call any Home Assistant service action.                                                                                                                                                                                                                                                                                                                  |
+| Assist         | Open the assist dialog. Uses the mobile dialog if available, like in the Home Assistant app. The pipeline ID and start listening options only work in the mobile assist dialog.                                                                                                                                                                          |
+| Key            | Send an remote button press like action to the media platform. The actual action varies by platform.                                                                                                                                                                                                                                                     |
+| Source         | Open an app using an action on a media platform. The actual action varies by platform.                                                                                                                                                                                                                                                                   |
+| Keyboard       | Open a dialog for sending seamless keyboard input.                                                                                                                                                                                                                                                                                                       |
+| Textbox        | Open a dialog for sending bulk keyboard input.                                                                                                                                                                                                                                                                                                           |
+| Search         | Open a dialog for sending a global search query.                                                                                                                                                                                                                                                                                                         |
+| Fire DOM event | Fire a browser dom event using the action object as the event detail. Useful for opening [browser mod popup cards](https://github.com/thomasloven/hass-browser_mod?tab=readme-ov-file#how-do-i-update-a-popup-from-the-browser-mod-15). **Note**: Home Assistant hardcodes the event type to `ll-custom`. For other events use the action `Evaluate JS`. |
+| Evaluate JS    | Evaluate a string as JavaScript code. You have access to the custom feature via `this`, which includes `this.hass`, `this.config`, and `this.value`. **Potentially dangerous, do not do something dumb like call actions in a loop with no delay which can crash your browser or server.**                                                               |
+| Repeat         | Repeat the tap action ten times a second while held. Only applicable to hold.                                                                                                                                                                                                                                                                            |
+| Nothing        | Explicilty set a command to do nothing.                                                                                                                                                                                                                                                                                                                  |
 
 ### Key and Source
 
@@ -1105,7 +1106,7 @@ custom_actions:
       }
 styles: |-
   remote-button {
-    background: rgb(27,27,27);
+    background: var(--lovelace-background, var(--primary-background-color, #6f767d));;
     padding: 8px;
     margin: 4px;
     border-radius: 24px;
@@ -1122,7 +1123,7 @@ styles: |-
     grid-gap: 8px 16px;
     padding: 0;
     flex: 0;
-    background: rgb(27,27,27);
+    background: var(--lovelace-background, var(--primary-background-color, #6f767d));;
     border-radius: 128px;
   }
 haptics: false
@@ -1428,7 +1429,7 @@ custom_actions:
 
 ## Example 13
 
-Style `dpad` to be like the Google TV app remote. **NOTE**: You have to add the provided overall styles including matching the row number. You can find the CSS IDs of your navigation button rows by hovering over the remote in the editor as described [in this section](#css-styles).
+Style `dpad` to be like the Google TV app remote. **Note**: You have to add the provided overall styles including matching the row number. You can find the CSS IDs of your navigation button rows by hovering over the remote in the editor as described [in this section](#css-styles).
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/google_tv_dpad.png" alt="google tv app styled dpad" width="500"/>
 
@@ -1565,7 +1566,7 @@ custom_icons: []
 
 ## Example 14
 
-Style `dpad` to be like a traditional tv remote. **NOTE**: You have to add the provided overall styles.
+Style `dpad` to be like a traditional tv remote. **Note**: You have to add the provided overall styles.
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/traditional_dpad.png" alt="traditional remote styled dpad" width="500"/>
 
