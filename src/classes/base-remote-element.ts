@@ -19,6 +19,7 @@ import {
 	IElementConfig,
 	IIconConfig,
 } from '../models/interfaces';
+import { MdRipple } from '../models/interfaces/MdRipple';
 import { defaultIcons } from '../models/maps';
 import { deepGet, deepSet, getDeepKeys } from '../utils';
 
@@ -26,6 +27,8 @@ export class BaseRemoteElement extends LitElement {
 	@property() hass!: HomeAssistant;
 	@property() config!: IElementConfig;
 	@property() icons: IIconConfig[] = [];
+
+	rippleEndTimer?: ReturnType<typeof setTimeout>;
 
 	@state() value?: string | number | boolean = 0;
 	entityId?: string;
@@ -899,14 +902,24 @@ export class BaseRemoteElement extends LitElement {
 		}
 	}
 
+	onTouchStart(e: TouchEvent) {
+		// Stuck ripple fix
+		clearTimeout(this.rippleEndTimer);
+		const ripple = this.shadowRoot?.querySelector('md-ripple') as MdRipple;
+		ripple?.endPressAnimation?.();
+		ripple?.startPressAnimation?.(e);
+	}
+
 	onTouchEnd(e: TouchEvent) {
 		e.preventDefault();
 
 		// Stuck ripple fix
-		const ripple = this.shadowRoot?.querySelector(
-			'md-ripple',
-		) as unknown as { endPressAnimation?: () => void };
-		ripple?.endPressAnimation?.();
+		clearTimeout(this.rippleEndTimer);
+		const ripple = this.shadowRoot?.querySelector('md-ripple') as MdRipple;
+		this.rippleEndTimer = setTimeout(
+			() => ripple?.endPressAnimation?.(),
+			15,
+		);
 	}
 
 	confirmationFailed() {
@@ -950,6 +963,7 @@ export class BaseRemoteElement extends LitElement {
 	firstUpdated() {
 		this.addEventListener('keydown', this.onKeyDown);
 		this.addEventListener('keyup', this.onKeyUp);
+		this.addEventListener('touchstart', this.onTouchStart);
 		this.addEventListener('touchend', this.onTouchEnd);
 		this.addEventListener('confirmation-failed', this.confirmationFailed);
 	}
