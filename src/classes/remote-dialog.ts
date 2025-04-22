@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { HomeAssistant, IDialog, KeyboardPlatform } from '../models/interfaces';
+import { HomeAssistant, IAction, KeyboardPlatform } from '../models/interfaces';
 
 import './dialogs/keyboards/adb-keyboard';
 import './dialogs/keyboards/android-tv-keyboard';
@@ -8,18 +8,17 @@ import './dialogs/keyboards/kodi-keyboard';
 import './dialogs/keyboards/roku-keyboard';
 import './dialogs/keyboards/unified-remote-keyboard';
 import './dialogs/keyboards/webos-keyboard';
-import './dialogs/remote-confirmation-dialog';
 
 @customElement('remote-dialog')
 export class RemoteDialog extends LitElement {
 	@property() hass!: HomeAssistant;
-	@state() config!: IDialog;
+	@state() config!: IAction;
 	@state() open: boolean = false;
 	@state() fadedIn: boolean = false;
 	fadedInTimer?: ReturnType<typeof setTimeout> = undefined;
 	tabIndex = -1;
 
-	showDialog(config: IDialog) {
+	showDialog(config: IAction) {
 		this.config = config;
 		this.open = true;
 		this.fadedInTimer = setTimeout(() => {
@@ -44,16 +43,6 @@ export class RemoteDialog extends LitElement {
 		this.fadedIn = false;
 		this.open = false;
 
-		if (e?.type == 'cancel' && this.config.type == 'confirmation') {
-			const event = new Event('confirmation-result', {
-				bubbles: true,
-				composed: true,
-			});
-			event.detail = false;
-
-			this.dispatchEvent(event);
-		}
-
 		const dialog = this.shadowRoot?.querySelector('dialog');
 		if (dialog) {
 			setTimeout(() => {
@@ -70,114 +59,64 @@ export class RemoteDialog extends LitElement {
 		}
 	}
 
-	onClick(e: MouseEvent) {
-		if (this.fadedIn && this.config.type == 'confirmation') {
-			const rect = (e.target as HTMLElement)?.getBoundingClientRect();
-			if (
-				rect &&
-				(rect.left > e.clientX ||
-					rect.right < e.clientX ||
-					rect.top > e.clientY ||
-					rect.bottom < e.clientY)
-			) {
-				const dialog = this.shadowRoot?.querySelector('dialog');
-				dialog?.animate(
-					[
-						{
-							transform: 'rotate(-1deg)',
-							'animation-timing-function': 'ease-in',
-						},
-						{
-							transform: 'rotate(1.5deg)',
-							'animation-timing-function': 'ease-out',
-						},
-						{
-							transform: 'rotate(0deg)',
-							'animation-timing-function': 'ease-in',
-						},
-					],
-					{
-						duration: 200,
-						iterations: 2,
-					},
-				);
-			}
-		}
-	}
-
 	render() {
 		let content = html``;
-		let className = '';
 		const open = this.open && this.fadedIn;
 		if (this.config) {
-			className = this.config.type;
-			switch (this.config.type) {
-				case 'confirmation':
-					content = html`<remote-confirmation-dialog
+			switch (this.config?.platform as KeyboardPlatform) {
+				case 'Unified Remote':
+					content = html`<unified-remote-keyboard
 						.hass=${this.hass}
-						.config=${this.config}
+						.action=${this.config ?? {}}
 						.open=${open}
-					></remote-confirmation-dialog>`;
+					></unified-remote-keyboard>`;
 					break;
-				case 'keyboard':
+				case 'Kodi':
+					content = html`<kodi-keyboard
+						.hass=${this.hass}
+						.action=${this.config ?? {}}
+						.open=${open}
+					></kodi-keyboard>`;
+					break;
+				case 'LG webOS':
+					content = html`<webos-keyboard
+						.hass=${this.hass}
+						.action=${this.config ?? {}}
+						.open=${open}
+					></webos-keyboard>`;
+					break;
+				case 'Roku':
+					content = html`<roku-keyboard
+						.hass=${this.hass}
+						.action=${this.config ?? {}}
+						.open=${open}
+					></roku-keyboard>`;
+					break;
+				case 'Fire TV':
+				case 'Sony BRAVIA':
+					content = html`<adb-keyboard
+						.hass=${this.hass}
+						.action=${this.config ?? {}}
+						.open=${open}
+					></adb-keyboard>`;
+					break;
+				case 'Android TV':
 				default:
-					switch (this.config.action?.platform as KeyboardPlatform) {
-						case 'Unified Remote':
-							content = html`<unified-remote-keyboard
-								.hass=${this.hass}
-								.action=${this.config.action ?? {}}
-								.open=${open}
-							></unified-remote-keyboard>`;
-							break;
-						case 'Kodi':
-							content = html`<kodi-keyboard
-								.hass=${this.hass}
-								.action=${this.config.action ?? {}}
-								.open=${open}
-							></kodi-keyboard>`;
-							break;
-						case 'LG webOS':
-							content = html`<webos-keyboard
-								.hass=${this.hass}
-								.action=${this.config.action ?? {}}
-								.open=${open}
-							></webos-keyboard>`;
-							break;
-						case 'Roku':
-							content = html`<roku-keyboard
-								.hass=${this.hass}
-								.action=${this.config.action ?? {}}
-								.open=${open}
-							></roku-keyboard>`;
-							break;
-						case 'Fire TV':
-						case 'Sony BRAVIA':
-							content = html`<adb-keyboard
-								.hass=${this.hass}
-								.action=${this.config.action ?? {}}
-								.open=${open}
-							></adb-keyboard>`;
-							break;
-						case 'Android TV':
-						default:
-							content = html`<android-tv-keyboard
-								.hass=${this.hass}
-								.action=${this.config.action ?? {}}
-								.open=${open}
-							></android-tv-keyboard>`;
-							break;
-					}
+					content = html`<android-tv-keyboard
+						.hass=${this.hass}
+						.action=${this.config ?? {}}
+						.open=${open}
+					></android-tv-keyboard>`;
 					break;
 			}
 		}
 
 		return html`<dialog
-			class="${className} ${this.open ? '' : 'closed'} ${this.fadedIn
+			class="${this.open ? '' : 'closed'} ${this.fadedIn
 				? 'faded-in'
 				: 'faded-out'}"
 			@dialog-close=${this.closeDialog}
 			@cancel=${this.closeDialog}
-			@click=${this.onClick}
 		>
 			${content}
 		</dialog>`;
@@ -191,6 +130,7 @@ export class RemoteDialog extends LitElement {
 			}
 
 			dialog {
+				width: 85%;
 				padding: 24px;
 				pointer-events: none;
 				display: inline-flex;
@@ -278,15 +218,6 @@ export class RemoteDialog extends LitElement {
 			dialog.faded-out::backdrop {
 				opacity: 0;
 				transition: opacity 0.075s linear;
-			}
-
-			.keyboard {
-				width: 85%;
-			}
-
-			.confirmation {
-				width: fit-content;
-				min-width: 272px;
 			}
 		`;
 	}

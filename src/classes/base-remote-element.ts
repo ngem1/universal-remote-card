@@ -2,12 +2,7 @@ import { CSSResult, LitElement, css, html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
 import { renderTemplate } from 'ha-nunjucks';
-import {
-	HapticType,
-	HomeAssistant,
-	IConfirmation,
-	IDialog,
-} from '../models/interfaces';
+import { HapticType, HomeAssistant, IConfirmation } from '../models/interfaces';
 
 import { load } from 'js-yaml';
 import { UPDATE_AFTER_ACTION_DELAY } from '../models/constants';
@@ -157,7 +152,6 @@ export class BaseRemoteElement extends LitElement {
 			}
 
 			if (!action || !(await this.handleConfirmation(action))) {
-				this.dispatchEvent(new Event('confirmation-failed'));
 				return;
 			}
 
@@ -267,18 +261,11 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	keyboard(action: IAction) {
-		this.showDialog({
-			type: 'keyboard',
-			action: action,
-		});
-	}
-
-	showDialog(dialogConfig: IDialog) {
 		const event = new Event('dialog-show', {
 			composed: true,
 			bubbles: true,
 		});
-		event.detail = dialogConfig;
+		event.detail = action;
 		this.dispatchEvent(event);
 	}
 
@@ -290,71 +277,50 @@ export class BaseRemoteElement extends LitElement {
 					(e) => e.user == this.hass.user?.id,
 				))
 		) {
-			this.fireHapticEvent('warning');
-
-			let text = (action.confirmation as IConfirmation).text;
-			if (!text) {
-				let serviceName;
-				const [domain, service] = (
-					action.perform_action ??
-					action['service' as 'perform_action'] ??
-					''
-				).split('.');
-				if (this.hass.services[domain]?.[service]) {
-					const localize =
-						await this.hass.loadBackendTranslation('title');
-					serviceName = `${
-						localize(`component.${domain}.title`) || domain
-					}: ${
-						localize(
-							`component.${domain}.services.${service}.name`,
-						) ||
-						this.hass.services[domain][service].name ||
-						service
-					}`;
-				}
-
-				text = this.hass.localize(
-					'ui.panel.lovelace.cards.actions.action_confirmation',
-					{
-						action:
-							serviceName ??
-							this.hass.localize(
-								`ui.panel.lovelace.editor.action-editor.actions.${action.action}`,
-							) ??
-							action.action,
-					},
-				);
-			}
-			this.showDialog({
-				type: 'confirmation',
-				text: text,
+			// Use hass-action to fire a dom event with a confirmation
+			const event = new Event('hass-action', {
+				bubbles: true,
+				composed: true,
 			});
+			event.detail = {
+				action: 'tap',
+				config: {
+					tap_action: {
+						action: 'fire-dom-event',
+						confirmation: action.confirmation,
+					},
+				},
+			};
+			this.dispatchEvent(event);
 
-			return await new Promise((resolve) => {
-				const handler = (e: Event) => {
-					this.shadowRoot?.removeEventListener(
-						'confirmation-result',
-						handler,
-					);
-					resolve(e.detail);
+			return new Promise((resolve) => {
+				// Cleanup timeout and event listeners
+				let cancelTimeout: ReturnType<typeof setTimeout>;
+				const cleanup = () => {
+					clearTimeout(cancelTimeout);
+					window.removeEventListener('ll-custom', confirmTrue);
+					window.removeEventListener('dialog-closed', confirmFalse);
 				};
-				this.shadowRoot?.addEventListener(
-					'confirmation-result',
-					handler,
-				);
+
+				// ll-custom event is fired when the user accepts the confirmation
+				const confirmTrue = () => {
+					cleanup();
+					resolve(true);
+				};
+				window.addEventListener('ll-custom', confirmTrue);
+
+				// dialog-closed event is always fired
+				// The timeout allows the ll-custom listener to resolve true before this one resolves false
+				const confirmFalse = () => {
+					cancelTimeout = setTimeout(() => {
+						cleanup();
+						resolve(false);
+					}, 100);
+				};
+				window.addEventListener('dialog-closed', confirmFalse);
 			});
 		}
 		return true;
-	}
-
-	onConfirmationResult(result: boolean) {
-		const event = new Event('confirmation-result', {
-			bubbles: false,
-			composed: false,
-		});
-		event.detail = result;
-		this.shadowRoot?.dispatchEvent(event);
 	}
 
 	setValue() {
@@ -722,6 +688,7 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	onTouchEnd(e: TouchEvent) {
+		// Premature dialog close fix
 		e.preventDefault();
 
 		// Stuck ripple fix
@@ -731,12 +698,6 @@ export class BaseRemoteElement extends LitElement {
 			() => ripple?.endPressAnimation?.(),
 			15,
 		);
-	}
-
-	confirmationFailed() {
-		clearTimeout(this.getValueFromHassTimer);
-		this.getValueFromHass = true;
-		this.requestUpdate();
 	}
 
 	async onKeyDown(e: KeyboardEvent) {
@@ -772,11 +733,10 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	firstUpdated() {
-		this.addEventListener('keydown', this.onKeyDown);
-		this.addEventListener('keyup', this.onKeyUp);
 		this.addEventListener('touchstart', this.onTouchStart);
 		this.addEventListener('touchend', this.onTouchEnd);
-		this.addEventListener('confirmation-failed', this.confirmationFailed);
+		this.addEventListener('keydown', this.onKeyDown);
+		this.addEventListener('keyup', this.onKeyUp);
 	}
 
 	static get styles(): CSSResult | CSSResult[] {
