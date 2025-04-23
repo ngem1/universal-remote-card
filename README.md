@@ -153,7 +153,7 @@ You can add a title to the card with the title field.
 
 Instead of copying the same custom actions across multiple remote cards, you can put custom actions in an array in a JSON or YAML file on your Home Assistant server's config www folder and fetch them by filename, like `local/remote_card_custom_actions.yaml`.
 
-If you are updating from an older version of this card, you may find that your configurations no longer work. Sorry! To upgrade them, click the button `UPDATE OLD CONFIG` at the bottom of the general tab. It should update your configuration to work with newer versions of this card.
+If you are updating from an older version of this card, you may find that your configurations no longer work. Sorry! To upgrade them, click the button `Update old config` at the bottom of the general tab. It should update your configuration to work with newer versions of this card.
 
 # Layout
 
@@ -204,7 +204,7 @@ In addition to the default keys and sources, you can create your own custom acti
 
 **Note**: If the remote element (default or custom) actions targets are not explicitly set in the UI they will be autofilled (if autofill is enabled) using the custom action entity or global IDs depending on which best matches the `perform-action` domain.
 
-Click the `ADD REMOTE ELEMENT` button to add a custom action remote element. Custom action remote elements can be buttons, sliders, or touchpads.
+Click the `Add remote element` button to add a custom action remote element. Custom action remote elements can be buttons, sliders, or touchpads.
 
 Custom actions in this list can be reordered for organization, but doing so does not have any effect on the the remote card layout. They can also be deleted, copied, and edited.
 

@@ -17,6 +17,7 @@ import {
 import { MdRipple } from '../models/interfaces/MdRipple';
 import { defaultIcons } from '../models/maps';
 import { deepGet, deepSet, getDeepKeys } from '../utils';
+import { buildStyles } from '../utils/styles';
 
 export class BaseRemoteElement extends LitElement {
 	@property() hass!: HomeAssistant;
@@ -625,16 +626,12 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	buildStyles(styles?: string, context?: object) {
-		const rendered = this.renderTemplate(styles as string, context);
-		return rendered
-			? html`
-					<style>
-						${(rendered as string)
-							.replace(/ !important/g, '')
-							.replace(/;/g, ' !important;')}
-					</style>
-			  `
-			: '';
+		const rendered = this.renderTemplate(
+			styles as string,
+			context,
+		) as string;
+
+		return buildStyles(rendered);
 	}
 
 	onPointerDown(e: PointerEvent) {

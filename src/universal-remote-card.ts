@@ -31,6 +31,7 @@ import {
 	HOLD_TIME,
 	REPEAT_DELAY,
 } from './models/constants';
+import { buildStyles } from './utils/styles';
 
 console.info(
 	`%c UNIVERSAL-REMOTE-CARD v${packageInfo.version}`,
@@ -572,6 +573,15 @@ class UniversalRemoteCard extends LitElement {
 		return html`<remote-dialog .hass=${this.hass}></remote-dialog>`;
 	}
 
+	buildStyles(styles?: string, context?: object) {
+		const rendered = this.renderTemplate(
+			styles as string,
+			context,
+		) as string;
+
+		return buildStyles(rendered);
+	}
+
 	fetchCustomActionsFromFile(filename?: string) {
 		if (!this.customActionsFromFile && filename) {
 			filename = `${filename.startsWith('/') ? '' : '/'}${filename}`;
@@ -652,28 +662,16 @@ class UniversalRemoteCard extends LitElement {
 			content.push(rowContent);
 		}
 
-		const styles = this.config.styles
-			? html`
-					<style>
-						${(
-							this.renderTemplate(
-								this.config.styles,
-								context,
-							) as string
-						)
-							.replace(/!important/g, '')
-							.replace(/;/g, ' !important;')}
-					</style>
-			  `
-			: '';
-
 		return html`<ha-card
 			class="${this.editMode ? ' edit-mode' : ''}"
 			.header="${this.renderTemplate(
 				this.config.title as string,
 				context,
 			)}"
-			>${content}${this.buildDialog()}${styles}</ha-card
+			>${content}${this.buildDialog()}${this.buildStyles(
+				this.config.styles,
+				context,
+			)}</ha-card
 		>`;
 	}
 
