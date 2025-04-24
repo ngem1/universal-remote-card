@@ -125,49 +125,65 @@ export class BaseRemoteElement extends LitElement {
 				break;
 		}
 
+		action &&= this.deepRenderTemplate(action);
+		if (!action || !(await this.handleConfirmation(action))) {
+			this.dispatchEvent(new Event('confirmation-failed'));
+			return;
+		}
+
 		try {
-			let handler: Function;
-			action &&= this.deepRenderTemplate(action);
 			switch (action?.action) {
+				case 'navigate':
+					this.navigate(action);
+					break;
+				case 'url':
+					this.url(action);
+					break;
+				case 'assist':
+					this.assist(action);
+					break;
+				case 'more-info':
+					this.moreInfo(action);
+					break;
+				case 'toggle':
+					this.toggle(action);
+					break;
+				case 'call-service' as 'perform-action': // deprecated in 2024.8
+				case 'perform-action':
+					this.callService(action);
+					break;
 				case 'source':
-					handler = this.source;
+					this.source(action);
 					break;
 				case 'key':
-					handler = this.key;
+					this.key(action, actionType);
 					break;
 				case 'eval':
-					handler = this.eval;
+					this.eval(action);
 					break;
 				case 'textbox':
 				case 'search':
 				case 'keyboard':
-					handler = this.keyboard;
+					this.keyboard(action);
 					break;
 				case 'repeat':
 				case 'none':
-				case undefined:
-					return;
-				default:
-					this.handleAction(action!);
-					return;
+					break;
 			}
-
-			if (!action || !(await this.handleConfirmation(action))) {
-				return;
-			}
-
-			handler.call(this, action, actionType);
 		} catch (e) {
 			this.endAction();
 			throw e;
 		}
 	}
 
-	handleAction(action: IAction) {
+	hassAction(action: IAction) {
+		// This normally cannot be used directly, because it fires a haptic event
+		// Ignoring the haptic settings of the individual element
 		let entity = action.target?.entity_id ?? this.config.entity_id;
 		if (Array.isArray(entity)) {
 			entity = entity[0];
 		}
+		action.confirmation = false;
 
 		const event = new Event('hass-action', {
 			bubbles: true,
@@ -257,6 +273,124 @@ export class BaseRemoteElement extends LitElement {
 		}
 	}
 
+	callService(action: IAction) {
+		const [domain, service] = (
+			action.perform_action ??
+			(action['service' as 'perform_action'] as string)
+		).split('.');
+		this.hass.callService(domain, service, action.data, action.target);
+	}
+
+	navigate(action: IAction) {
+		const path = (action.navigation_path as string) ?? '';
+		const replace = action.navigation_replace ?? false;
+		if (path.includes('//')) {
+			console.error(
+				'Protocol detected in navigation path. To navigate to another website use the action "url" with the key "url_path" instead.',
+			);
+			return;
+		}
+		if (replace == true) {
+			window.history.replaceState(
+				window.history.state?.root ? { root: true } : null,
+				'',
+				path,
+			);
+		} else {
+			window.history.pushState(null, '', path);
+		}
+		const event = new Event('location-changed', {
+			bubbles: false,
+			cancelable: true,
+			composed: false,
+		});
+		event.detail = { replace: replace == true };
+		window.dispatchEvent(event);
+	}
+
+	url(action: IAction) {
+		let url = action.url_path ?? '';
+		if (!url.includes('//')) {
+			url = `https://${url}`;
+		}
+		window.open(url);
+	}
+
+	assist(action: IAction) {
+		this.hassAction(action);
+	}
+
+	moreInfo(action: IAction) {
+		const event = new Event('hass-more-info', {
+			bubbles: true,
+			cancelable: true,
+			composed: true,
+		});
+		event.detail = {
+			entityId: action.target?.entity_id ?? this.config.entity_id,
+		};
+		this.dispatchEvent(event);
+	}
+
+	toggle(action: IAction) {
+		const target = {
+			...action.data,
+			...action.target,
+		};
+
+		if (Array.isArray(target.entity_id)) {
+			for (const entityId of target.entity_id) {
+				this.toggleSingle(entityId);
+			}
+		} else if (target.entity_id) {
+			this.toggleSingle(target.entity_id);
+		} else {
+			this.hass.callService('homeassistant', 'toggle', target);
+		}
+	}
+
+	toggleSingle(entityId: string) {
+		const turnOn = ['closed', 'locked', 'off'].includes(
+			this.hass.states[entityId].state,
+		);
+		let domain = entityId.split('.')[0];
+		let service: string;
+		switch (domain) {
+			case 'lock':
+				service = turnOn ? 'unlock' : 'lock';
+				break;
+			case 'cover':
+				service = turnOn ? 'open_cover' : 'close_cover';
+				break;
+			case 'button':
+				service = 'press';
+				break;
+			case 'input_button':
+				service = 'press';
+				break;
+			case 'scene':
+				service = 'turn_on';
+				break;
+			case 'valve':
+				service = turnOn ? 'open_valve' : 'close_valve';
+				break;
+			default:
+				domain = 'homeassistant';
+				service = turnOn ? 'turn_on' : 'turn_off';
+				break;
+		}
+		this.hass.callService(domain, service, { entity_id: entityId });
+	}
+
+	fireDomEvent(action: IAction) {
+		const event = new Event(action.event_type ?? 'll-custom', {
+			composed: true,
+			bubbles: true,
+		});
+		event.detail = action;
+		this.dispatchEvent(event);
+	}
+
 	eval(action: IAction) {
 		eval(action.eval ?? '');
 	}
@@ -289,6 +423,7 @@ export class BaseRemoteElement extends LitElement {
 					tap_action: {
 						action: 'fire-dom-event',
 						confirmation: action.confirmation,
+						confirmed: true,
 					},
 				},
 			};
@@ -304,9 +439,11 @@ export class BaseRemoteElement extends LitElement {
 				};
 
 				// ll-custom event is fired when the user accepts the confirmation
-				const confirmTrue = () => {
-					cleanup();
-					resolve(true);
+				const confirmTrue = (e: Event) => {
+					if (e.detail.confirmed) {
+						cleanup();
+						resolve(true);
+					}
 				};
 				window.addEventListener('ll-custom', confirmTrue);
 

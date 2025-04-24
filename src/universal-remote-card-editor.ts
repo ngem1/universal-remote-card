@@ -2413,43 +2413,6 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 	}
 
-	updatePlatform(platform?: Platform) {
-		switch (platform) {
-			case 'KODI' as Platform:
-			case 'Kodi':
-				return 'Kodi';
-			case 'ROKU' as Platform:
-			case 'Roku':
-				return 'Roku';
-			case 'FIRE' as Platform:
-			case 'FIRETV' as Platform:
-			case 'FIRE_TV' as Platform:
-			case 'FIRE TV' as Platform:
-			case 'Fire TV':
-				return 'Fire TV';
-			case 'BRAVIA' as Platform:
-			case 'Sony BRAVIA':
-				return 'Sony BRAVIA';
-			case 'APPLE TV' as Platform:
-			case 'Apple TV':
-				return 'Apple TV';
-			case 'SAMSUNG TV' as Platform:
-			case 'Samsung TV':
-				return 'Samsung TV';
-			case 'WEBOS' as Platform:
-			case 'LG webOS':
-				return 'LG webOS';
-			case 'ANDROID' as Platform:
-			case 'ANDROIDTV' as Platform:
-			case 'ANDROID_TV' as Platform:
-			case 'ANDROID TV' as Platform:
-			case 'Android TV':
-				return 'Android TV';
-			default:
-				return undefined;
-		}
-	}
-
 	autofillDefaultFields(config: IConfig) {
 		const updatedConfig = structuredClone(config);
 		const updatedEntries: IElementConfig[] = [];
@@ -2604,7 +2567,11 @@ export class UniversalRemoteCardEditor extends LitElement {
 				.keyboard_mode as Platform;
 			delete (updatedConfig as Record<string, string>).keyboard_mode;
 		}
-		updatedConfig.platform = this.updatePlatform(updatedConfig.platform);
+		updatedConfig.platform = Platforms.includes(
+			updatedConfig.platform as Platform,
+		)
+			? updatedConfig.platform
+			: 'Android TV';
 
 		// Old haptic feedback toggle names
 		if ('enable_button_feedback' in updatedConfig) {
