@@ -446,6 +446,42 @@ export class BaseRemoteElement extends LitElement {
 					(e) => e.user == this.hass.user?.id,
 				))
 		) {
+			// Retrieve original confirmation text or get translation
+			let text = (action.confirmation as IConfirmation).text;
+			if (!text) {
+				let serviceName;
+				const [domain, service] = (
+					action.perform_action ??
+					action['service' as 'perform_action'] ??
+					''
+				).split('.');
+				if (this.hass.services[domain]?.[service]) {
+					const localize =
+						await this.hass.loadBackendTranslation('title');
+					serviceName = `${
+						localize(`component.${domain}.title`) || domain
+					}: ${
+						localize(
+							`component.${domain}.services.${service}.name`,
+						) ||
+						this.hass.services[domain][service].name ||
+						service
+					}`;
+				}
+
+				text = this.hass.localize(
+					'ui.panel.lovelace.cards.actions.action_confirmation',
+					{
+						action:
+							serviceName ??
+							this.hass.localize(
+								`ui.panel.lovelace.editor.action-editor.actions.${action.action}`,
+							) ??
+							action.action,
+					},
+				);
+			}
+
 			// Use hass-action to fire a dom event with a confirmation
 			const event = new Event('hass-action', {
 				bubbles: true,
@@ -456,7 +492,9 @@ export class BaseRemoteElement extends LitElement {
 				config: {
 					tap_action: {
 						action: 'fire-dom-event',
-						confirmation: action.confirmation,
+						confirmation: {
+							text,
+						},
 						confirmed: true,
 					},
 				},
