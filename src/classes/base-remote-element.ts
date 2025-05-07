@@ -1,7 +1,7 @@
 import { CSSResult, LitElement, css, html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
-import { renderTemplate } from 'ha-nunjucks';
+import { hasTemplate, renderTemplate } from 'ha-nunjucks';
 import {
 	Action,
 	HapticType,
@@ -757,6 +757,10 @@ export class BaseRemoteElement extends LitElement {
 		str: string | number | boolean,
 		context?: object,
 	): string | number | boolean {
+		if (!hasTemplate(str)) {
+			return str;
+		}
+
 		let holdSecs: number = 0;
 		if (this.momentaryStart && this.momentaryEnd) {
 			holdSecs = (this.momentaryEnd - this.momentaryStart) / 1000;
@@ -798,7 +802,7 @@ export class BaseRemoteElement extends LitElement {
 		}
 
 		try {
-			return renderTemplate(this.hass, str as string, context);
+			return renderTemplate(this.hass, str as string, context, false);
 		} catch (e) {
 			console.error(e);
 			return '';

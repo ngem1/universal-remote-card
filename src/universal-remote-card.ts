@@ -3,7 +3,7 @@ import packageInfo from '../package.json';
 import { LitElement, TemplateResult, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import { renderTemplate } from 'ha-nunjucks';
+import { hasTemplate, renderTemplate } from 'ha-nunjucks';
 import { load } from 'js-yaml';
 import { HomeAssistant } from './models/interfaces';
 
@@ -316,22 +316,21 @@ class UniversalRemoteCard extends LitElement {
 		str: string | number | boolean,
 		context?: object,
 	): string | number | boolean {
+		if (!hasTemplate(str)) {
+			return str;
+		}
+
 		context = {
 			render: (str2: string) => this.renderTemplate(str2, context),
 			...context,
 		};
 
 		try {
-			const res = renderTemplate(this.hass, str as string, context);
-			if (res != str) {
-				return res;
-			}
+			return renderTemplate(this.hass, str as string, context, false);
 		} catch (e) {
 			console.error(e);
 			return '';
 		}
-
-		return str;
 	}
 
 	buildRow(content: TemplateResult[]): TemplateResult {
