@@ -59,6 +59,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 
 	BASE_TABS = ['general', 'layout', 'actions', 'icons'];
 	TOUCHPAD_TABS = ['up', 'down', 'center', 'left', 'right'];
+	ACTION_TABS = ['default', 'momentary'];
 	DEFAULT_KEYS: IElementConfig[] = [];
 	DEFAULT_SOURCES: IElementConfig[] = [];
 	DEFAULT_ACTIONS: IElementConfig[] = [];
@@ -346,7 +347,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.yamlString = undefined;
 		this.entryIndex = -1;
 		this.guiMode = true;
-		const i = e.detail.index;
+		const i = this.BASE_TABS.indexOf(e.detail.name);
 		if (this.baseTabIndex == i) {
 			return;
 		}
@@ -355,7 +356,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 
 	handleActionsTabSelected(e: Event) {
 		this.yamlStringsCache = {};
-		const i = e.detail.index;
+		const i = this.ACTION_TABS.indexOf(e.detail.name);
 		if (this.actionsTabIndex == i) {
 			return;
 		}
@@ -365,7 +366,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 	handleTouchpadTabSelected(e: Event) {
 		this.yamlString = undefined;
 		this.yamlStringsCache = {};
-		const i = e.detail.index;
+		const i = this.TOUCHPAD_TABS.indexOf(e.detail.name);
 		if (this.touchpadTabIndex == i) {
 			return;
 		}
@@ -1412,17 +1413,26 @@ export class UniversalRemoteCardEditor extends LitElement {
 
 	buildTabBar(index: number, handler: (e: Event) => void, tabs: string[]) {
 		return html`
-			<mwc-tab-bar .activeIndex=${index} @MDCTabBar:activated=${handler}>
-				${tabs.map((tab) => html`<mwc-tab .label=${tab}></mwc-tab>`)}
-			</mwc-tab-bar>
+			<sl-tab-group @sl-tab-show=${handler}>
+				${tabs.map(
+					(tab, i) =>
+						html`<sl-tab
+							slot="nav"
+							panel=${tab}
+							.active=${i == index}
+							>${tab}</sl-tab
+						>`,
+				)}
+			</sl-tab-group>
 		`;
 	}
 
 	buildButtonGuiEditor() {
+		this.ACTION_TABS = ['default', 'momentary'];
 		const actionsTabBar = this.buildTabBar(
 			this.actionsTabIndex,
 			this.handleActionsTabSelected,
-			['default', 'momentary'],
+			this.ACTION_TABS,
 		);
 		let actionSelectors: TemplateResult<1>;
 		const actionsNoRepeat = Actions.concat();
@@ -1598,14 +1608,14 @@ export class UniversalRemoteCardEditor extends LitElement {
 	}
 
 	buildTouchpadGuiEditor() {
-		const tabs = ['default', 'multi-touch'];
+		this.ACTION_TABS = ['default', 'multi-touch'];
 		if (this.touchpadTabIndex == 2) {
-			tabs.push(...['momentary', 'drag']);
+			this.ACTION_TABS.push(...['momentary', 'drag']);
 		}
 		const actionsTabBar = this.buildTabBar(
 			this.actionsTabIndex,
 			this.handleActionsTabSelected,
-			tabs,
+			this.ACTION_TABS,
 		);
 		let actionSelectors: TemplateResult<1>;
 		const actionsNoRepeat = Actions.concat();
@@ -2014,30 +2024,23 @@ export class UniversalRemoteCardEditor extends LitElement {
 						<div class="title-header">
 							Media Platform and Entity IDs
 						</div>
-						<div class="form">
-							${this.buildSelector(
-								'Platform',
-								'platform',
-								{
-									select: {
-										mode: 'dropdown',
-										options: Platforms,
-										reorder: false,
-									},
+						${this.buildSelector(
+							'Platform',
+							'platform',
+							{
+								select: {
+									mode: 'dropdown',
+									options: Platforms,
+									reorder: false,
 								},
-								'Android TV',
-							)}
+							},
+							'Android TV',
+						)}
+						<div class="form">
 							${this.buildSelector('Remote ID', 'remote_id', {
 								entity: {
 									filter: {
 										domain: 'remote',
-									},
-								},
-							})}
-							${this.buildSelector('Keyboard ID', 'keyboard_id', {
-								entity: {
-									filter: {
-										domain: ['remote', 'media_player'],
 									},
 								},
 							})}
@@ -2052,6 +2055,13 @@ export class UniversalRemoteCardEditor extends LitElement {
 									},
 								},
 							)}
+							${this.buildSelector('Keyboard ID', 'keyboard_id', {
+								entity: {
+									filter: {
+										domain: ['remote', 'media_player'],
+									},
+								},
+							})}
 						</div>
 					</div>
 					<div class="wrapper">
@@ -3155,6 +3165,16 @@ export class UniversalRemoteCardEditor extends LitElement {
 				box-sizing: border-box;
 				width: 100%;
 			}
+			sl-tab-group {
+				text-transform: capitalize;
+			}
+			sl-tab {
+				flex: 1;
+			}
+			sl-tab::part(base) {
+				width: 100%;
+				justify-content: center;
+			}
 
 			ha-expansion-panel {
 				display: block;
@@ -3356,6 +3376,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 					minmax(var(--form-grid-min-width, 200px), 1fr)
 				);
 				gap: 24px 8px;
+				padding: 8px 0;
 			}
 			.actions-form {
 				display: grid;
