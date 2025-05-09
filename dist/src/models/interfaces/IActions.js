@@ -12,7 +12,7 @@ export const Platforms = [
     'Apple TV',
     'Samsung TV',
     'Jellyfin',
-    'Philips TV'
+    'Philips TV',
 ];
 export const Actions = [
     'more-info',
