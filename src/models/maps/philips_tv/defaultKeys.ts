@@ -6,8 +6,8 @@ import { IElementConfig } from '../../interfaces';
 export const philipsTVDefaultKeys: IElementConfig[] = [
 	{
 		type: 'button',
-		name: 'power',
-		tap_action: { action: 'key', key: 'KEY_POWER' },
+		name: 'standby',
+		tap_action: { action: 'key', key: 'Standby' },
 		icon: 'mdi:power',
 	},
 	{
@@ -34,12 +34,7 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 		tap_action: { action: 'key', key: 'Back' },
 		icon: 'mdi:keyboard-backspace',
 	},
-	{
-		type: 'button',
-		name: 'menu',
-		tap_action: { action: 'key', key: 'PhilipsMenu' },
-		icon: 'mdi:menu',
-	},
+
 	{
 		type: 'button',
 		name: 'options',
