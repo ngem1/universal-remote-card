@@ -29,6 +29,7 @@ A super customizable universal remote card iterating on the work of several othe
   - Apple TV
   - Samsung TV
   - Jellyfin
+  - Philips TV
 - Support for multiple buttons, touchpads, and sliders using default or user defined custom actions.
 - Complete [Home Assistant actions](https://www.home-assistant.io/dashboards/actions/) support.
 - [Keyboard and search](#keyboard-textbox-and-search) dialog actions for most platforms.
@@ -68,7 +69,8 @@ This card supports several media platforms with default key and source lists. Fo
 | [Unified Remote](https://github.com/DaviPtrs/hass-unified-remote)          | NA (see below)           | NA (see below)                                                                                                                         | NA (see below)                                                                                            |
 | [Apple TV](https://www.home-assistant.io/integrations/apple_tv)            | Default keys             | Default sources and slider                                                                                                             | NA                                                                                                        |
 | [Samsung TV](https://www.home-assistant.io/integrations/samsungtv/)        | Default keys             | Default sources (requires the [SamsungTV Smart Component custom integration](https://github.com/ollo69/ha-samsungtv-smart)) and slider | NA                                                                                                        |
-| [Jellyfin](https://www.home-assistant.io/integrations/jellyfin/)           | Default keys             | Play/pause and slider                                                                                                                  | NA                                                                                                        |
+| [Jellyfin](https://www.home-assistant.io/integrations/jellyfin/)           | Default keys             | Play/pause and slider                                                                                                                  |           
+| [Philips TV](https://www.home-assistant.io/integrations/philips_js/)        | Default keys             |  Play/pause and slider  | NA    |
 
 ### Samsung TV Sources
 
