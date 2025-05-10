@@ -24,6 +24,19 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 	},
 	{
 		type: 'button',
+		name: 'list',
+		tap_action: { action: 'key', key: 'List' },
+		icon: 'mdi:format-list-bulleted',
+	},
+	{
+		type: 'button',
+		name: 'find',
+		tap_action: { action: 'key', key: 'Find' },
+		icon: 'mdi:tag-search',
+	},
+
+	{
+		type: 'button',
 		name: 'home',
 		tap_action: { action: 'key', key: 'Home' },
 		icon: 'mdi:home',
@@ -37,9 +50,22 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 
 	{
 		type: 'button',
+		name: 'exit',
+		tap_action: { action: 'key', key: 'Exit' },
+		icon: 'mdi:exit-to-app',
+	},
+
+	{
+		type: 'button',
 		name: 'options',
 		tap_action: { action: 'key', key: 'Options' },
 		icon: 'mdi:backburger',
+	},
+	{
+		type: 'button',
+		name: 'adjust',
+		tap_action: { action: 'key', key: 'Adjust' },
+		icon: 'mdi:adjust',
 	},
 	{
 		type: 'button',
@@ -325,6 +351,19 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 	},
 	{
 		type: 'button',
+		name: 'teletext',
+		tap_action: { action: 'key', key: 'Teletext' },
+		icon: 'mdi:card-textn',
+	},
+	{
+		type: 'button',
+		name: 'subtitle',
+		tap_action: { action: 'key', key: 'Subtitle' },
+		icon: 'mdi:subtitles',
+	},
+
+	{
+		type: 'button',
 		name: 'guide',
 		tap_action: { action: 'key', key: 'TvGuide' },
 		icon: 'mdi:television-box',
@@ -334,12 +373,6 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 		name: 'captions',
 		tap_action: { action: 'key', key: 'ClosedCaption' },
 		icon: 'mdi:closed-caption',
-	},
-	{
-		type: 'button',
-		name: 'tools',
-		tap_action: { action: 'key', key: 'Options' },
-		icon: 'mdi:hammer-screwdriver',
 	},
 	{
 		type: 'button',
@@ -367,8 +400,86 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 	},
 	{
 		type: 'button',
-		name: 'tv',
-		tap_action: { action: 'key', key: 'WatchTV' },
-		icon: 'mdi:television',
-	}
+		name: 'viewmode',
+		tap_action: { action: 'key', key: 'Viewmode' },
+		icon: 'mdi:view-column-outline',
+	},
+	{
+		type: 'button',
+		name: '3d_format',
+		tap_action: { action: 'key', key: '3dFormat' },
+		icon: 'mdi:video-3d',
+	},
+	{
+		type: 'button',
+		name: 'multiview',
+		tap_action: { action: 'key', key: 'Multiview' },
+		icon: 'mdi:picture-in-picture-top-right-outline',
+	},
+	{
+		type: 'button',
+		name: 'picturestyle',
+		tap_action: { action: 'key', key: 'PictureStyle' },
+		icon: 'mdi:panorama-variant-outline',
+	},
+	{
+		type: 'button',
+		name: '3d_depth',
+		tap_action: { action: 'key', key: '3dDepth' },
+		icon: 'mdi:video-3d-variant',
+	},
+	{
+		type: 'button',
+		name: 'soundstyle',
+		tap_action: { action: 'key', key: 'SoundStyle' },
+		icon: 'mdi:volume-low',
+	},
+	{
+		type: 'button',
+		name: 'surroundmode',
+		tap_action: { action: 'key', key: 'SurroundMode' },
+		icon: 'mdi:surround-sound',
+	},
+	{
+		type: 'button',
+		name: 'headphones_volume',
+		tap_action: { action: 'key', key: 'HeadphonesVolume' },
+		icon: 'mdi:headphones-settings',
+	},
+	{
+		type: 'button',
+		name: '2playergaming',
+		tap_action: { action: 'key', key: '2PlayerGaming' },
+		icon: 'mdi:gamepad-variant',
+	},
+	{
+		type: 'button',
+		name: 'setup',
+		tap_action: { action: 'key', key: 'Setup' },
+		icon: 'mdi:application-settings',
+	},
+	{
+		type: 'button',
+		name: 'whitecolour',
+		tap_action: { action: 'key', key: 'WhiteColour' },
+		icon: 'mdi:white-balance-incandescent',
+	},
+	{
+		type: 'button',
+		name: 'online',
+		tap_action: { action: 'key', key: 'Online' },
+		icon: 'mdi:web',
+	},
+	{
+		type: 'button',
+		name: 'philips_menu',
+		tap_action: { action: 'key', key: 'PhilipsMenu' },
+		icon: 'mdi:menu',
+	},
+	{
+		type: 'button',
+		name: 'dot',
+		tap_action: { action: 'key', key: 'Dot' },
+		icon: 'mdi:dots-circle',
+	},
 ];
