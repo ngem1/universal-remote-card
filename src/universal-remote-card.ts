@@ -171,7 +171,6 @@ class UniversalRemoteCard extends LitElement {
 									action.data = action.data ?? {};
 									action.data.target =
 										action.data.target ??
-										updatedElement.entity_id ??
 										this.config.device ??
 										this.config.remote_id ??
 										this.config.media_player_id ??
