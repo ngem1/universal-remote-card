@@ -1,8 +1,6 @@
 import { IElementConfig } from '../../interfaces';
 
 /**
- * https://github.com/ollo69/ha-samsungtv-smart
+ * https://www.home-assistant.io/integrations/philips_js/
  */
-export const philipsTVDefaultSources: IElementConfig[] = [
-
-];
+export const philipsTVDefaultSources: IElementConfig[] = [];

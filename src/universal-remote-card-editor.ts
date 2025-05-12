@@ -3385,6 +3385,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 					minmax(var(--form-grid-min-width, 200px), 1fr)
 				);
 				gap: 8px;
+				align-items: end;
 			}
 			.selector-margin {
 				margin: 8px 0;

@@ -12,9 +12,8 @@ export const Platforms = [
 	...KeyboardPlatforms,
 	'Apple TV',
 	'Samsung TV',
-	'Jellyfin',
 	'Philips TV',
-
+	'Jellyfin',
 ] as const;
 export type Platform = (typeof Platforms)[number];
 

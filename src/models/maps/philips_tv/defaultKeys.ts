@@ -353,7 +353,7 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 		type: 'button',
 		name: 'teletext',
 		tap_action: { action: 'key', key: 'Teletext' },
-		icon: 'mdi:card-textn',
+		icon: 'mdi:card-text',
 	},
 	{
 		type: 'button',
