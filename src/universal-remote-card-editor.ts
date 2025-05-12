@@ -1,4 +1,4 @@
-import { renderTemplate } from 'ha-nunjucks';
+import { hasTemplate, renderTemplate } from 'ha-nunjucks';
 import { LitElement, TemplateResult, css, html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
@@ -2293,22 +2293,21 @@ export class UniversalRemoteCardEditor extends LitElement {
 	}
 
 	renderTemplate(str: string | number | boolean, context: object) {
+		if (!hasTemplate(str)) {
+			return str;
+		}
+
 		context = {
 			render: (str2: string) => this.renderTemplate(str2, context),
 			...context,
 		};
 
 		try {
-			const res = renderTemplate(this.hass, str as string, context);
-			if (res != str) {
-				return res;
-			}
+			return renderTemplate(this.hass, str as string, context, false);
 		} catch (e) {
 			console.error(e);
 			return '';
 		}
-
-		return str;
 	}
 
 	getEntryContext(entry?: IElementConfig) {
