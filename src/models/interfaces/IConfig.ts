@@ -15,6 +15,7 @@ export interface IConfig {
 	keyboard_id?: string;
 	remote_id?: string;
 	media_player_id?: string;
+	device?: string;
 	autofill_entity_id?: boolean;
 
 	custom_actions?: IElementConfig[];

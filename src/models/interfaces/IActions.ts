@@ -14,8 +14,34 @@ export const Platforms = [
 	'Samsung TV',
 	'Philips TV',
 	'Jellyfin',
+	'Generic IR/RF',
 ] as const;
 export type Platform = (typeof Platforms)[number];
+
+export const RemotePlatforms: Platform[] = [
+	'Android TV',
+	'Sony BRAVIA',
+	'Fire TV',
+	'Roku',
+	'Apple TV',
+	'Samsung TV',
+	'Philips TV',
+	'Jellyfin',
+	'Generic IR/RF',
+];
+export const MediaPlayerPlatforms: Platform[] = [
+	'Android TV',
+	'Sony BRAVIA',
+	'Fire TV',
+	'Roku',
+	'LG webOS',
+	'Kodi',
+	'Apple TV',
+	'Samsung TV',
+	'Philips TV',
+	'Jellyfin',
+];
+export const DevicePlatforms: Platform[] = ['Unified Remote', 'Generic IR/RF'];
 
 export const Actions = [
 	'more-info',
@@ -83,6 +109,7 @@ export interface IAction {
 	media_player_id?: string;
 	keyboard_id?: string;
 	keyboard_prompt?: string;
+	device?: string;
 
 	perform_action?: string;
 	data?: IData;

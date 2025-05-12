@@ -3,7 +3,12 @@ import { LitElement, TemplateResult, css, html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
 import { dump, load } from 'js-yaml';
-import { HomeAssistant } from './models/interfaces';
+import {
+	DevicePlatforms,
+	HomeAssistant,
+	MediaPlayerPlatforms,
+	RemotePlatforms,
+} from './models/interfaces';
 
 import {
 	AUTOFILL,
@@ -2016,7 +2021,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		</div> `;
 	}
 
-	buildGeneralEditor() {
+	buildGeneralEditor(platform: Platform) {
 		return html`
 			<div class="content">
 				<div class="gui-editor">
@@ -2037,31 +2042,55 @@ export class UniversalRemoteCardEditor extends LitElement {
 							'Android TV',
 						)}
 						<div class="form">
-							${this.buildSelector('Remote ID', 'remote_id', {
-								entity: {
-									filter: {
-										domain: 'remote',
-									},
-								},
-							})}
-							${this.buildSelector(
-								'Media Player ID',
-								'media_player_id',
-								{
-									entity: {
-										filter: {
-											domain: 'media_player',
+							${RemotePlatforms.includes(platform)
+								? this.buildSelector('Remote ID', 'remote_id', {
+										entity: {
+											filter: {
+												domain: 'remote',
+											},
 										},
-									},
-								},
-							)}
-							${this.buildSelector('Keyboard ID', 'keyboard_id', {
-								entity: {
-									filter: {
-										domain: ['remote', 'media_player'],
-									},
-								},
-							})}
+								  })
+								: ''}
+							${MediaPlayerPlatforms.includes(platform)
+								? this.buildSelector(
+										'Media Player ID',
+										'media_player_id',
+										{
+											entity: {
+												filter: {
+													domain: 'media_player',
+												},
+											},
+										},
+								  )
+								: ''}
+							${KeyboardPlatforms.includes(
+								platform as KeyboardPlatform,
+							)
+								? this.buildSelector(
+										'Keyboard ID',
+										'keyboard_id',
+										{
+											entity: {
+												filter: {
+													domain: [
+														'remote',
+														'media_player',
+													],
+												},
+											},
+										},
+								  )
+								: ''}
+							${DevicePlatforms.includes(platform)
+								? this.buildSelector(
+										'Remote/Device Name',
+										'device',
+										{
+											text: {},
+										},
+								  )
+								: ''}
 						</div>
 					</div>
 					<div class="wrapper">
@@ -2285,7 +2314,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 				break;
 			case 0:
 			default:
-				editor = this.buildGeneralEditor();
+				editor = this.buildGeneralEditor(platform);
 				break;
 		}
 

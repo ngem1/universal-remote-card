@@ -127,6 +127,9 @@ class UniversalRemoteCard extends LitElement {
 							this.config.media_player_id;
 						action.platform =
 							action.platform ?? this.config.platform;
+						action.data = action.data ?? {};
+						action.data.device =
+							action.data.device ?? this.config.device;
 						break;
 					case 'perform-action': {
 						const [domain, _service] = (
@@ -170,6 +173,7 @@ class UniversalRemoteCard extends LitElement {
 									action.data.target =
 										action.data.target ??
 										updatedElement.entity_id ??
+										this.config.device ??
 										this.config.remote_id ??
 										this.config.media_player_id ??
 										this.config.keyboard_id;

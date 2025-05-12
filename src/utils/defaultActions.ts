@@ -8,26 +8,31 @@ import {
 	braviaTVDefaultSources,
 	fireTVDefaultKeys,
 	fireTVDefaultSources,
+	genericIRRFDefaultKeys,
+	genericIRRFDefaultSources,
 	jellyfinDefaultSources,
 	jellyfinTVDefaultKeys,
 	kodiDefaultKeys,
 	kodiDefaultSources,
+	philipsTVDefaultKeys,
+	philipsTVDefaultSources,
 	rokuDefaultKeys,
 	rokuDefaultSources,
 	samsungTVDefaultKeys,
 	samsungTVDefaultSources,
-	philipsTVDefaultKeys,
 	unifiedRemoteDefaultKeys,
 	unifiedRemoteDefaultSources,
 	webosDefaultKeys,
 	webosDefaultSources,
-	philipsTVDefaultSources,
 } from '../models/maps';
 
 export function getDefaultActions(platform: Platform) {
 	let defaultKeys: IElementConfig[];
 	let defaultSources: IElementConfig[];
 	switch (platform) {
+		case 'Generic IR/RF':
+			defaultKeys = genericIRRFDefaultKeys;
+			defaultSources = genericIRRFDefaultSources;
 		case 'Unified Remote':
 			defaultKeys = unifiedRemoteDefaultKeys;
 			defaultSources = unifiedRemoteDefaultSources;
@@ -42,9 +47,8 @@ export function getDefaultActions(platform: Platform) {
 			break;
 		case 'Philips TV':
 			defaultKeys = philipsTVDefaultKeys;
-			defaultSources = philipsTVDefaultSources
+			defaultSources = philipsTVDefaultSources;
 			break;
-	
 		case 'Jellyfin':
 			defaultKeys = jellyfinTVDefaultKeys;
 			defaultSources = jellyfinDefaultSources;

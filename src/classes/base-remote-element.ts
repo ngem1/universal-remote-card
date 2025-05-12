@@ -228,6 +228,7 @@ export class BaseRemoteElement extends LitElement {
 			case 'Samsung TV':
 			case 'Philips TV':
 			case 'Jellyfin':
+			case 'Generic IR/RF':
 			default: {
 				const data: IData = {
 					entity_id: action.remote_id ?? '',
@@ -249,13 +250,15 @@ export class BaseRemoteElement extends LitElement {
 	source(action: IAction) {
 		switch (action.platform) {
 			case 'Unified Remote':
+			case 'Generic IR/RF':
+			case 'Jellyfin':
+			case 'Kodi':
+			case 'Philips TV':
 				break;
 			case 'Fire TV':
 			case 'Roku':
-			case 'Kodi':
 			case 'Apple TV':
 			case 'Samsung TV':
-			case 'Philips TV':
 			case 'LG webOS':
 				this.hass.callService('media_player', 'select_source', {
 					entity_id: action.media_player_id,
@@ -270,7 +273,6 @@ export class BaseRemoteElement extends LitElement {
 				});
 				break;
 			case 'Android TV':
-			case 'Jellyfin':
 			default:
 				this.hass.callService('remote', 'turn_on', {
 					entity_id: action.remote_id,
