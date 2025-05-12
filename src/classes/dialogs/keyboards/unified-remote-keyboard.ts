@@ -15,7 +15,7 @@ export class UnifiedRemoteKeyboard extends BaseKeyboard {
 
 	sendText(text: string) {
 		this.hass.callService('unified_remote', 'call', {
-			target: this.action.keyboard_id,
+			target: this.action.data!.device,
 			remote_id: 'Core.Input',
 			action: 'Text',
 			extras: {
@@ -30,7 +30,7 @@ export class UnifiedRemoteKeyboard extends BaseKeyboard {
 
 	sendKey(key: string) {
 		this.hass.callService('unified_remote', 'call', {
-			target: this.action.keyboard_id,
+			target: this.action.data!.device,
 			remote_id: 'Core.Input',
 			action: 'Press',
 			extras: {

@@ -190,7 +190,11 @@ export class BaseKeyboard extends BaseDialog {
 	}
 
 	updated(changedProperties: PropertyValues) {
-		if (changedProperties.has('open') && !changedProperties.get('open')) {
+		if (
+			changedProperties.has('open') &&
+			!changedProperties.get('open') &&
+			this.open
+		) {
 			querySelectorAsync(this.shadowRoot!, 'textarea').then(
 				(textarea) => {
 					this.textarea = textarea as HTMLTextAreaElement;
@@ -203,7 +207,8 @@ export class BaseKeyboard extends BaseDialog {
 		}
 		if (
 			changedProperties.has('enabled') &&
-			!changedProperties.get('enabled')
+			!changedProperties.get('enabled') &&
+			this.enabled
 		) {
 			this.textarea?.focus();
 		}

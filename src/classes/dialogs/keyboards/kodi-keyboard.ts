@@ -16,7 +16,7 @@ export class KodiKeyboard extends BaseKeyboard {
 
 	sendText(_text: string) {
 		this.hass.callService('kodi', 'call_method', {
-			entity_id: this.action.keyboard_id,
+			entity_id: this.action.media_player_id,
 			method: 'Input.SendText',
 			text: this.textarea?.value ?? '',
 			done: false,
@@ -25,7 +25,7 @@ export class KodiKeyboard extends BaseKeyboard {
 
 	sendKey(key: string) {
 		this.hass.callService('kodi', 'call_method', {
-			entity_id: this.action.keyboard_id,
+			entity_id: this.action.media_player_id,
 			method: 'Input.SendText',
 			text: this.textarea?.value ?? '',
 			done: key == 'Enter',
@@ -34,7 +34,7 @@ export class KodiKeyboard extends BaseKeyboard {
 
 	sendSearch(text: string) {
 		this.hass.callService('kodi', 'call_method', {
-			entity_id: this.action.keyboard_id,
+			entity_id: this.action.media_player_id,
 			method: 'Input.SendText',
 			text: text,
 			done: true,
@@ -48,7 +48,7 @@ export class KodiKeyboard extends BaseKeyboard {
 			this.action.action == 'search'
 		) {
 			this.hass.callService('kodi', 'call_method', {
-				entity_id: this.action.keyboard_id,
+				entity_id: this.action.media_player_id,
 				method: 'Addons.ExecuteAddon',
 				addonid: 'script.globalsearch',
 			});

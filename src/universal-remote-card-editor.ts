@@ -4,6 +4,7 @@ import { property, state } from 'lit/decorators.js';
 
 import { dump, load } from 'js-yaml';
 import {
+	ADBKeyboardPlatforms,
 	DevicePlatforms,
 	HomeAssistant,
 	MediaPlayerPlatforms,
@@ -2064,7 +2065,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 										},
 								  )
 								: ''}
-							${KeyboardPlatforms.includes(
+							${ADBKeyboardPlatforms.includes(
 								platform as KeyboardPlatform,
 							)
 								? this.buildSelector(
@@ -3405,6 +3406,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 					minmax(var(--form-grid-min-width, 200px), 1fr)
 				);
 				gap: 24px 8px;
+				align-items: end;
 				padding: 8px 0;
 			}
 			.actions-form {

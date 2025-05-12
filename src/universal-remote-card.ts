@@ -116,7 +116,6 @@ class UniversalRemoteCard extends LitElement {
 					case 'search':
 						action.keyboard_id =
 							action.keyboard_id ?? this.config.keyboard_id;
-					// TODO update this logic to prioritize remote and media player IDs based on platform, and make keyboard_id field only useful for Android TV and Bravia
 					// falls through
 					case 'key':
 					case 'source':

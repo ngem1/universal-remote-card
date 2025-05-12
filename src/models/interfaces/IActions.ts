@@ -42,6 +42,11 @@ export const MediaPlayerPlatforms: Platform[] = [
 	'Jellyfin',
 ];
 export const DevicePlatforms: Platform[] = ['Unified Remote', 'Generic IR/RF'];
+export const ADBKeyboardPlatforms: KeyboardPlatform[] = [
+	'Android TV',
+	'Sony BRAVIA',
+	'Fire TV',
+];
 
 export const Actions = [
 	'more-info',
@@ -109,7 +114,6 @@ export interface IAction {
 	media_player_id?: string;
 	keyboard_id?: string;
 	keyboard_prompt?: string;
-	device?: string;
 
 	perform_action?: string;
 	data?: IData;
