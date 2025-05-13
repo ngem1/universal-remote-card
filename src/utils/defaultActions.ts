@@ -24,11 +24,11 @@ export function getDefaultActions(platform: Platform) {
 	let defaultKeys: IElementConfig[];
 	let defaultSources: IElementConfig[];
 	switch (platform) {
-		case 'Generic IR/RF':
+		case 'Generic Remote':
 			const names: string[] = [];
 			defaultKeys = [];
 			defaultSources = [];
-			for (const p of Platforms.filter((p) => p != 'Generic IR/RF')) {
+			for (const p of Platforms.filter((p) => p != 'Generic Remote')) {
 				const [keys, sources] = getDefaultActions(p);
 				for (const key of keys) {
 					if (key.type == 'button' && !names.includes(key.name)) {

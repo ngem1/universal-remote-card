@@ -14,7 +14,7 @@ export const Platforms = [
 	'Samsung TV',
 	'Philips TV',
 	'Jellyfin',
-	'Generic IR/RF',
+	'Generic Remote',
 ] as const;
 export type Platform = (typeof Platforms)[number];
 
@@ -27,7 +27,7 @@ export const RemotePlatforms: Platform[] = [
 	'Samsung TV',
 	'Philips TV',
 	'Jellyfin',
-	'Generic IR/RF',
+	'Generic Remote',
 ];
 export const MediaPlayerPlatforms: Platform[] = [
 	'Android TV',
@@ -41,7 +41,7 @@ export const MediaPlayerPlatforms: Platform[] = [
 	'Philips TV',
 	'Jellyfin',
 ];
-export const DevicePlatforms: Platform[] = ['Unified Remote', 'Generic IR/RF'];
+export const DevicePlatforms: Platform[] = ['Unified Remote', 'Generic Remote'];
 export const ADBKeyboardPlatforms: KeyboardPlatform[] = [
 	'Android TV',
 	'Sony BRAVIA',
@@ -114,6 +114,7 @@ export interface IAction {
 	media_player_id?: string;
 	keyboard_id?: string;
 	keyboard_prompt?: string;
+	device?: string;
 
 	perform_action?: string;
 	data?: IData;

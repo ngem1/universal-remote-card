@@ -30,7 +30,7 @@ A super customizable universal remote card iterating on the work of several othe
   - Samsung TV
   - Philips TV
   - Jellyfin
-  - Generic IR/RF
+  - Generic Remote
 - Support for multiple buttons, touchpads, and sliders using default or user defined custom actions.
 - Complete [Home Assistant actions](https://www.home-assistant.io/dashboards/actions/) support.
 - [Keyboard and search](#keyboard-textbox-and-search) dialog actions for most platforms.
@@ -72,7 +72,7 @@ This card supports several media platforms with default key and source lists. Fo
 | [Samsung TV](https://www.home-assistant.io/integrations/samsungtv/)        | Default keys             | Default sources (requires the [SamsungTV Smart Component custom integration](https://github.com/ollo69/ha-samsungtv-smart)) and slider | NA                                                                                                        |
 | [Philips TV](https://www.home-assistant.io/integrations/philips_js/)       | Default keys             | Play/pause and slider                                                                                                                  | NA                                                                                                        |
 | [Jellyfin](https://www.home-assistant.io/integrations/jellyfin/)           | Default keys             | Play/pause and slider                                                                                                                  | NA                                                                                                        |
-| Generic IR/RF                                                              | Default keys             | NA                                                                                                                                     | NA                                                                                                        |
+| Generic Remote                                                             | Default keys and sources | NA                                                                                                                                     | NA                                                                                                        |
 
 ### Samsung TV Sources
 
@@ -80,7 +80,21 @@ The Home Assistant Samsung TV integration does not allow you to change sources. 
 
 ### Unified Remote Setup
 
-Unlike most platforms, Unified Remote relies entirely on [a custom integration](https://github.com/DaviPtrs/hass-unified-remote), which is used to control a [Unified Remote server](https://www.unifiedremote.com/) on your PC. This custom integration does not create any entities, but does provide us with the action `unified_remote.call`, which can be used to call any Unified Remote API. It requires that you install the integration and setup your computer hosts [as described here in its README](https://github.com/DaviPtrs/hass-unified-remote?tab=readme-ov-file#home-assistant). You can then use the host name or IP address in the remote and keyboard ID fields in the configuration UI (make sure it does not autofill with an actual entity, you may have to fix it with the code editor).
+Unlike most platforms, Unified Remote relies entirely on [a custom integration](https://github.com/DaviPtrs/hass-unified-remote), which is used to control a [Unified Remote server](https://www.unifiedremote.com/) on your PC. This custom integration does not create any entities, but does provide us with the action `unified_remote.call`, which can be used to call any Unified Remote API. It requires that you install the integration and setup your computer hosts [as described here in its README](https://github.com/DaviPtrs/hass-unified-remote?tab=readme-ov-file#home-assistant). You can then use the host name or IP address in the remote/device name field in the configuration UI.
+
+### Generic Remote
+
+The generic remote platform takes all default key and source buttons of all other platforms and creates generic remote actions using their names and icons.
+
+```yaml
+name: power
+icon: mdi:power
+tap_action:
+  action: key
+  key: power
+```
+
+You can use `remote.learn_command` on supported platforms like [Broadlink Remote](https://www.home-assistant.io/integrations/broadlink/#remote) to create commands that match these actions. If needed a remote/device name can be provided which will be included in the key actions data.
 
 ## Action Timings
 

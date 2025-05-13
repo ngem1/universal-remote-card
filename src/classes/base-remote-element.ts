@@ -232,7 +232,7 @@ export class BaseRemoteElement extends LitElement {
 			case 'Samsung TV':
 			case 'Philips TV':
 			case 'Jellyfin':
-			case 'Generic IR/RF':
+			case 'Generic Remote':
 			default: {
 				const data: IData = {
 					entity_id: action.remote_id ?? '',
@@ -245,6 +245,9 @@ export class BaseRemoteElement extends LitElement {
 				) {
 					data.hold_secs = 1;
 				}
+				if (action.device) {
+					data.device = action.device;
+				}
 				this.hass.callService('remote', 'send_command', data);
 				break;
 			}
@@ -254,7 +257,7 @@ export class BaseRemoteElement extends LitElement {
 	source(action: IAction) {
 		switch (action.platform) {
 			case 'Unified Remote':
-			case 'Generic IR/RF':
+			case 'Generic Remote':
 			case 'Jellyfin':
 			case 'Kodi':
 			case 'Philips TV':
