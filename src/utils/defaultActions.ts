@@ -1,4 +1,4 @@
-import { IElementConfig, Platform } from '../models/interfaces';
+import { IElementConfig, Platform, Platforms } from '../models/interfaces';
 import {
 	androidTVDefaultKeys,
 	androidTVDefaultSources,
@@ -8,20 +8,14 @@ import {
 	braviaTVDefaultSources,
 	fireTVDefaultKeys,
 	fireTVDefaultSources,
-	genericIRRFDefaultKeys,
-	genericIRRFDefaultSources,
-	jellyfinDefaultSources,
 	jellyfinTVDefaultKeys,
 	kodiDefaultKeys,
-	kodiDefaultSources,
 	philipsTVDefaultKeys,
-	philipsTVDefaultSources,
 	rokuDefaultKeys,
 	rokuDefaultSources,
 	samsungTVDefaultKeys,
 	samsungTVDefaultSources,
 	unifiedRemoteDefaultKeys,
-	unifiedRemoteDefaultSources,
 	webosDefaultKeys,
 	webosDefaultSources,
 } from '../models/maps';
@@ -31,11 +25,46 @@ export function getDefaultActions(platform: Platform) {
 	let defaultSources: IElementConfig[];
 	switch (platform) {
 		case 'Generic IR/RF':
-			defaultKeys = genericIRRFDefaultKeys;
-			defaultSources = genericIRRFDefaultSources;
+			const names: string[] = [];
+			defaultKeys = [];
+			defaultSources = [];
+			for (const p of Platforms.filter((p) => p != 'Generic IR/RF')) {
+				const [keys, sources] = getDefaultActions(p);
+				for (const key of keys) {
+					if (key.type == 'button' && !names.includes(key.name)) {
+						names.push(key.name);
+						const action: IElementConfig = {
+							type: 'button',
+							name: key.name,
+							icon: key.icon,
+							tap_action: { action: 'key', key: key.name },
+						};
+						if (key.hold_action) {
+							action.hold_action = key.hold_action;
+						}
+						defaultKeys.push(action);
+					}
+				}
+				for (const source of sources) {
+					if (!names.includes(source.name)) {
+						names.push(source.name);
+						const action: IElementConfig = {
+							type: 'button',
+							name: source.name,
+							icon: source.icon,
+							tap_action: { action: 'key', key: source.name },
+						};
+						if (source.hold_action) {
+							action.hold_action = source.hold_action;
+						}
+						defaultSources.push(action);
+					}
+				}
+			}
+			break;
 		case 'Unified Remote':
 			defaultKeys = unifiedRemoteDefaultKeys;
-			defaultSources = unifiedRemoteDefaultSources;
+			defaultSources = [];
 			break;
 		case 'LG webOS':
 			defaultKeys = webosDefaultKeys;
@@ -47,15 +76,15 @@ export function getDefaultActions(platform: Platform) {
 			break;
 		case 'Philips TV':
 			defaultKeys = philipsTVDefaultKeys;
-			defaultSources = philipsTVDefaultSources;
+			defaultSources = [];
 			break;
 		case 'Jellyfin':
 			defaultKeys = jellyfinTVDefaultKeys;
-			defaultSources = jellyfinDefaultSources;
+			defaultSources = [];
 			break;
 		case 'Kodi':
 			defaultKeys = kodiDefaultKeys;
-			defaultSources = kodiDefaultSources;
+			defaultSources = [];
 			break;
 		case 'Roku':
 			defaultKeys = rokuDefaultKeys;
@@ -79,5 +108,5 @@ export function getDefaultActions(platform: Platform) {
 			defaultSources = androidTVDefaultSources;
 			break;
 	}
-	return [structuredClone(defaultKeys), structuredClone(defaultSources)];
+	return [defaultKeys, defaultSources];
 }

@@ -42,7 +42,9 @@ class UniversalRemoteCard extends LitElement {
 	@property() hass!: HomeAssistant;
 	@property() config!: IConfig;
 
-	DEFAULT_ACTIONS: IElementConfig[] = [];
+	PLATFORM?: Platform;
+	DEFAULT_KEYS: IElementConfig[] = [];
+	DEFAULT_SOURCES: IElementConfig[] = [];
 
 	nRows: number = 0;
 	nColumns: number = 0;
@@ -307,11 +309,15 @@ class UniversalRemoteCard extends LitElement {
 		}
 
 		const defaultActions = this.updateElementConfig(
-			this.DEFAULT_ACTIONS.filter(
-				(defaultActions) => defaultActions.name == name,
-			)[0] ?? {},
+			this.DEFAULT_KEYS.filter(
+				(defaultKeys) => defaultKeys.name == name,
+			)[0] ??
+				this.DEFAULT_SOURCES.filter(
+					(defaultSources) => defaultSources.name == name,
+				)[0] ??
+				{},
 		);
-		return defaultActions;
+		return structuredClone(defaultActions);
 	}
 
 	renderTemplate(
@@ -630,6 +636,7 @@ class UniversalRemoteCard extends LitElement {
 		this.fetchCustomActionsFromFile(
 			this.renderTemplate(
 				this.config.custom_actions_file ?? '',
+				context,
 			) as string,
 		);
 
@@ -646,8 +653,11 @@ class UniversalRemoteCard extends LitElement {
 			context,
 		) as Platform;
 
-		const [defaultKeys, defaultSources] = getDefaultActions(platform);
-		this.DEFAULT_ACTIONS = [...defaultKeys, ...defaultSources];
+		if (platform != this.PLATFORM) {
+			this.PLATFORM = platform;
+			[this.DEFAULT_KEYS, this.DEFAULT_SOURCES] =
+				getDefaultActions(platform);
+		}
 
 		const content: TemplateResult[] = [];
 

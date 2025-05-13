@@ -33,7 +33,7 @@ export const samsungTVDefaultSources: IElementConfig[] = [
 	},
 	{
 		type: 'button',
-		name: 'Dropout',
+		name: 'dropout',
 		tap_action: {
 			action: 'source',
 			source: 'Dropout', // UNTESTED

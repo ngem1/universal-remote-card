@@ -1993,25 +1993,30 @@ export class UniversalRemoteCardEditor extends LitElement {
 									</div>
 									<div class="action-list-container">
 										<ul class="action-list">
-											${defaultSources.map((entry) => {
-												const context =
-													this.getEntryContext(
-														entry as IElementConfig,
-													);
-												const iconElement =
-													this.buildIconElement(
-														entry,
-														context,
-													);
-												return html`<li
-													class="action-list-item"
-													draggable="true"
-													@dragstart=${this
-														.handleLayoutActionListItemDragStart}
-												>
-													${iconElement} ${entry.name}
-												</li>`;
-											})}
+											${defaultSources
+												.sort((a, b) =>
+													a.name < b.name ? -1 : 1,
+												)
+												.map((entry) => {
+													const context =
+														this.getEntryContext(
+															entry as IElementConfig,
+														);
+													const iconElement =
+														this.buildIconElement(
+															entry,
+															context,
+														);
+													return html`<li
+														class="action-list-item"
+														draggable="true"
+														@dragstart=${this
+															.handleLayoutActionListItemDragStart}
+													>
+														${iconElement}
+														${entry.name}
+													</li>`;
+												})}
 										</ul>
 									</div>
 							  </div>`
@@ -2287,10 +2292,8 @@ export class UniversalRemoteCardEditor extends LitElement {
 			context,
 		) as Platform;
 
-		const [defaultKeys, defaultSources] = getDefaultActions(platform);
-		this.DEFAULT_KEYS = defaultKeys;
-		this.DEFAULT_SOURCES = defaultSources;
-		this.DEFAULT_ACTIONS = [...defaultKeys, ...defaultSources];
+		[this.DEFAULT_KEYS, this.DEFAULT_SOURCES] = getDefaultActions(platform);
+		this.DEFAULT_ACTIONS = [...this.DEFAULT_KEYS, ...this.DEFAULT_SOURCES];
 
 		const baseTabBar = this.buildTabBar(
 			this.baseTabIndex,
@@ -2795,9 +2798,11 @@ export class UniversalRemoteCardEditor extends LitElement {
 				'';
 			const tapAction =
 				slider.tap_action ??
-				this.DEFAULT_KEYS.filter(
-					(defaultKey) => defaultKey.name == 'slider',
-				)[0].tap_action;
+				structuredClone(
+					this.DEFAULT_KEYS.filter(
+						(defaultKey) => defaultKey.name == 'slider',
+					)[0].tap_action,
+				);
 			if (tapAction) {
 				const data = tapAction.data ?? {};
 				const target = tapAction.target ?? {};
@@ -2815,17 +2820,19 @@ export class UniversalRemoteCardEditor extends LitElement {
 			updateSlider = true;
 		}
 		if (updateSlider) {
-			const defaultSlider = this.DEFAULT_KEYS.filter(
-				(defaultKey) => defaultKey.name == 'slider',
-			)[0];
+			const defaultSlider = structuredClone(
+				this.DEFAULT_KEYS.filter(
+					(defaultKey) => defaultKey.name == 'slider',
+				)[0],
+			);
 			if (sliderIndex > -1) {
 				customActions[sliderIndex] = {
-					...structuredClone(defaultSlider),
+					...defaultSlider,
 					...slider,
 				};
 			} else {
 				customActions.push({
-					...structuredClone(defaultSlider),
+					...defaultSlider,
 					...slider,
 				});
 			}
@@ -2895,9 +2902,11 @@ export class UniversalRemoteCardEditor extends LitElement {
 			};
 			updateTouchpad = true;
 		}
-		const defaultTouchpad = this.DEFAULT_KEYS.filter(
-			(defaultKey) => defaultKey.name == 'touchpad',
-		)[0];
+		const defaultTouchpad = structuredClone(
+			this.DEFAULT_KEYS.filter(
+				(defaultKey) => defaultKey.name == 'touchpad',
+			)[0],
+		);
 		if (updatedConfig.rows.toString().includes('touchpad')) {
 			const centerCustomAction = customActions.filter(
 				(customAction) => customAction.name == 'center',
@@ -2933,21 +2942,19 @@ export class UniversalRemoteCardEditor extends LitElement {
 		if (updateTouchpad) {
 			for (const direction of DirectionActions) {
 				if (!touchpad[direction]) {
-					touchpad[direction] = structuredClone(
-						defaultTouchpad[direction] ?? {},
-					);
+					touchpad[direction] = defaultTouchpad[direction] ?? {};
 					delete touchpad[direction]?.['type' as keyof IBasicActions];
 					delete touchpad[direction]?.icon;
 				}
 			}
 			if (touchpadIndex > -1) {
 				customActions[touchpadIndex] = {
-					...structuredClone(defaultTouchpad),
+					...defaultTouchpad,
 					...touchpad,
 				};
 			} else {
 				customActions.push({
-					...structuredClone(defaultTouchpad),
+					...defaultTouchpad,
 					...touchpad,
 				});
 			}
