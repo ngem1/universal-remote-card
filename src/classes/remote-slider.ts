@@ -1,5 +1,6 @@
 import { CSSResult, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 
 import { RANGE_MAX, RANGE_MIN, STEP, STEP_COUNT } from '../models/constants';
 import { ISliderConfig } from '../models/interfaces';
@@ -18,7 +19,7 @@ export class RemoteSlider extends BaseRemoteElement {
 	step: number = STEP;
 
 	vertical: boolean = false;
-	thumbWidth: number = 50;
+	thumbWidth: number = 48;
 	resizeObserver = new ResizeObserver((entries) => {
 		for (const entry of entries) {
 			this.featureWidth = this.vertical
@@ -177,7 +178,7 @@ export class RemoteSlider extends BaseRemoteElement {
 		`;
 	}
 
-	buildSliderStyles() {
+	setSliderStyles() {
 		let height, width;
 		const containerElement = this.shadowRoot?.querySelector('.container');
 		if (containerElement) {
@@ -203,84 +204,24 @@ export class RemoteSlider extends BaseRemoteElement {
 			iconTransform = 'translateX(var(--thumb-offset))';
 		}
 
-		// Moved out of html literal to prevent it from being broken by the minifier
-		const styles = `
-		:host {
-			--tooltip-label: ${tooltipLabel} !important;
-			--tooltip-transform: ${tooltipTransform} !important;
-			--icon-transform: ${iconTransform} !important;
-		}
-		${
-			this.rtl
-				? `
-		::-webkit-slider-thumb {
-			scale: -1 !important;
-		}
-		::-moz-range-thumb {
-			scale: -1 !important;
-		}
-		`
-				: ''
-		}
-		${
-			this.renderTemplate(this.config.tap_action?.action as string) ==
-			'none'
-				? `
-		input {
-			pointer-events: none !important;
-			cursor: default !important;
-		}
-		`
-				: ''
-		}
-		${
-			this.pressed
-				? `
-		:host {
-			--thumb-transition: none !important;
-			--tooltip-transition: opacity 540ms ease-in-out 0s !important;
-			--tooltip-opacity: 1 !important;
-		}
-		`
-				: ''
-		}
-		${
-			this.vertical
-				? `
-		:host {
-			width: fit-content !important;
-			align-self: stretch !important;
-		}
-		.container {
-			height: ${this.featureWidth}px !important;
-			width: var(--height) !important;
-		}
-		.background {
-			rotate: ${this.rtl ? '90' : '270'}deg !important;
-			width: ${this.featureWidth}px !important;
-			height: var(--background-height, ${this.featureHeight}px) !important;
-		}
-		input {
-			rotate: ${this.rtl ? '90' : '270'}deg !important;
-			height: ${this.featureHeight}px !important;
-			width: ${this.featureWidth}px !important;
-			touch-action: none !important;
-		}
-		.thumb {
-			translate: 0 calc(-1 * var(--thumb-offset)) !important;
-			rotate: ${this.rtl ? '90' : '270'}deg !important;
-		}
-		.thumb .active {
-			width: 100vh;
-		}
-		`
-				: ''
-		}
-		`;
+		this.style.setProperty('--feature-height', `${this.featureHeight}px`);
+		this.style.setProperty('--feature-width', `${this.featureWidth}px`);
 
-		return html`<style>
-			${styles}
-		</style>`;
+		this.style.setProperty('--tooltip-label', tooltipLabel);
+		this.style.setProperty('--tooltip-transform', tooltipTransform);
+		this.style.setProperty('--icon-transform', iconTransform);
+
+		this.style.setProperty(
+			'--thumb-offset',
+			`calc(${this.rtl && !this.vertical ? '-1 * ' : ''}${
+				this.thumbOffset
+			}px)`,
+		);
+
+		if (this.vertical) {
+			this.style.setProperty('width', 'fit-content');
+			this.style.setProperty('align-self', 'stretch');
+		}
 	}
 
 	render() {
@@ -315,21 +256,26 @@ export class RemoteSlider extends BaseRemoteElement {
 			this.renderTemplate(this.config.vertical ?? false) == true;
 		this.rtl = getComputedStyle(this).direction == 'rtl';
 		this.setThumbOffset();
-		this.style.setProperty(
-			'--thumb-offset',
-			`calc(${this.rtl && !this.vertical ? '-1 * ' : ''}${
-				this.thumbOffset
-			}px)`,
-		);
+		this.setSliderStyles();
 
 		return html`
-			<div class="container ${this.sliderOn ? 'on' : 'off'}">
+			<div
+				class="container ${classMap({
+					off: !this.sliderOn,
+					pressed: this.pressed,
+					'read-only':
+						this.renderTemplate(
+							this.config.tap_action?.action as string,
+						) == 'none',
+					rtl: this.rtl,
+					vertical: this.vertical,
+				})}"
+			>
 				${this.buildBackground()}${this.buildSlider()}
 				${this.buildThumb()}${this.buildIcon(this.config.icon)}
 				${this.buildLabel(this.config.label)}
 			</div>
-			${this.buildTooltip()}${this.buildSliderStyles()}
-			${this.buildStyles(this.config.styles)}
+			${this.buildTooltip()}${this.buildStyles(this.config.styles)}
 		`;
 	}
 
@@ -339,13 +285,17 @@ export class RemoteSlider extends BaseRemoteElement {
 		const style = getComputedStyle(thumb);
 		const userThumbWidth = style.getPropertyValue('--thumb-width');
 
+		let pixels: number;
 		if (userThumbWidth) {
-			this.thumbWidth = getNumericPixels(userThumbWidth);
+			pixels = getNumericPixels(userThumbWidth);
 		} else {
 			const height = style.getPropertyValue('height');
-			this.thumbWidth = getNumericPixels(height);
+			pixels = getNumericPixels(height);
 		}
-		this.style.setProperty('--thumb-width', `${this.thumbWidth}px`);
+		if (!isNaN(pixels) && pixels) {
+			this.thumbWidth = pixels;
+			this.style.setProperty('--thumb-width', `${this.thumbWidth}px`);
+		}
 	}
 
 	async onKeyDown(e: KeyboardEvent) {
@@ -418,9 +368,6 @@ export class RemoteSlider extends BaseRemoteElement {
 
 					--color: var(--primary-text-color);
 					--height: 48px;
-					--thumb-transition: translate 180ms ease-in-out;
-					--tooltip-transition: opacity 180ms ease-in-out 0s;
-					--tooltip-opacity: 0;
 				}
 				:host(:focus-visible) {
 					box-shadow: 0 0 0 2px
@@ -499,7 +446,7 @@ export class RemoteSlider extends BaseRemoteElement {
 					pointer-events: none;
 					translate: var(--thumb-offset) 0;
 					transition:
-						var(--thumb-transition),
+						translate 180ms ease-in-out,
 						background 180ms ease-in-out;
 				}
 				.thumb .active {
@@ -521,8 +468,8 @@ export class RemoteSlider extends BaseRemoteElement {
 					line-height: 20px;
 					transform: var(--tooltip-transform);
 					display: var(--tooltip-display);
-					transition: var(--tooltip-transition);
-					opacity: var(--tooltip-opacity);
+					transition: opacity 180ms ease-in-out 0s;
+					opacity: 0;
 				}
 				.tooltip::after {
 					content: var(--tooltip-label, 0);
@@ -541,6 +488,65 @@ export class RemoteSlider extends BaseRemoteElement {
 					);
 
 					--mdc-icon-size: var(--size, 32px);
+				}
+
+				.off .thumb {
+					visibility: hidden;
+				}
+
+				.pressed .thumb {
+					transition: background 180ms ease-in-out;
+				}
+				.pressed ~ .tooltip {
+					transition: opacity 540ms ease-in-out 0s;
+					opacity: 1;
+				}
+
+				.read-only input {
+					pointer-events: none;
+					cursor: default;
+				}
+
+				.rtl ::-webkit-slider-thumb {
+					scale: -1;
+				}
+				.rtl ::-moz-range-thumb {
+					scale: -1;
+				}
+				.rtl .thumb {
+					scale: -1;
+				}
+
+				.vertical.container {
+					height: var(--feature-width);
+					width: var(--height);
+				}
+				.vertical .background {
+					rotate: 270deg;
+					width: var(--feature-width);
+					height: var(
+						--background-height,
+						var(--feature-height)
+					) !important;
+				}
+				.vertical input {
+					rotate: 270deg;
+					height: var(--feature-height);
+					width: var(--feature-width);
+					touch-action: none;
+				}
+				.vertical .thumb {
+					translate: 0 calc(-1 * var(--thumb-offset));
+					rotate: 270deg;
+				}
+				.vertical .thumb .active {
+					width: 100vh;
+				}
+
+				.rtl.vertical .background,
+				.rtl.vertical input,
+				.rtl.vertical .thumb {
+					rotate: 90deg;
 				}
 			`,
 		];
