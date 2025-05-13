@@ -142,42 +142,6 @@ export class RemoteSlider extends BaseRemoteElement {
 			) || ((this.value as number) ?? this.range[0]) > this.range[0];
 	}
 
-	buildBackground() {
-		return html`<div class="background"></div>`;
-	}
-
-	buildTooltip() {
-		return html` <div class="tooltip"></div> `;
-	}
-
-	buildThumb() {
-		return html`<div class="thumb">
-			<div class="active"></div>
-		</div>`;
-	}
-
-	buildSlider() {
-		this.setSliderState();
-
-		return html`
-			<input
-				tabindex="-1"
-				type="range"
-				min="${this.range[0]}"
-				max="${this.range[1]}"
-				step=${this.step}
-				value="${this.range[0]}"
-				.value="${this.value}"
-				@pointerdown=${this.onPointerDown}
-				@pointerup=${this.onPointerUp}
-				@pointermove=${this.onPointerMove}
-				@pointercancel=${this.onPointerCancel}
-				@pointerleave=${this.onPointerLeave}
-				@contextmenu=${this.onContextMenu}
-			/>
-		`;
-	}
-
 	setSliderStyles() {
 		let height, width;
 		const containerElement = this.shadowRoot?.querySelector('.container');
@@ -222,6 +186,42 @@ export class RemoteSlider extends BaseRemoteElement {
 			this.style.setProperty('width', 'fit-content');
 			this.style.setProperty('align-self', 'stretch');
 		}
+	}
+
+	buildBackground() {
+		return html`<div class="background"></div>`;
+	}
+
+	buildTooltip() {
+		return html` <div class="tooltip"></div> `;
+	}
+
+	buildThumb() {
+		return html`<div class="thumb">
+			<div class="active"></div>
+		</div>`;
+	}
+
+	buildSlider() {
+		this.setSliderState();
+
+		return html`
+			<input
+				tabindex="-1"
+				type="range"
+				min="${this.range[0]}"
+				max="${this.range[1]}"
+				step=${this.step}
+				value="${this.range[0]}"
+				.value="${this.value}"
+				@pointerdown=${this.onPointerDown}
+				@pointerup=${this.onPointerUp}
+				@pointermove=${this.onPointerMove}
+				@pointercancel=${this.onPointerCancel}
+				@pointerleave=${this.onPointerLeave}
+				@contextmenu=${this.onContextMenu}
+			/>
+		`;
 	}
 
 	render() {
