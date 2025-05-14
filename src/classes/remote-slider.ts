@@ -157,25 +157,20 @@ export class RemoteSlider extends BaseRemoteElement {
 			'{{ value }}{{ unit }}',
 		)}'`;
 		let tooltipTransform: string;
-		let iconTransform: string;
 		if (this.vertical) {
 			tooltipTransform = `translate(calc(-0.3 * ${
 				width ?? 'var(--height)'
 			} - 0.8em - 18px), calc(-1 * var(--thumb-offset)))`;
-			iconTransform = 'translateY(calc(-1 * var(--thumb-offset)))';
 		} else {
 			tooltipTransform = `translate(var(--thumb-offset), calc(-0.5 * ${
 				height ?? 'var(--height)'
 			} - 0.4em - 10px))`;
-			iconTransform = 'translateX(var(--thumb-offset))';
 		}
 
 		this.style.setProperty('--feature-height', `${this.featureHeight}px`);
 		this.style.setProperty('--feature-width', `${this.featureWidth}px`);
-
 		this.style.setProperty('--tooltip-label', tooltipLabel);
 		this.style.setProperty('--tooltip-transform', tooltipTransform);
-		this.style.setProperty('--icon-transform', iconTransform);
 
 		this.style.setProperty(
 			'--thumb-offset',
@@ -371,6 +366,9 @@ export class RemoteSlider extends BaseRemoteElement {
 
 					--color: var(--primary-text-color);
 					--height: 48px;
+					--thumb-translate: var(--thumb-offset) 0;
+					--thumb-transition: translate 180ms ease-in-out,
+						background 180ms ease-in-out;
 				}
 				:host(:focus-visible) {
 					box-shadow: 0 0 0 2px
@@ -447,10 +445,8 @@ export class RemoteSlider extends BaseRemoteElement {
 					opacity: var(--opacity, 1);
 					position: absolute;
 					pointer-events: none;
-					translate: var(--thumb-offset) 0;
-					transition:
-						translate 180ms ease-in-out,
-						background 180ms ease-in-out;
+					translate: var(--thumb-translate);
+					transition: var(--thumb-transition);
 				}
 				.thumb .active {
 					height: 100%;
@@ -489,6 +485,8 @@ export class RemoteSlider extends BaseRemoteElement {
 							)
 						)
 					);
+					translate: var(--thumb-translate);
+					transition: var(--thumb-transition);
 
 					--mdc-icon-size: var(--size, 32px);
 				}
@@ -497,8 +495,8 @@ export class RemoteSlider extends BaseRemoteElement {
 					visibility: hidden;
 				}
 
-				.pressed .thumb {
-					transition: background 180ms ease-in-out;
+				.pressed {
+					--thumb-transition: background 180ms ease-in-out;
 				}
 				.pressed ~ .tooltip {
 					transition: opacity 540ms ease-in-out 0s;
@@ -517,6 +515,7 @@ export class RemoteSlider extends BaseRemoteElement {
 				.vertical.container {
 					height: var(--feature-width);
 					width: var(--height);
+					--thumb-translate: 0 calc(-1 * var(--thumb-offset));
 				}
 				.vertical .background {
 					transform: rotate(270deg);
@@ -533,7 +532,6 @@ export class RemoteSlider extends BaseRemoteElement {
 					touch-action: none;
 				}
 				.vertical .thumb {
-					translate: 0 calc(-1 * var(--thumb-offset));
 					transform: rotate(270deg);
 				}
 				.vertical .thumb .active {

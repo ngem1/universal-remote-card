@@ -45,7 +45,7 @@ export const DevicePlatforms: Platform[] = ['Unified Remote', 'Generic Remote'];
 export const ADBKeyboardPlatforms: KeyboardPlatform[] = [
 	'Android TV',
 	'Sony BRAVIA',
-	'Fire TV',
+	// 'Fire TV', // Fire TV uses ADB for everything and does not need to be listed here.
 ];
 
 export const Actions = [

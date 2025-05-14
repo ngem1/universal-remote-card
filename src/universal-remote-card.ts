@@ -120,7 +120,10 @@ class UniversalRemoteCard extends LitElement {
 					case 'textbox':
 					case 'search':
 						action.keyboard_id =
-							action.keyboard_id ?? this.config.keyboard_id;
+							action.keyboard_id ??
+							this.config.keyboard_id ??
+							this.config.remote_id ??
+							this.config.media_player_id;
 					// falls through
 					case 'key':
 					case 'source':

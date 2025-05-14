@@ -36,7 +36,7 @@ A super customizable universal remote card iterating on the work of several othe
 - [Keyboard and search](#keyboard-textbox-and-search) dialog actions for most platforms.
 - [Template](#a-note-on-templating) support for almost all fields using nunjucks.
 - Toggleable haptics.
-- Remappable touchpad with [momentary, multi-touch, and drag](#touchpad-actions) gesture support.
+- Remappable touchpad with [swipe, multi-touch, and drag](#touchpad-actions) gesture support.
 - Remappable slider with vertical orientation support.
 - User configurable remote [layout](#layout).
 - Icons and labels for all elements.
@@ -132,17 +132,19 @@ Double tap actions have a default window of 200ms to trigger before a single tap
 
 Styles can be set and changed for all remote sub-elements using regular CSS and templating. CSS styles have to be encapsulated in a CSS selector like the following.
 
-| CSS Selector  | Element                       |
-| ------------- | ----------------------------- |
-| :host         | Global values.                |
-| .row          | All rows.                     |
-| .column       | All columns.                  |
-| .button-pad   | All default button pads.      |
-| .empty-button | All empty/null button spaces. |
-| remote-button | All buttons.                  |
-| #row-1        | The first row.                |
-| #column-1     | The first column.             |
-| #pad-1        | The first button default pad. |
+| CSS Selector       | Element                         |
+| ------------------ | ------------------------------- |
+| :host              | Global values.                  |
+| .row               | All rows.                       |
+| .column            | All columns.                    |
+| .button-pad        | All default button pads.        |
+| .empty-button      | All empty/null button spaces.   |
+| remote-button      | All buttons.                    |
+| #row-1             | The first row.                  |
+| #column-1          | The first column.               |
+| #pad-1             | The first button default pad.   |
+| #power             | The name of a specific element. |
+| #power::part(icon) | The icon of a specific element. |
 
 ```css
 .row {
@@ -267,28 +269,29 @@ All remote elements can have a `Label`, `Icon`, and `Units`. These fields can al
 
 You may find the following CSS selectors useful for styling:
 
-| CSS Selector | Element                        |
-| ------------ | ------------------------------ |
-| :host        | The element itself.            |
-| .icon        | The element icon.              |
-| .label       | The element label.             |
-| button       | A button element background.   |
-| toucharea    | A touchpad element background. |
-| input        | A slider element.              |
-| .background  | A slider element background.   |
-| .tooltip     | A slider element tooltip.      |
-| .button-pad  | All button pads.               |
+| CSS Selector   | Element                                            |
+| -------------- | -------------------------------------------------- |
+| :host          | The element itself.                                |
+| .icon          | The element icon.                                  |
+| .label         | The element label.                                 |
+| button         | A button element background.                       |
+| toucharea      | A touchpad element background.                     |
+| input          | A slider element.                                  |
+| .thumb         | A slider thumb visual element.                     |
+| .thumb .active | A slider thumb trailing / active track area.       |
+| .background    | A slider element background / inactive track area. |
+| .tooltip       | A slider element tooltip.                          |
+| .button-pad    | All button pads.                                   |
 
 While you can now set most CSS fields directly using their sub-element selectors, you may find the following CSS properties useful, especially for sliders which use and modify them internally.
 
 | Name                        | Description                                                                                                                                                                                                                                                                 |
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | --size                      | Height and width of the icon.                                                                                                                                                                                                                                               |
-| --thumb-width               | Slider thumb width, defaults to `48px`.                                                                                                                                                                                                                                     |
+| --thumb-width               | Slider thumb interactable area width, defaults to `48px`. Does not represent the visually seen active area.                                                                                                                                                                 |
 | --height                    | Slider height when horizontal and width when vertical.                                                                                                                                                                                                                      |
 | --tooltip-label             | Slider tooltip label template, defaults to `'{{ value }}'`.                                                                                                                                                                                                                 |
 | --tooltip-transform         | Slider tooltip location transform function, defaults to `translate(var(--thumb-offset), calc(-0.5 * var(--height) - 0.4em - 10px))` for horizontal sliders and `translate(calc(-0.3 * var(--height) - 0.8em - 18px), calc(-1 * var(--thumb-offset)))` for vertical sliders. |
-| --icon-transform            | Slider icon transform function, defaults to `translateX(var(--thumb-offset))` for horizontal sliders and `translateY(calc(-1 * var(--thumb-offset)))` for vertical sliders.                                                                                                 |
 | --ha-ripple-color           | Color of ripples when hovered over or pressed, defaults to `var(--secondary-text-color)`.                                                                                                                                                                                   |
 | --ha-ripple-hover-color     | Color of ripples when hovered over, defaults to `var(--secondary-text-color)`.                                                                                                                                                                                              |
 | --ha-ripple-pressed-color   | Color of riples when pressed, defaults to `var(--secondary-text-color)`.                                                                                                                                                                                                    |
@@ -379,9 +382,9 @@ While most default keys use the `key` action, some actions require more informat
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_momentary.png" width="600"/>
 
-As an alternative to normal tap, hold, and double tap actions, buttons and the touchpad center can also be used in a momentary mode. Configuring this option disables the normal tap, hold, and double tap actions.
+As an alternative to normal tap, hold, and double tap actions, buttons can also be used in momentary mode. Configuring this option disables the normal tap, hold, and double tap actions.
 
-The momentary start action is fired when you first press down on a button or touchpad. The momentary end action is fired when you release the button or touchpad. These actions can be used together or separately.
+The momentary start action is fired when you first press down on a buttonand the momentary end action is fired when you release it. These actions can be used together or separately.
 
 For momentary end actions you can include the number of seconds a button has been held down using `hold_secs` in a template. For convenience, the momentary end action YAML is included in a code box below the action, like shown above.
 
@@ -389,23 +392,25 @@ For momentary end actions you can include the number of seconds a button has bee
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_touchpad.png" width="600"/>
 
-The touchpad's center acts like a button, with support for the same actions. The touchpad's direction actions are activated when the user swipes in a direction, and do not support double tap actions or momentary mode.
+The touchpad's center supports the default tap, double tap, and hold actions. The touchpads direction actions are activated when the user swipes in a direction but do not support double tap actions. Direction actions hold actions are set to repeat by default.
 
 Touchpads also support multi-touch mode, which fires alternate actions when more than one finger is used with it. This mode is disabled by default but can be enabled by setting a touchpad's multi-touch actions to something other than `Nothing`. Multi-touch mode supports center tap, double tap, and hold actions, and direction swipe and hold actions.
 
-Touchpads also support an alternate drag mode. This action is called whenever movement is detected on the touchpad, and works best with mouse movement actions like Unified Remote's `Relmtech.Basic Input delta`. The touchpad X and Y movement can be added to actions using templates using `deltaX` and `deltaY`. Because this action fires every time movement is detected on the touchpad, you may find that it fires too often, or not often enough. You can either use math to modify the values of `deltaX` and `deltaY` within the action data templates, or introduce a delay in which movement will be ignored after a drag action is fired using the configuration UI option `Sampling delay` to tweak the speed of your drag movements and action fire rate. The drag action can also be used in multi-touch mode. Enabling this action disables directional actions.
+Touchpads also support an alternate drag mode. This action is called whenever movement is detected on the touchpad, and works best with mouse movement actions like Unified Remote's `Relmtech.Basic Input delta`. The touchpad X and Y movement can be added to actions using templates using `deltaX` and `deltaY`. Because this action fires every time movement is detected on the touchpad, you may find that it fires too often, or not often enough. You can either use math to modify the values of `deltaX` and `deltaY` within the action data templates, or introduce a delay in which movement will be ignored after a drag action is fired using the configuration UI option `Sampling delay` to tweak the speed of your drag movements and action fire rate. The drag action can also be used in multi-touch mode. Enabling this action disables direction swipe actions, but not center default actions.
 
 ### Keyboard, Textbox, and Search
 
 This card supports sending text to the following platforms:
 
-- Android TV
-- Sony BRAVIA
-- Fire TV
-- Roku
-- LG webOS
-- Kodi
-- Unified Remote (PC, Mac, Linux)
+| Platform                        | Seamless       | Bulk | Search | Notes                                                                                 |
+| ------------------------------- | -------------- | ---- | ------ | ------------------------------------------------------------------------------------- |
+| Android TV                      | Yes (inserts)  | Yes  | Yes    | Requires ADB.                                                                         |
+| Sony BRAVIA                     | Yes (inserts)  | Yes  | Yes    | Requires ADB.                                                                         |
+| Fire TV                         | Yes (inserts)  | Yes  | Yes    | Requires ADB (the Fire TV integration itself is the ADB integration).                 |
+| Roku                            | Yes (inserts)  | Yes  | Yes    | Uses the remote entity for send text and the media player entity for search.          |
+| LG webOS                        | Yes (replaces) | Yes  | No     | Fully replaces on screen text rather than appending. Does not have a search function. |
+| Kodi                            | Yes (replaces) | Yes  | Yes    | Fully replaces on screen text rather than appending.                                  |
+| Unified Remote (PC, Mac, Linux) | Yes (inserts)  | Yes  | No     | Search methods vary by Unified Remote server platform, so we can't really pick one.   |
 
 If the user defined general platform is listed above, then any action set to a keyboard action (that has autofill enabled) will inherit it. Otherwise it will default to `Android TV`. Keyboard support for more platforms can be added if there is a way to do so through their Home Assistant (or community made) integrations.
 
@@ -419,7 +424,7 @@ You can change the prompt text that appears before you type anything using the `
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/keyboard_dialog_custom_prompt.png" width="600"/>
 
-For Android TV you need to include the Android TV Remote integration remote entity ID at the general or action level as it is used to send the keys enter and delete (backspace).
+For Android TV and Sony BRAVIA, you need to include the Android Debug Bridge integration remote entity ID in the keyboard ID field at the general or action level as it is used to send keys. All other integrations (including Fire TV which uses ADB for everything) will use the user provided remote and/or media player IDs for keyboard input.
 
 For Roku make sure to include both the remote and media player IDs at the general or action level, as the remote is used for normal keyboard entry while the media player is used for search.
 
@@ -427,17 +432,19 @@ For Roku make sure to include both the remote and media player IDs at the genera
 
 Send text to your supported media platform seamlessly using the action or default key `keyboard`. The dialog has several listeners which will send anything you type to your media platform immediately.
 
-Because we do not have a way to retrieve the currently on screen text of most media platforms, the dialog and platform text may become out of sync if a message gets dropped due to a network issue, you attempt to erase more than one character at a time, you try to modify the middle of the entered text, or if you prematurely close the dialog window. The keyboard dialog will attempt to prevent you from doing things that would cause this, but please remember that if you make a mistake you have to backspace all the way to the incorrect character from the end of your input text one character at at a time. In my testing the dialog always kept in sync with the platform text unless I attempted to delete more than one character. This does not apply to Kodi or LG webOS, whose text entry methods replace the on screen text when called instead of appending/inserting.
+ADB can be slow and you may notice some delay in what you type and what appears on your device. This is not a bug, this is the reality of using ADB as an input interface.
 
-ADB can be slow and you may notice some delay in what you type and what appears on your Android TV, Sony BRAVIA, or Fire TV device. Make sure to use the newer ADB integration remote entity for a faster typing experience.
+##### Insert vs Replace
+
+Platforms which insert text insert characters to the location of your on device screen (not the card text area screen) cursor. Because we do not have a way to retrieve the currently on screen text of any media platform, the dialog and platform text may become out of sync if a message gets dropped due to a network issue, you attempt to erase more than one character at a time, you try to modify the middle of the entered text, or if you prematurely close the dialog window. The keyboard dialog will attempt to prevent you from doing things that would cause this, but please remember that if you make a mistake you have to backspace all the way to the incorrect character from the end of your input text one character at at a time. In my testing the dialog always kept in sync with the platform text unless I attempted to delete more than one character.
+
+Platforms which replace replaced the entire on screen text with the text area text. These platforms do not have any restrictions on cursor movement within the card text area. If you close and re-open the card keyboard the text area will be cleared and if you type anything, it will clear the on device screen text.
 
 #### Textbox - Bulk Text Entry
 
 Send text to your supported media platform in bulk using the action or default button `textbox`. The dialog will not send any information until you tap the send button. It is highly recommended that you also create buttons for delete and enter so you can easily delete the text you send and quickly search using it.
 
 #### Search - Global Search
-
-Not supported by the platforms LG webOS or Unified Remote.
 
 Send a global search query to your media platform using the action or default button `search`. Like the bulk entry method, the dialog will not send any information until you tap the search button. This method cannot be used to enter text into currently visible text fields.
 
