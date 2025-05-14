@@ -212,11 +212,6 @@ export class RemoteButton extends BaseRemoteElement {
 		`;
 	}
 
-	firstUpdated() {
-		super.firstUpdated();
-		this.removeAttribute('tabindex');
-	}
-
 	static get styles(): CSSResult | CSSResult[] {
 		return [
 			super.styles as CSSResult,
