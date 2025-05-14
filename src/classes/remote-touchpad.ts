@@ -9,8 +9,10 @@ import {
 } from '../models/interfaces';
 
 import {
+	DIRECTION_KEYS,
 	DOUBLE_TAP_WINDOW,
 	HOLD_TIME,
+	NAVIGATION_KEYS,
 	REPEAT_DELAY,
 } from '../models/constants';
 import { BaseRemoteElement } from './base-remote-element';
@@ -82,47 +84,13 @@ export class RemoteTouchpad extends BaseRemoteElement {
 		this.holdStart = true;
 		this.swiping = false;
 
-		if (
-			!this.direction &&
-			this.renderTemplate(
-				this.config.momentary_start_action?.action ?? 'none',
-			) != 'none'
-		) {
-			this.fireHapticEvent('light');
-			this.momentaryStart = performance.now();
-			await this.sendAction('momentary_start_action');
-		} else if (
-			!this.direction &&
-			this.renderTemplate(
-				this.config.momentary_end_action?.action ?? 'none',
-			) != 'none'
-		) {
-			this.fireHapticEvent('light');
-			this.momentaryStart = performance.now();
-		} else if (!this.holdTimer) {
+		if (!this.holdTimer) {
 			this.setHoldTimer();
 		}
 	}
 
 	async onPointerUp(e: PointerEvent) {
-		if (
-			!this.direction &&
-			this.renderTemplate(
-				this.config.momentary_end_action?.action ?? 'none',
-			) != 'none'
-		) {
-			this.momentaryEnd = performance.now();
-			this.fireHapticEvent('selection');
-			await this.sendAction('momentary_end_action');
-			this.endAction();
-		} else if (
-			!this.direction &&
-			this.renderTemplate(
-				this.config.momentary_start_action?.action ?? 'none',
-			) != 'none'
-		) {
-			this.endAction();
-		} else if (this.hold || this.holdMove) {
+		if (this.hold || this.holdMove) {
 			e.stopImmediatePropagation();
 			if (e.cancelable) {
 				e.preventDefault();
@@ -209,22 +177,6 @@ export class RemoteTouchpad extends BaseRemoteElement {
 				}
 			}
 		}
-	}
-
-	async onPointerCancel(e: PointerEvent) {
-		if (
-			this.renderTemplate(
-				this.config.momentary_start_action?.action ?? 'none',
-			) != 'none' &&
-			this.renderTemplate(
-				this.config.momentary_end_action?.action ?? 'none',
-			) != 'none'
-		) {
-			this.momentaryEnd = performance.now();
-			await this.sendAction('momentary_end_action');
-		}
-
-		super.onPointerCancel(e);
 	}
 
 	endAction() {
@@ -361,16 +313,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 	}
 
 	async onKeyDown(e: KeyboardEvent) {
-		if (
-			[
-				'Enter',
-				' ',
-				'ArrowUp',
-				'ArrowDown',
-				'ArrowLeft',
-				'ArrowRight',
-			].includes(e.key)
-		) {
+		if (NAVIGATION_KEYS.includes(e.key)) {
 			e.preventDefault();
 			if (!e.repeat) {
 				if (e.shiftKey) {
@@ -384,14 +327,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 						clientY: 64,
 					}),
 				);
-				if (
-					[
-						'ArrowUp',
-						'ArrowDown',
-						'ArrowLeft',
-						'ArrowRight',
-					].includes(e.key)
-				) {
+				if (DIRECTION_KEYS.includes(e.key)) {
 					e.preventDefault();
 					if (!e.repeat) {
 						this.onPointerMove(
@@ -421,16 +357,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 	}
 
 	async onKeyUp(e: KeyboardEvent) {
-		if (
-			[
-				'Enter',
-				' ',
-				'ArrowUp',
-				'ArrowDown',
-				'ArrowLeft',
-				'ArrowRight',
-			].includes(e.key)
-		) {
+		if (NAVIGATION_KEYS.includes(e.key)) {
 			e.preventDefault();
 			if (!e.repeat) {
 				if (e.shiftKey) {

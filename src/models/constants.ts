@@ -11,3 +11,11 @@ export const STEP_COUNT = 100;
 export const STEP = 0.01;
 export const RANGE_MIN = 0;
 export const RANGE_MAX = 1;
+
+export const DIRECTION_KEYS = [
+	'ArrowUp',
+	'ArrowDown',
+	'ArrowLeft',
+	'ArrowRight',
+];
+export const NAVIGATION_KEYS = ['Enter', ' ', ...DIRECTION_KEYS];

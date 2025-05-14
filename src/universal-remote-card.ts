@@ -26,10 +26,12 @@ import './classes/remote-dialog';
 import { RemoteDialog } from './classes/remote-dialog';
 import './classes/remote-slider';
 import './classes/remote-touchpad';
+import { RemoteTouchpad } from './classes/remote-touchpad';
 import {
 	AUTOFILL,
 	DOUBLE_TAP_WINDOW,
 	HOLD_TIME,
+	NAVIGATION_KEYS,
 	REPEAT_DELAY,
 } from './models/constants';
 import { buildStyles, capitalizeWords } from './utils/styles';
@@ -703,44 +705,74 @@ class UniversalRemoteCard extends LitElement {
 	}
 
 	async onKeyDown(e: KeyboardEvent) {
-		const element = this.shadowRoot?.querySelector(
-			`[key="${e.key}"]`,
-		) as RemoteButton;
 		if (
-			element &&
 			!e.repeat &&
 			!this.shadowRoot?.querySelector('remote-dialog[open]')
 		) {
-			e.preventDefault();
-			element.onPointerDown(
-				new window.PointerEvent('pointerdown', {
-					...e,
-					isPrimary: true,
-					clientX: 1,
-					clientY: 1,
-				}),
-			);
+			const button = this.shadowRoot?.querySelector(
+				`[key="${e.key}"]`,
+			) as RemoteButton;
+			if (button) {
+				e.preventDefault();
+				button.onPointerDown(
+					new window.PointerEvent('pointerdown', {
+						...e,
+						isPrimary: true,
+						clientX: 1,
+						clientY: 1,
+					}),
+				);
+				return;
+			}
+
+			const touchpad = this.shadowRoot?.querySelector(
+				'remote-touchpad',
+			) as RemoteTouchpad;
+			if (touchpad && NAVIGATION_KEYS.includes(e.key)) {
+				e.preventDefault();
+				touchpad.onKeyDown(
+					new window.KeyboardEvent('keydown', {
+						...e,
+						key: e.key,
+					}),
+				);
+			}
 		}
 	}
 
 	async onKeyUp(e: KeyboardEvent) {
-		const element = this.shadowRoot?.querySelector(
-			`[key="${e.key}"]`,
-		) as RemoteButton;
 		if (
-			element &&
 			!e.repeat &&
 			!this.shadowRoot?.querySelector('remote-dialog[open]')
 		) {
-			e.preventDefault();
-			element.onPointerUp(
-				new window.PointerEvent('pointerup', {
-					...e,
-					isPrimary: true,
-					clientX: 1,
-					clientY: 1,
-				}),
-			);
+			const button = this.shadowRoot?.querySelector(
+				`[key="${e.key}"]`,
+			) as RemoteButton;
+			if (button) {
+				e.preventDefault();
+				button.onPointerUp(
+					new window.PointerEvent('pointerup', {
+						...e,
+						isPrimary: true,
+						clientX: 1,
+						clientY: 1,
+					}),
+				);
+				return;
+			}
+
+			const touchpad = this.shadowRoot?.querySelector(
+				'remote-touchpad',
+			) as RemoteTouchpad;
+			if (touchpad && NAVIGATION_KEYS.includes(e.key)) {
+				e.preventDefault();
+				touchpad.onKeyUp(
+					new window.KeyboardEvent('keyup', {
+						...e,
+						key: e.key,
+					}),
+				);
+			}
 		}
 	}
 

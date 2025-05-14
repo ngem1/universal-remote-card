@@ -573,7 +573,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 			) != 'none'
 		) {
 			if (entryType == 'touchpad' && this.touchpadTabIndex == 2) {
-				this.actionsTabIndex = 3;
+				this.actionsTabIndex = 2;
 			} else {
 				this.actionsTabIndex = 0;
 			}
@@ -587,11 +587,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 				context,
 			) != 'none'
 		) {
-			if (entryType == 'touchpad' && this.touchpadTabIndex == 2) {
-				this.actionsTabIndex = 2;
-			} else {
-				this.actionsTabIndex = 1;
-			}
+			this.actionsTabIndex = 1;
 		} else if (
 			entryType == 'touchpad' &&
 			(this.renderTemplate(
@@ -1621,7 +1617,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 	buildTouchpadGuiEditor() {
 		this.ACTION_TABS = ['default', 'multi-touch'];
 		if (this.touchpadTabIndex == 2) {
-			this.ACTION_TABS.push(...['momentary', 'drag']);
+			this.ACTION_TABS.push('drag');
 		}
 		const actionsTabBar = this.buildTabBar(
 			this.actionsTabIndex,
@@ -1637,7 +1633,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 			},
 		};
 		switch (this.actionsTabIndex) {
-			case 3:
+			case 2:
 				actionSelectors = html`
 					${actionsTabBar}
 					${this.buildAlertBox(
@@ -1653,29 +1649,6 @@ export class UniversalRemoteCardEditor extends LitElement {
 						'Multi-touch drag behavior (optional)',
 						'multi_drag_action',
 						defaultUiActions,
-					)}
-				`;
-				break;
-			case 2:
-				actionSelectors = html`
-					${actionsTabBar}
-					${this.buildAlertBox(
-						'Enabling momentary actions disables tap, double tap, and hold actions.',
-						'warning',
-					)}
-					${this.buildActionOption(
-						'Start behavior (optional)',
-						'momentary_start_action',
-						defaultUiActions,
-					)}
-					${this.buildAlertBox(
-						"Set the action below, and then use the code editor to set a data field to the seconds the feature was held down using a template like '{{ hold_secs | float }}'.",
-					)}
-					${this.buildActionOption(
-						'End behavior (optional)',
-						'momentary_end_action',
-						defaultUiActions,
-						true,
 					)}
 				`;
 				break;
