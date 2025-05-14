@@ -32,7 +32,7 @@ import {
 	HOLD_TIME,
 	REPEAT_DELAY,
 } from './models/constants';
-import { buildStyles } from './utils/styles';
+import { buildStyles, capitalizeWords } from './utils/styles';
 
 console.info(
 	`%c UNIVERSAL-REMOTE-CARD v${packageInfo.version}`,
@@ -388,7 +388,7 @@ class UniversalRemoteCard extends LitElement {
 			return html`<div class="empty-button"></div>`;
 		}
 		return html`<remote-button
-			title="${elementName}"
+			title="${capitalizeWords(elementName)}"
 			.hass=${this.hass}
 			.config=${actions}
 			.icons=${this.config.custom_icons}
@@ -397,7 +397,7 @@ class UniversalRemoteCard extends LitElement {
 
 	buildSlider(elementName: string, actions: IElementConfig): TemplateResult {
 		return html`<remote-slider
-			title="${elementName}"
+			title="${capitalizeWords(elementName)}"
 			.hass=${this.hass}
 			.config=${actions}
 			.icons=${this.config.custom_icons}
@@ -409,7 +409,7 @@ class UniversalRemoteCard extends LitElement {
 		actions: IElementConfig,
 	): TemplateResult {
 		return html`<remote-touchpad
-			title="${elementName}"
+			title="${capitalizeWords(elementName)}"
 			.hass=${this.hass}
 			.config=${actions}
 			.icons=${this.config.custom_icons}

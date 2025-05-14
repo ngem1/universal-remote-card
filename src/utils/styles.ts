@@ -42,3 +42,16 @@ export function buildStyles(styles?: string): TemplateResult<1> {
 export function getNumericPixels(pixels: string) {
 	return parseFloat(pixels.replace(/[^0-9]+/g, ''));
 }
+
+/**
+ * Replace underscores with spaces and capitalize the first letter of each word
+ * @param {string} word
+ * @returns {string}
+ */
+export function capitalizeWords(word: string): string {
+	return word
+		.replace('_', ' ')
+		.split(' ')
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ');
+}
