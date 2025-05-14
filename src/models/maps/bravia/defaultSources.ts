@@ -93,6 +93,15 @@ export const braviaTVDefaultSources: IElementConfig[] = [
 	},
 	{
 		type: 'button',
+		name: 'globoplay',
+		tap_action: {
+			action: 'source',
+			source: 'Globoplay',
+		},
+		icon: 'globoplay',
+	},
+	{
+		type: 'button',
 		name: 'hulu',
 		tap_action: {
 			action: 'source',
