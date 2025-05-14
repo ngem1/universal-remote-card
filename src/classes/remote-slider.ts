@@ -510,12 +510,6 @@ export class RemoteSlider extends BaseRemoteElement {
 					cursor: default;
 				}
 
-				.rtl ::-webkit-slider-thumb {
-					scale: -1;
-				}
-				.rtl ::-moz-range-thumb {
-					scale: -1;
-				}
 				.rtl .thumb {
 					scale: -1;
 				}
@@ -549,7 +543,7 @@ export class RemoteSlider extends BaseRemoteElement {
 				.rtl.vertical .background,
 				.rtl.vertical input,
 				.rtl.vertical .thumb {
-					rotate: 90deg;
+					transform: rotate(90deg);
 				}
 			`,
 		];
