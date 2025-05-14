@@ -38,7 +38,9 @@ export class RemoteSlider extends BaseRemoteElement {
 			Math.min(Number(value) ?? this.range[0], this.range[1]),
 			this.range[0],
 		);
-		if (!this.precision) {
+		if (this.precision) {
+			value = Number(value.toFixed(this.precision));
+		} else {
 			value = Math.trunc(value as number);
 		}
 		this.value = value;
@@ -523,7 +525,7 @@ export class RemoteSlider extends BaseRemoteElement {
 					width: var(--height);
 				}
 				.vertical .background {
-					rotate: 270deg;
+					transform: rotate(270deg);
 					width: var(--feature-width);
 					height: var(
 						--background-height,
@@ -531,14 +533,14 @@ export class RemoteSlider extends BaseRemoteElement {
 					) !important;
 				}
 				.vertical input {
-					rotate: 270deg;
+					transform: rotate(270deg);
 					height: var(--feature-height);
 					width: var(--feature-width);
 					touch-action: none;
 				}
 				.vertical .thumb {
 					translate: 0 calc(-1 * var(--thumb-offset));
-					rotate: 270deg;
+					transform: rotate(270deg);
 				}
 				.vertical .thumb .active {
 					width: 100vh;
