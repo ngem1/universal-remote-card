@@ -33,6 +33,12 @@ export const braviaTVDefaultKeys: IElementConfig[] = [
 	},
 	{
 		type: 'button',
+		name: 'source',
+		tap_action: { action: 'key', key: 'Input' },
+		icon: 'mdi:import',
+	},
+	{
+		type: 'button',
 		name: 'volume_up',
 		tap_action: { action: 'key', key: 'VolumeUp' },
 		hold_action: { action: 'repeat' },
