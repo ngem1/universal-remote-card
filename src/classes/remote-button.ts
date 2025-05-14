@@ -197,6 +197,7 @@ export class RemoteButton extends BaseRemoteElement {
 
 		return html`
 			<button
+				part="button"
 				tabindex="-1"
 				@pointerdown=${this.onPointerDown}
 				@pointerup=${this.onPointerUp}

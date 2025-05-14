@@ -871,16 +871,18 @@ export class BaseRemoteElement extends LitElement {
 				`;
 			}
 		}
-		return html`<div class="icon">${iconElement}</div>`;
+		return html`<div class="icon" part="icon">${iconElement}</div>`;
 	}
 
 	buildLabel(label?: string, context?: object) {
 		const rendered = this.renderTemplate(label as string, context);
-		return rendered ? html`<pre class="label">${rendered}</pre>` : '';
+		return rendered
+			? html`<pre class="label" part="label">${rendered}</pre>`
+			: '';
 	}
 
 	buildRipple() {
-		return html`<md-ripple></md-ripple>`;
+		return html`<md-ripple part="ripple"></md-ripple>`;
 	}
 
 	buildStyles(styles?: string, context?: object) {

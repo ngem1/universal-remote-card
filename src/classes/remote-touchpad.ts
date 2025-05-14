@@ -304,6 +304,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 		this.setValue();
 		return html`
 			<toucharea
+				part="toucharea"
 				tabindex="0"
 				@pointerdown=${this.onPointerDown}
 				@pointerup=${this.onPointerUp}
@@ -312,37 +313,42 @@ export class RemoteTouchpad extends BaseRemoteElement {
 				@pointerleave=${this.onPointerLeave}
 				@contextmenu=${this.onContextMenu}
 			>
-				<div class="toucharea-row">
+				<div class="toucharea-row" part="top-row">
 					<remote-icon-label
 						id="up"
+						part="up"
 						.hass=${this.hass}
 						.config=${this.config.up ?? {}}
 						.icons=${this.icons}
 					></remote-icon-label>
 				</div>
-				<div class="toucharea-row">
+				<div class="toucharea-row" part="center-row">
 					<remote-icon-label
 						id="left"
+						part="left"
 						.hass=${this.hass}
 						.config=${this.config.left ?? {}}
 						.icons=${this.icons}
 					></remote-icon-label>
 					<remote-icon-label
 						id="center"
+						part="center"
 						.hass=${this.hass}
 						.config=${this.config}
 						.icons=${this.icons}
 					></remote-icon-label>
 					<remote-icon-label
 						id="right"
+						part="right"
 						.hass=${this.hass}
 						.config=${this.config.right ?? {}}
 						.icons=${this.icons}
 					></remote-icon-label>
 				</div>
-				<div class="toucharea-row">
+				<div class="toucharea-row" part="bottom-row">
 					<remote-icon-label
 						id="down"
+						part="down"
 						.hass=${this.hass}
 						.config=${this.config.down ?? {}}
 						.icons=${this.icons}

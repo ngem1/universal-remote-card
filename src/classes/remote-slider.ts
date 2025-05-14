@@ -189,24 +189,23 @@ export class RemoteSlider extends BaseRemoteElement {
 	}
 
 	buildBackground() {
-		return html`<div class="background"></div>`;
+		return html`<div class="background" part="background"></div>`;
 	}
 
 	buildTooltip() {
-		return html` <div class="tooltip"></div> `;
+		return html` <div class="tooltip" part="tooltip"></div> `;
 	}
 
 	buildThumb() {
-		return html`<div class="thumb">
-			<div class="active"></div>
+		return html`<div class="thumb" part="thumb">
+			<div class="active" part="active"></div>
 		</div>`;
 	}
 
 	buildSlider() {
-		this.setSliderState();
-
 		return html`
 			<input
+				part="range"
 				tabindex="-1"
 				type="range"
 				min="${this.range[0]}"
@@ -256,6 +255,7 @@ export class RemoteSlider extends BaseRemoteElement {
 			this.renderTemplate(this.config.vertical ?? false) == true;
 		this.rtl = getComputedStyle(this).direction == 'rtl';
 		this.setThumbOffset();
+		this.setSliderState();
 		this.setSliderStyles();
 
 		return html`
@@ -270,6 +270,7 @@ export class RemoteSlider extends BaseRemoteElement {
 					rtl: this.rtl,
 					vertical: this.vertical,
 				})}"
+				part="container"
 			>
 				${this.buildBackground()}${this.buildSlider()}
 				${this.buildThumb()}${this.buildIcon(this.config.icon)}
