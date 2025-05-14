@@ -456,8 +456,8 @@ export const samsungTVDefaultKeys: IElementConfig[] = [
 	},
 	{
 		type: 'button',
-		name: 'av_2',
-		tap_action: { action: 'key', key: 'KEY_AV2' },
+		name: 'av_3',
+		tap_action: { action: 'key', key: 'KEY_AV3' },
 		icon: 'mdi:video-input-component',
 	},
 	{

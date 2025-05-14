@@ -189,6 +189,12 @@ export class RemoteButton extends BaseRemoteElement {
 
 	render() {
 		this.setValue();
+
+		const key = this.renderTemplate(this.config.keypress ?? '');
+		if (key) {
+			this.setAttribute('key', key as string);
+		}
+
 		return html`
 			<button
 				tabindex="-1"
@@ -204,6 +210,11 @@ export class RemoteButton extends BaseRemoteElement {
 			</button>
 			${this.buildStyles(this.config.styles)}
 		`;
+	}
+
+	firstUpdated() {
+		super.firstUpdated();
+		this.removeAttribute('tabindex');
 	}
 
 	static get styles(): CSSResult | CSSResult[] {

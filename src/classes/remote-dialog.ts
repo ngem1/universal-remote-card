@@ -111,8 +111,16 @@ export class RemoteDialog extends LitElement {
 			}
 		}
 
+		if (this.open) {
+			this.setAttribute('open', '');
+			this.removeAttribute('closed');
+		} else {
+			this.setAttribute('closed', '');
+			this.removeAttribute('open');
+		}
+
 		return html`<dialog
-			class="${this.open ? '' : 'closed'} ${this.fadedIn
+			class="${this.open ? 'open' : 'closed'} ${this.fadedIn
 				? 'faded-in'
 				: 'faded-out'}"
 			@dialog-close=${this.closeDialog}

@@ -162,7 +162,7 @@ export const braviaTVDefaultSources: IElementConfig[] = [
 	},
 	{
 		type: 'button',
-		name: 'npo_start',
+		name: 'npostart',
 		tap_action: {
 			action: 'source',
 			source: 'NPO Start',

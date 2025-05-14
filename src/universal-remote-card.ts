@@ -21,6 +21,7 @@ import { UniversalRemoteCardEditor } from './universal-remote-card-editor';
 import { getDefaultActions } from './utils';
 
 import './classes/remote-button';
+import { RemoteButton } from './classes/remote-button';
 import './classes/remote-dialog';
 import { RemoteDialog } from './classes/remote-dialog';
 import './classes/remote-slider';
@@ -673,6 +674,9 @@ class UniversalRemoteCard extends LitElement {
 
 		return html`<ha-card
 			class="${this.editMode ? ' edit-mode' : ''}"
+			tabindex="0"
+			@keydown=${this.onKeyDown}
+			@keyup=${this.onKeyUp}
 			.header="${this.renderTemplate(
 				this.config.title as string,
 				context,
@@ -693,6 +697,48 @@ class UniversalRemoteCard extends LitElement {
 
 	firstUpdated() {
 		this.addEventListener('dialog-show', this.showDialog);
+	}
+
+	async onKeyDown(e: KeyboardEvent) {
+		const element = this.shadowRoot?.querySelector(
+			`[key="${e.key}"]`,
+		) as RemoteButton;
+		if (
+			element &&
+			!e.repeat &&
+			!this.shadowRoot?.querySelector('remote-dialog[open]')
+		) {
+			e.preventDefault();
+			element.onPointerDown(
+				new window.PointerEvent('pointerdown', {
+					...e,
+					isPrimary: true,
+					clientX: 1,
+					clientY: 1,
+				}),
+			);
+		}
+	}
+
+	async onKeyUp(e: KeyboardEvent) {
+		const element = this.shadowRoot?.querySelector(
+			`[key="${e.key}"]`,
+		) as RemoteButton;
+		if (
+			element &&
+			!e.repeat &&
+			!this.shadowRoot?.querySelector('remote-dialog[open]')
+		) {
+			e.preventDefault();
+			element.onPointerUp(
+				new window.PointerEvent('pointerup', {
+					...e,
+					isPrimary: true,
+					clientX: 1,
+					clientY: 1,
+				}),
+			);
+		}
 	}
 
 	static get styles() {

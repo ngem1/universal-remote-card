@@ -26,6 +26,7 @@ interface IBaseElementConfig extends IDisplayConfig {
 	entity_id?: string;
 	autofill_entity_id?: boolean;
 	value_attribute?: string;
+	keypress?: string;
 }
 
 interface IDisplayConfig {

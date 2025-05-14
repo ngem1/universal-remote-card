@@ -1503,7 +1503,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 		return html`
 			${this.buildMainFeatureOptions()}
 			${this.buildAppearancePanel(this.buildCommonAppearanceOptions())}
-			${this.buildInteractionsPanel(actionSelectors)}
+			${this.buildInteractionsPanel(html`
+				${actionSelectors}
+				${this.buildSelector('Keyboard Key', 'keypress', {
+					text: {},
+				})}
+			`)}
 		`;
 	}
 
