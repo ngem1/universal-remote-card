@@ -388,6 +388,7 @@ class UniversalRemoteCard extends LitElement {
 			return html`<div class="empty-button"></div>`;
 		}
 		return html`<remote-button
+			id="${elementName}"
 			title="${capitalizeWords(elementName)}"
 			.hass=${this.hass}
 			.config=${actions}
@@ -397,6 +398,7 @@ class UniversalRemoteCard extends LitElement {
 
 	buildSlider(elementName: string, actions: IElementConfig): TemplateResult {
 		return html`<remote-slider
+			id="${elementName}"
 			title="${capitalizeWords(elementName)}"
 			.hass=${this.hass}
 			.config=${actions}
@@ -409,6 +411,7 @@ class UniversalRemoteCard extends LitElement {
 		actions: IElementConfig,
 	): TemplateResult {
 		return html`<remote-touchpad
+			id="${elementName}"
 			title="${capitalizeWords(elementName)}"
 			.hass=${this.hass}
 			.config=${actions}
