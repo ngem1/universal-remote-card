@@ -31,7 +31,6 @@ export class RemoteSlider extends BaseRemoteElement {
 			this.setThumbOffset();
 		}
 	});
-	rtl: boolean = false;
 
 	set _value(value: string | number | boolean | undefined) {
 		value = Math.max(
@@ -174,9 +173,9 @@ export class RemoteSlider extends BaseRemoteElement {
 
 		this.style.setProperty(
 			'--thumb-offset',
-			`calc(${this.rtl && !this.vertical ? '-1 * ' : ''}${
-				this.thumbOffset
-			}px)`,
+			`calc(${
+				this.classList.contains('rtl') && !this.vertical ? '-1 * ' : ''
+			}${this.thumbOffset}px)`,
 		);
 
 		if (this.vertical) {
@@ -250,7 +249,6 @@ export class RemoteSlider extends BaseRemoteElement {
 
 		this.vertical =
 			this.renderTemplate(this.config.vertical ?? false) == true;
-		this.rtl = getComputedStyle(this).direction == 'rtl';
 		this.setThumbOffset();
 		this.setSliderState();
 		this.setSliderStyles();
@@ -264,7 +262,6 @@ export class RemoteSlider extends BaseRemoteElement {
 						this.renderTemplate(
 							this.config.tap_action?.action as string,
 						) == 'none',
-					rtl: this.rtl,
 					vertical: this.vertical,
 				})}"
 				part="container"
@@ -306,7 +303,12 @@ export class RemoteSlider extends BaseRemoteElement {
 			this._value = Math.min(
 				Math.max(
 					parseFloat((this.value ?? this.range[0]) as string) +
-						(e.key == keys[!this.vertical && this.rtl ? 1 : 0]
+						(e.key ==
+						keys[
+							!this.vertical && this.classList.contains('rtl')
+								? 1
+								: 0
+						]
 							? -1
 							: 1) *
 							this.step,
@@ -508,7 +510,7 @@ export class RemoteSlider extends BaseRemoteElement {
 					cursor: default;
 				}
 
-				.rtl .thumb {
+				:host(.rtl) .thumb {
 					scale: -1;
 				}
 
@@ -538,9 +540,9 @@ export class RemoteSlider extends BaseRemoteElement {
 					width: 100vh;
 				}
 
-				.rtl.vertical .background,
-				.rtl.vertical input,
-				.rtl.vertical .thumb {
+				:host(.rtl) .vertical .background,
+				:host(.rtl) .vertical input,
+				:host(.rtl) .vertical .thumb {
 					transform: rotate(90deg);
 				}
 			`,

@@ -57,7 +57,6 @@ export class BaseRemoteElement extends LitElement {
 
 	@state() featureWidth: number = 0;
 	@state() featureHeight: number = 0;
-	rtl: boolean = false;
 	tabIndex: number = 0;
 	firefox: boolean = /firefox|fxios/i.test(navigator.userAgent);
 
