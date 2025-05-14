@@ -173,9 +173,9 @@ export class RemoteSlider extends BaseRemoteElement {
 
 		this.style.setProperty(
 			'--thumb-offset',
-			`calc(${
-				this.classList.contains('rtl') && !this.vertical ? '-1 * ' : ''
-			}${this.thumbOffset}px)`,
+			`calc(${this.rtl && !this.vertical ? '-1 * ' : ''}${
+				this.thumbOffset
+			}px)`,
 		);
 
 		if (this.vertical) {
@@ -303,12 +303,7 @@ export class RemoteSlider extends BaseRemoteElement {
 			this._value = Math.min(
 				Math.max(
 					parseFloat((this.value ?? this.range[0]) as string) +
-						(e.key ==
-						keys[
-							!this.vertical && this.classList.contains('rtl')
-								? 1
-								: 0
-						]
+						(e.key == keys[!this.vertical && this.rtl ? 1 : 0]
 							? -1
 							: 1) *
 							this.step,
@@ -510,7 +505,7 @@ export class RemoteSlider extends BaseRemoteElement {
 					cursor: default;
 				}
 
-				:host(.rtl) .thumb {
+				:host([dir='rtl']) .thumb {
 					scale: -1;
 				}
 
@@ -540,9 +535,9 @@ export class RemoteSlider extends BaseRemoteElement {
 					width: 100vh;
 				}
 
-				:host(.rtl) .vertical .background,
-				:host(.rtl) .vertical input,
-				:host(.rtl) .vertical .thumb {
+				:host([dir='rtl']) .vertical .background,
+				:host([dir='rtl']) .vertical input,
+				:host([dir='rtl']) .vertical .thumb {
 					transform: rotate(90deg);
 				}
 			`,

@@ -59,6 +59,7 @@ export class BaseRemoteElement extends LitElement {
 	@state() featureHeight: number = 0;
 	tabIndex: number = 0;
 	firefox: boolean = /firefox|fxios/i.test(navigator.userAgent);
+	rtl: boolean = false;
 
 	fireHapticEvent(haptic: HapticType) {
 		if (
@@ -989,6 +990,10 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	firstUpdated() {
+		this.rtl = getComputedStyle(this).direction == 'rtl';
+		if (this.rtl) {
+			this.setAttribute('dir', 'rtl');
+		}
 		this.addEventListener('touchstart', this.onTouchStart, {
 			passive: true,
 		});
