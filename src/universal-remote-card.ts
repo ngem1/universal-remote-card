@@ -57,13 +57,6 @@ class UniversalRemoteCard extends LitElement {
 
 	customActionsFromFile?: IElementConfig[];
 
-	static get properties() {
-		return {
-			hass: {},
-			config: {},
-		};
-	}
-
 	static getConfigElement() {
 		return document.createElement('universal-remote-card-editor');
 	}
@@ -83,7 +76,7 @@ class UniversalRemoteCard extends LitElement {
 		return numRows;
 	}
 
-	async setConfig(config: IConfig) {
+	setConfig(config: IConfig) {
 		if (!config) {
 			throw new Error('Invalid configuration');
 		}
