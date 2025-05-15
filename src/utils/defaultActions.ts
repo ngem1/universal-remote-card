@@ -8,6 +8,7 @@ import {
 	braviaTVDefaultSources,
 	fireTVDefaultKeys,
 	fireTVDefaultSources,
+	genericRemoteDefaultKeys,
 	jellyfinTVDefaultKeys,
 	kodiDefaultKeys,
 	philipsTVDefaultKeys,
@@ -25,62 +26,14 @@ export function getDefaultActions(platform: Platform) {
 	let defaultSources: IElementConfig[];
 	switch (platform) {
 		case 'Generic Remote':
-			const names: string[] = [];
-			defaultKeys = [
-				{
-					type: 'touchpad',
-					name: 'touchpad',
-					tap_action: {
-						action: 'key',
-						key: 'center',
-					},
-					up: {
-						tap_action: { action: 'key', key: 'up' },
-						hold_action: { action: 'repeat' },
-					},
-					down: {
-						tap_action: { action: 'key', key: 'down' },
-						hold_action: { action: 'repeat' },
-					},
-					left: {
-						tap_action: { action: 'key', key: 'left' },
-						hold_action: { action: 'repeat' },
-					},
-					right: {
-						tap_action: { action: 'key', key: 'right' },
-						hold_action: { action: 'repeat' },
-					},
-				},
-				{
-					type: 'touchpad',
-					name: 'dragpad',
-					tap_action: {
-						action: 'key',
-						key: 'center',
-					},
-					drag_action: {
-						action: 'key',
-						key: '{{ ("right" if deltaX > 0 else "left") if (deltaX | abs) > (deltaY | abs) else ("down" if deltaY > 0 else "up") }}',
-						repeat_delay: 100,
-					},
-					multi_drag_action: {
-						action: 'key',
-						key: '{{ ("right" if deltaX > 0 else "left") if (deltaX | abs) > (deltaY | abs) else ("down" if deltaY > 0 else "up") }}',
-						repeat_delay: 50,
-					},
-					up: {},
-					down: {},
-					left: {},
-					right: {},
-					icon: 'mdi:drag-variant',
-				},
-			];
+			const names = new Set();
+			defaultKeys = genericRemoteDefaultKeys;
 			defaultSources = [];
 			for (const p of Platforms.filter((p) => p != 'Generic Remote')) {
 				const [keys, sources] = getDefaultActions(p);
 				for (const key of keys) {
-					if (key.type == 'button' && !names.includes(key.name)) {
-						names.push(key.name);
+					if (key.type == 'button' && !names.has(key.name)) {
+						names.add(key.name);
 						const action: IElementConfig = {
 							type: 'button',
 							name: key.name,
@@ -94,8 +47,8 @@ export function getDefaultActions(platform: Platform) {
 					}
 				}
 				for (const source of sources) {
-					if (!names.includes(source.name)) {
-						names.push(source.name);
+					if (!names.has(source.name)) {
+						names.add(source.name);
 						const action: IElementConfig = {
 							type: 'button',
 							name: source.name,
