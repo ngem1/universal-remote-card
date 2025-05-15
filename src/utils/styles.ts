@@ -45,14 +45,27 @@ export function getNumericPixels(pixels: string) {
 
 /**
  * Replace underscores with spaces and capitalize the first letter of each word
- * @param {string} word
+ * @param {unknown} word
  * @returns {string}
  */
-export function capitalizeWords(word: string): string {
-	return (word ?? '')
-		.toString()
-		.replace('_', ' ')
-		.split(' ')
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(' ');
+export function capitalizeWords(word: unknown): string {
+	if (!word) return '';
+	if (typeof word !== 'string') return word.toString()
+
+	let result = '';
+	let upperNext = true;
+	for (const char of word) {
+		if (upperNext) {
+			result += char.toUpperCase();
+			upperNext = false;
+			continue;
+		}
+		if (char === '_') {
+			result += ' ';
+			upperNext = true;
+			continue;
+		}
+		result += char;
+	}
+	return result;
 }
