@@ -152,6 +152,46 @@ export const kodiDefaultKeys: IElementConfig[] = [
 		icon: 'mdi:gamepad',
 	},
 	{
+		type: 'circlepad',
+		name: 'circlepad',
+		tap_action: {
+			action: 'key',
+			key: 'Input.Select',
+		},
+		up: {
+			icon: 'mdi:chevron-up',
+			tap_action: {
+				action: 'key',
+				key: 'Input.Up',
+			},
+			hold_action: { action: 'repeat' },
+		},
+		down: {
+			icon: 'mdi:chevron-down',
+			tap_action: {
+				action: 'key',
+				key: 'Input.Down',
+			},
+			hold_action: { action: 'repeat' },
+		},
+		left: {
+			icon: 'mdi:chevron-left',
+			tap_action: {
+				action: 'key',
+				key: 'Input.Left',
+			},
+			hold_action: { action: 'repeat' },
+		},
+		right: {
+			icon: 'mdi:chevron-right',
+			tap_action: {
+				action: 'key',
+				key: 'Input.Right',
+			},
+			hold_action: { action: 'repeat' },
+		},
+	},
+	{
 		type: 'touchpad',
 		name: 'touchpad',
 		tap_action: {

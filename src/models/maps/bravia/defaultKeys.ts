@@ -121,6 +121,34 @@ export const braviaTVDefaultKeys: IElementConfig[] = [
 		icon: 'mdi:gamepad',
 	},
 	{
+		type: 'circlepad',
+		name: 'circlepad',
+		tap_action: {
+			action: 'key',
+			key: 'Confirm',
+		},
+		up: {
+			icon: 'mdi:chevron-up',
+			tap_action: { action: 'key', key: 'Up' },
+			hold_action: { action: 'repeat' },
+		},
+		down: {
+			icon: 'mdi:chevron-down',
+			tap_action: { action: 'key', key: 'Down' },
+			hold_action: { action: 'repeat' },
+		},
+		left: {
+			icon: 'mdi:chevron-left',
+			tap_action: { action: 'key', key: 'Left' },
+			hold_action: { action: 'repeat' },
+		},
+		right: {
+			icon: 'mdi:chevron-right',
+			tap_action: { action: 'key', key: 'Right' },
+			hold_action: { action: 'repeat' },
+		},
+	},
+	{
 		type: 'touchpad',
 		name: 'touchpad',
 		tap_action: {

@@ -151,6 +151,34 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 		icon: 'mdi:gamepad',
 	},
 	{
+		type: 'circlepad',
+		name: 'circlepad',
+		tap_action: {
+			action: 'key',
+			key: 'Confirm',
+		},
+		up: {
+			icon: 'mdi:chevron-up',
+			tap_action: { action: 'key', key: 'CursorUp' },
+			hold_action: { action: 'repeat' },
+		},
+		down: {
+			icon: 'mdi:chevron-down',
+			tap_action: { action: 'key', key: 'CursorDown' },
+			hold_action: { action: 'repeat' },
+		},
+		left: {
+			icon: 'mdi:chevron-left',
+			tap_action: { action: 'key', key: 'CursorLeft' },
+			hold_action: { action: 'repeat' },
+		},
+		right: {
+			icon: 'mdi:chevron-right',
+			tap_action: { action: 'key', key: 'CursorRight' },
+			hold_action: { action: 'repeat' },
+		},
+	},
+	{
 		type: 'touchpad',
 		name: 'touchpad',
 		tap_action: {

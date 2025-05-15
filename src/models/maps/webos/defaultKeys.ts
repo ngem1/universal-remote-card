@@ -157,6 +157,34 @@ export const webosDefaultKeys: IElementConfig[] = [
 		icon: 'mdi:gamepad',
 	},
 	{
+		type: 'circlepad',
+		name: 'circlepad',
+		tap_action: {
+			action: 'key',
+			key: 'ENTER',
+		},
+		up: {
+			icon: 'mdi:chevron-up',
+			tap_action: { action: 'key', key: 'UP' },
+			hold_action: { action: 'repeat' },
+		},
+		down: {
+			icon: 'mdi:chevron-down',
+			tap_action: { action: 'key', key: 'DOWN' },
+			hold_action: { action: 'repeat' },
+		},
+		left: {
+			icon: 'mdi:chevron-left',
+			tap_action: { action: 'key', key: 'LEFT' },
+			hold_action: { action: 'repeat' },
+		},
+		right: {
+			icon: 'mdi:chevron-right',
+			tap_action: { action: 'key', key: 'RIGHT' },
+			hold_action: { action: 'repeat' },
+		},
+	},
+	{
 		type: 'touchpad',
 		name: 'touchpad',
 		tap_action: {

@@ -352,6 +352,101 @@ export const unifiedRemoteDefaultKeys: IElementConfig[] = [
 		icon: 'mdi:gamepad',
 	},
 	{
+		type: 'circlepad',
+		name: 'circlepad',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'unified_remote.call',
+			data: {
+				remote_id: 'Core.Input',
+				action: 'Press',
+				extras: {
+					Values: [
+						{
+							Value: 'enter',
+						},
+					],
+				},
+			},
+		},
+		up: {
+			icon: 'mdi:chevron-up',
+			tap_action: {
+				action: 'perform-action',
+				perform_action: 'unified_remote.call',
+				data: {
+					remote_id: 'Core.Input',
+					action: 'Press',
+					extras: {
+						Values: [
+							{
+								Value: 'up',
+							},
+						],
+					},
+				},
+			},
+			hold_action: { action: 'repeat' },
+		},
+		down: {
+			icon: 'mdi:chevron-down',
+			tap_action: {
+				action: 'perform-action',
+				perform_action: 'unified_remote.call',
+				data: {
+					remote_id: 'Core.Input',
+					action: 'Press',
+					extras: {
+						Values: [
+							{
+								Value: 'down',
+							},
+						],
+					},
+				},
+			},
+			hold_action: { action: 'repeat' },
+		},
+		left: {
+			icon: 'mdi:chevron-left',
+			tap_action: {
+				action: 'perform-action',
+				perform_action: 'unified_remote.call',
+				data: {
+					remote_id: 'Core.Input',
+					action: 'Press',
+					extras: {
+						Values: [
+							{
+								Value: 'left',
+							},
+						],
+					},
+				},
+			},
+			hold_action: { action: 'repeat' },
+		},
+		right: {
+			icon: 'mdi:chevron-right',
+			tap_action: {
+				action: 'perform-action',
+				perform_action: 'unified_remote.call',
+				data: {
+					remote_id: 'Core.Input',
+					action: 'Press',
+					extras: {
+						Values: [
+							{
+								Value: 'right',
+							},
+						],
+					},
+				},
+			},
+			hold_action: { action: 'repeat' },
+		},
+	},
+	{
 		type: 'touchpad',
 		name: 'touchpad',
 		tap_action: {
