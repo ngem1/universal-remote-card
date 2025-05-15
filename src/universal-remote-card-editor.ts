@@ -1954,12 +1954,45 @@ export class UniversalRemoteCardEditor extends LitElement {
 				)[0] ??
 				({ type: 'button', name: '' } as IElementConfig),
 		);
-		const defaultKeys = this.DEFAULT_KEYS.filter(
-			(entry) => !customActionNames.includes(entry.name),
-		);
-		const defaultSources = this.DEFAULT_SOURCES.filter(
-			(entry) => !customActionNames.includes(entry.name),
-		);
+
+		const defaultKeysList = this.DEFAULT_KEYS.map((entry) => {
+			if (customActionNames.includes(entry.name)) {
+				return '';
+			}
+
+			const context = this.getEntryContext(entry as IElementConfig);
+			const iconElement = this.buildIconElement(entry, context);
+			return html`<li
+				class="action-list-item"
+				draggable="true"
+				@dragstart=${this.handleLayoutActionListItemDragStart}
+			>
+				${iconElement} ${entry.name}
+			</li>`;
+		});
+
+		const defaultSourcesList = this.DEFAULT_SOURCES.length
+			? this.DEFAULT_SOURCES.sort((a, b) =>
+					a.name < b.name ? -1 : 1,
+			  ).map((entry) => {
+					if (customActionNames.includes(entry.name)) {
+						return '';
+					}
+
+					const context = this.getEntryContext(
+						entry as IElementConfig,
+					);
+					const iconElement = this.buildIconElement(entry, context);
+					return html`<li
+						class="action-list-item"
+						draggable="true"
+						@dragstart=${this.handleLayoutActionListItemDragStart}
+					>
+						${iconElement} ${entry.name}
+					</li>`;
+			  })
+			: '';
+
 		return html`<div class="content">
 			<div class="layout-editor">
 				${this.buildCodeEditor('layout')}
@@ -1998,69 +2031,28 @@ export class UniversalRemoteCardEditor extends LitElement {
 								<div><hr /></div>`
 						: ''}
 					<div class="default-action-lists-container">
-						${defaultKeys.length
+						${this.DEFAULT_KEYS.length
 							? html`<div class="wrapper">
 									<div class="title-header">Default Keys</div>
 									<div class="action-list-container">
 										<ul
-											class="action-list ${defaultSources.length
+											class="action-list ${defaultSourcesList.length
 												? ''
 												: 'two-column-action-list'}"
 										>
-											${defaultKeys.map((entry) => {
-												const context =
-													this.getEntryContext(
-														entry as IElementConfig,
-													);
-												const iconElement =
-													this.buildIconElement(
-														entry,
-														context,
-													);
-												return html`<li
-													class="action-list-item"
-													draggable="true"
-													@dragstart=${this
-														.handleLayoutActionListItemDragStart}
-												>
-													${iconElement} ${entry.name}
-												</li>`;
-											})}
+											${defaultKeysList}
 										</ul>
 									</div>
 							  </div>`
 							: ''}
-						${defaultSources.length
+						${defaultSourcesList.length
 							? html`<div class="wrapper">
 									<div class="title-header">
 										Default Sources
 									</div>
 									<div class="action-list-container">
 										<ul class="action-list">
-											${defaultSources
-												.sort((a, b) =>
-													a.name < b.name ? -1 : 1,
-												)
-												.map((entry) => {
-													const context =
-														this.getEntryContext(
-															entry as IElementConfig,
-														);
-													const iconElement =
-														this.buildIconElement(
-															entry,
-															context,
-														);
-													return html`<li
-														class="action-list-item"
-														draggable="true"
-														@dragstart=${this
-															.handleLayoutActionListItemDragStart}
-													>
-														${iconElement}
-														${entry.name}
-													</li>`;
-												})}
+											${defaultSourcesList}
 										</ul>
 									</div>
 							  </div>`
