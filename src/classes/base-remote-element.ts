@@ -46,6 +46,7 @@ export class BaseRemoteElement extends LitElement {
 
 	swiping?: boolean = false;
 
+	@state() pressed: boolean = false;
 	pointers: number = 0;
 	fireMouseEvent: boolean = true;
 	initialX?: number;
@@ -82,6 +83,7 @@ export class BaseRemoteElement extends LitElement {
 		this.swiping = false;
 		this.pointers = 0;
 
+		this.pressed = false;
 		this.initialX = undefined;
 		this.initialY = undefined;
 		this.currentX = undefined;
@@ -896,7 +898,8 @@ export class BaseRemoteElement extends LitElement {
 
 	onPointerDown(e: PointerEvent) {
 		this.pointers++;
-		if (!this.initialX && !this.initialY) {
+		if (!this.pressed) {
+			this.pressed = true;
 			this.initialX = e.clientX;
 			this.initialY = e.clientY;
 			this.currentX = e.clientX;
@@ -906,12 +909,14 @@ export class BaseRemoteElement extends LitElement {
 		}
 	}
 
-	onPointerUp(_e: PointerEvent) {}
+	onPointerUp(_e: PointerEvent) {
+		this.pressed = false;
+	}
 
 	onPointerMove(e: PointerEvent) {
-		if (this.currentX && this.currentY && e.isPrimary) {
-			this.deltaX = e.clientX - this.currentX;
-			this.deltaY = e.clientY - this.currentY;
+		if (this.pressed && e.isPrimary) {
+			this.deltaX = e.clientX - (this.currentX ?? 0);
+			this.deltaY = e.clientY - (this.currentY ?? 0);
 			this.currentX = e.clientX;
 			this.currentY = e.clientY;
 		}
@@ -1000,6 +1005,14 @@ export class BaseRemoteElement extends LitElement {
 		this.addEventListener('touchend', this.onTouchEnd);
 		this.addEventListener('keydown', this.onKeyDown);
 		this.addEventListener('keyup', this.onKeyUp);
+	}
+
+	updated() {
+		if (this.pressed) {
+			this.setAttribute('pressed', '');
+		} else {
+			this.removeAttribute('pressed');
+		}
 	}
 
 	static get styles(): CSSResult | CSSResult[] {

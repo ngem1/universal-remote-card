@@ -42,6 +42,7 @@ export class KodiKeyboard extends BaseKeyboard {
 	}
 
 	updated(changedProperties: PropertyValues) {
+		super.updated(changedProperties);
 		if (
 			changedProperties.has('open') &&
 			!changedProperties.get('open') &&
@@ -53,6 +54,5 @@ export class KodiKeyboard extends BaseKeyboard {
 				addonid: 'script.globalsearch',
 			});
 		}
-		super.updated(changedProperties);
 	}
 }

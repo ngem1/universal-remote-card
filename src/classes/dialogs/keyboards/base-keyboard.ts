@@ -190,6 +190,7 @@ export class BaseKeyboard extends BaseDialog {
 	}
 
 	updated(changedProperties: PropertyValues) {
+		super.updated(changedProperties);
 		if (
 			changedProperties.has('open') &&
 			!changedProperties.get('open') &&

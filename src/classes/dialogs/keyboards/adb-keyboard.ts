@@ -56,6 +56,7 @@ export class ADBKeyboard extends BaseKeyboard {
 	}
 
 	updated(changedProperties: PropertyValues) {
+		super.updated(changedProperties);
 		if (changedProperties.has('open') && !changedProperties.get('open')) {
 			switch ((this.action.keyboard_id ?? '').split('.')[0]) {
 				case 'media_player':
@@ -69,6 +70,5 @@ export class ADBKeyboard extends BaseKeyboard {
 					break;
 			}
 		}
-		super.updated(changedProperties);
 	}
 }

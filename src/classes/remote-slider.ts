@@ -13,7 +13,6 @@ export class RemoteSlider extends BaseRemoteElement {
 
 	@state() thumbOffset: number = 0;
 	@state() sliderOn: boolean = true;
-	@state() pressed: boolean = false;
 
 	range: [number, number] = [RANGE_MIN, RANGE_MAX];
 	step: number = STEP;
@@ -45,15 +44,9 @@ export class RemoteSlider extends BaseRemoteElement {
 		this.value = value;
 	}
 
-	endAction() {
-		super.endAction();
-		this.pressed = false;
-	}
-
 	onPointerDown(e: PointerEvent) {
 		super.onPointerDown(e);
 		const slider = e.currentTarget as HTMLInputElement;
-		this.pressed = true;
 
 		if (!this.swiping) {
 			clearTimeout(this.getValueFromHassTimer);
@@ -65,9 +58,9 @@ export class RemoteSlider extends BaseRemoteElement {
 	}
 
 	async onPointerUp(e: PointerEvent) {
+		super.onPointerUp(e);
 		this.setThumbOffset();
 		const slider = e.currentTarget as HTMLInputElement;
-		this.pressed = false;
 
 		if (!this.swiping && this.pointers) {
 			this._value = slider.value;
@@ -257,7 +250,6 @@ export class RemoteSlider extends BaseRemoteElement {
 			<div
 				class="container ${classMap({
 					off: !this.sliderOn,
-					pressed: this.pressed,
 					'read-only':
 						this.renderTemplate(
 							this.config.tap_action?.action as string,
@@ -275,6 +267,8 @@ export class RemoteSlider extends BaseRemoteElement {
 	}
 
 	updated() {
+		super.updated();
+
 		// Ensure that both the input range and div thumbs are the same size
 		const thumb = this.shadowRoot?.querySelector('.thumb') as HTMLElement;
 		const style = getComputedStyle(thumb);
@@ -492,10 +486,10 @@ export class RemoteSlider extends BaseRemoteElement {
 					visibility: hidden;
 				}
 
-				.pressed {
+				:host([pressed]) {
 					--thumb-transition: background 180ms ease-in-out;
 				}
-				.pressed ~ .tooltip {
+				:host([pressed]) .tooltip {
 					transition: opacity 540ms ease-in-out 0s;
 					opacity: 1;
 				}
@@ -535,7 +529,6 @@ export class RemoteSlider extends BaseRemoteElement {
 					width: 100vh;
 				}
 
-				:host([dir='rtl']) .vertical .background,
 				:host([dir='rtl']) .vertical input,
 				:host([dir='rtl']) .vertical .thumb {
 					transform: rotate(90deg);

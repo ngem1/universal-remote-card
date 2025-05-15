@@ -90,6 +90,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 	}
 
 	async onPointerUp(e: PointerEvent) {
+		super.onPointerUp(e);
 		if (this.hold || this.holdMove) {
 			e.stopImmediatePropagation();
 			if (e.cancelable) {
