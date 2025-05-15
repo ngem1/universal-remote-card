@@ -6,6 +6,15 @@ import { IElementConfig } from '../../interfaces';
 export const webosDefaultKeys: IElementConfig[] = [
 	{
 		type: 'button',
+		name: 'power',
+		icon: 'mdi:power',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'media_player.toggle',
+		},
+	},
+	{
+		type: 'button',
 		name: 'home',
 		tap_action: {
 			action: 'key',
@@ -305,6 +314,24 @@ export const webosDefaultKeys: IElementConfig[] = [
 			},
 		},
 		icon: 'mdi:fast-forward',
+	},
+	{
+		type: 'button',
+		name: 'previous',
+		icon: 'mdi:skip-previous',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'media_player.media_previous_track',
+		},
+	},
+	{
+		type: 'button',
+		name: 'next',
+		icon: 'mdi:skip-next',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'media_player.media_next_track',
+		},
 	},
 	{
 		type: 'button',
