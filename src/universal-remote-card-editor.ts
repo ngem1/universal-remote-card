@@ -1141,7 +1141,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		) as string;
 		const platform = this.renderTemplate(
 			(this.activeEntry as IElementConfig)?.[actionType]?.platform ??
-				this.config.platform ??
+				this.PLATFORM ??
 				'Android TV',
 			context,
 		) as string;
@@ -1260,7 +1260,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 									},
 								},
 								autofill
-									? this.config.platform ?? 'Android TV'
+									? this.PLATFORM ?? 'Android TV'
 									: 'Android TV',
 							)}
 						</div>
@@ -1310,7 +1310,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 									},
 								},
 								autofill
-									? this.config.platform ?? 'Android TV'
+									? this.PLATFORM ?? 'Android TV'
 									: 'Android TV',
 							)}
 						</div>
@@ -1347,7 +1347,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 											this.config
 												.platform as KeyboardPlatform,
 									  )
-										? this.config.platform
+										? this.PLATFORM
 										: 'Android TV'
 									: 'Android TV',
 							)}
