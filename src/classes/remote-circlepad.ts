@@ -19,77 +19,81 @@ export class RemoteCirclepad extends BaseRemoteElement {
 
 	render() {
 		return html`
-			<remote-button
-				class="direction"
-				id="up"
-				title="Up"
-				part="up"
-				tabindex="-1"
-				.hass=${this.hass}
-				.config=${{
-					entity_id: this.config.entity_id,
-					autofill_default_fields: this.config.autofill_entity_id,
-					haptics: this.config.haptics,
-					...this.config.up,
-				}}
-				.icons=${this.icons}
-			></remote-button>
-			<div class="center-row">
+			<div class="circlepad">
 				<remote-button
 					class="direction"
-					id="left"
-					title="Left"
-					part="left"
+					id="up"
+					title="Up"
+					part="up"
 					tabindex="-1"
 					.hass=${this.hass}
 					.config=${{
 						entity_id: this.config.entity_id,
 						autofill_default_fields: this.config.autofill_entity_id,
 						haptics: this.config.haptics,
-						...this.config.left,
+						...this.config.up,
 					}}
 					.icons=${this.icons}
 				></remote-button>
-				<remote-button
-					id="center"
-					title="Center"
-					part="center"
-					tabindex="-1"
-					.hass=${this.hass}
-					.config=${this.config ?? {}}
-					.icons=${this.icons}
-				></remote-button>
+				<div class="center-row">
+					<remote-button
+						class="direction"
+						id="left"
+						title="Left"
+						part="left"
+						tabindex="-1"
+						.hass=${this.hass}
+						.config=${{
+							entity_id: this.config.entity_id,
+							autofill_default_fields:
+								this.config.autofill_entity_id,
+							haptics: this.config.haptics,
+							...this.config.left,
+						}}
+						.icons=${this.icons}
+					></remote-button>
+					<remote-button
+						id="center"
+						title="Center"
+						part="center"
+						tabindex="-1"
+						.hass=${this.hass}
+						.config=${this.config ?? {}}
+						.icons=${this.icons}
+					></remote-button>
+					<remote-button
+						class="direction"
+						id="right"
+						title="Right"
+						part="right"
+						tabindex="-1"
+						.hass=${this.hass}
+						.config=${{
+							entity_id: this.config.entity_id,
+							autofill_default_fields:
+								this.config.autofill_entity_id,
+							haptics: this.config.haptics,
+							...this.config.right,
+						}}
+						.icons=${this.icons}
+					></remote-button>
+				</div>
 				<remote-button
 					class="direction"
-					id="right"
-					title="Right"
-					part="right"
+					id="down"
+					title="Down"
+					part="down"
 					tabindex="-1"
 					.hass=${this.hass}
 					.config=${{
 						entity_id: this.config.entity_id,
 						autofill_default_fields: this.config.autofill_entity_id,
 						haptics: this.config.haptics,
-						...this.config.right,
+						...this.config.down,
 					}}
 					.icons=${this.icons}
 				></remote-button>
 			</div>
-			<remote-button
-				class="direction"
-				id="down"
-				title="Down"
-				part="down"
-				tabindex="-1"
-				.hass=${this.hass}
-				.config=${{
-					entity_id: this.config.entity_id,
-					autofill_default_fields: this.config.autofill_entity_id,
-					haptics: this.config.haptics,
-					...this.config.down,
-				}}
-				.icons=${this.icons}
-			></remote-button>
 			${this.buildStyles(this.config.styles)}
 		`;
 	}
@@ -158,6 +162,10 @@ export class RemoteCirclepad extends BaseRemoteElement {
 				:host(:focus-visible) {
 					box-shadow: 0 0 0 2px
 						var(--icon-color, var(--primary-text-color));
+				}
+
+				.circlepad {
+					all: inherit;
 				}
 
 				.center-row {
