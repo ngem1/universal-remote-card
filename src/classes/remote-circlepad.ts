@@ -90,6 +90,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 				}}
 				.icons=${this.icons}
 			></remote-button>
+			${this.buildStyles(this.config.styles)}
 		`;
 	}
 
