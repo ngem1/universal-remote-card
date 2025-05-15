@@ -23,7 +23,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 				class="direction"
 				id="up"
 				title="Up"
-				part="dpad-up"
+				part="up"
 				tabindex="-1"
 				.hass=${this.hass}
 				.config=${{
@@ -39,7 +39,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 					class="direction"
 					id="left"
 					title="Left"
-					part="dpad-left"
+					part="left"
 					tabindex="-1"
 					.hass=${this.hass}
 					.config=${{
@@ -53,7 +53,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 				<remote-button
 					id="center"
 					title="Center"
-					part="dpad-center"
+					part="center"
 					tabindex="-1"
 					.hass=${this.hass}
 					.config=${this.config ?? {}}
@@ -63,7 +63,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 					class="direction"
 					id="right"
 					title="Right"
-					part="dpad-right"
+					part="right"
 					tabindex="-1"
 					.hass=${this.hass}
 					.config=${{
@@ -79,7 +79,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 				class="direction"
 				id="down"
 				title="Down"
-				part="dpad-down"
+				part="down"
 				tabindex="-1"
 				.hass=${this.hass}
 				.config=${{
@@ -131,20 +131,26 @@ export class RemoteCirclepad extends BaseRemoteElement {
 			super.styles as CSSResult,
 			css`
 				:host {
-					height: var(--dpad-size);
-					width: var(--dpad-size);
-					min-height: var(--dpad-size);
-					min-width: var(--dpad-size);
-					border-radius: var(--dpad-size);
+					height: var(--circlepad-size);
+					width: var(--circlepad-size);
+					min-height: var(--circlepad-size);
+					min-width: var(--circlepad-size);
+					border-radius: var(--circlepad-size);
 					display: flex;
 					flex-direction: column;
 					background: #1f1f1f;
 					overflow: hidden;
 
-					--dpad-size: min(340px, 80vw);
-					--center-button-size: min(160px, 40vw);
-					--direction-button-size: min(177px, 50vw);
-					--size: min(48px, 14vw);
+					--circlepad-size: calc(
+						var(--circlepad-scale, 1) * min(340px, 80vw)
+					);
+					--center-button-size: calc(
+						var(--circlepad-scale, 1) * min(160px, 40vw)
+					);
+					--direction-button-size: calc(
+						var(--circlepad-scale, 1) * min(177px, 50vw)
+					);
+					--size: calc(var(--circlepad-scale, 1) * min(48px, 14vw));
 					--icon-color: #c4c7c5;
 				}
 
