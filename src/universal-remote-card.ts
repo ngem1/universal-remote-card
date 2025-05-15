@@ -20,6 +20,7 @@ import {
 import { UniversalRemoteCardEditor } from './universal-remote-card-editor';
 import { getDefaultActions } from './utils';
 
+import { BaseRemoteElement } from './classes/base-remote-element';
 import './classes/remote-button';
 import { RemoteButton } from './classes/remote-button';
 import './classes/remote-circlepad';
@@ -27,7 +28,6 @@ import './classes/remote-dialog';
 import { RemoteDialog } from './classes/remote-dialog';
 import './classes/remote-slider';
 import './classes/remote-touchpad';
-import { RemoteTouchpad } from './classes/remote-touchpad';
 import {
 	AUTOFILL,
 	DOUBLE_TAP_WINDOW,
@@ -698,8 +698,8 @@ class UniversalRemoteCard extends LitElement {
 		return html`<ha-card
 			class="${this.editMode ? ' edit-mode' : ''}"
 			tabindex="0"
-			@keydown=${this.onKeyDown}
-			@keyup=${this.onKeyUp}
+			@keydown=${this.onKey}
+			@keyup=${this.onKey}
 			.header="${this.renderTemplate(
 				this.config.title as string,
 				context,
@@ -722,74 +722,50 @@ class UniversalRemoteCard extends LitElement {
 		this.addEventListener('dialog-show', this.showDialog);
 	}
 
-	async onKeyDown(e: KeyboardEvent) {
-		if (
-			!e.repeat &&
-			!this.shadowRoot?.querySelector('remote-dialog[open]')
-		) {
-			const button = this.shadowRoot?.querySelector(
-				`[key="${e.key}"]`,
-			) as RemoteButton;
-			if (button) {
-				e.preventDefault();
-				button.onPointerDown(
-					new window.PointerEvent('pointerdown', {
-						...e,
-						isPrimary: true,
-						clientX: 1,
-						clientY: 1,
-					}),
-				);
-				return;
-			}
+	onKey(e: KeyboardEvent) {
+		const button = this.shadowRoot?.querySelector(
+			`[key="${e.key}"]`,
+		) as RemoteButton;
+		const direction = e.type == 'keydown' ? 'Down' : 'Up';
 
-			const touchpad = this.shadowRoot?.querySelector(
-				'remote-touchpad',
-			) as RemoteTouchpad;
-			if (touchpad && NAVIGATION_KEYS.includes(e.key)) {
+		if (button && !this.shadowRoot?.querySelector('remote-dialog[open]')) {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			if (!e.repeat) {
 				e.preventDefault();
-				touchpad.onKeyDown(
-					new window.KeyboardEvent('keydown', {
-						...e,
-						key: e.key,
-					}),
+				button[`onPointer${direction}`](
+					new window.PointerEvent(
+						`pointer${direction.toLowerCase()}`,
+						{
+							...e,
+							isPrimary: true,
+							clientX: 1,
+							clientY: 1,
+						},
+					),
 				);
 			}
+			return;
 		}
-	}
 
-	async onKeyUp(e: KeyboardEvent) {
-		if (
-			!e.repeat &&
-			!this.shadowRoot?.querySelector('remote-dialog[open]')
-		) {
-			const button = this.shadowRoot?.querySelector(
-				`[key="${e.key}"]`,
-			) as RemoteButton;
-			if (button) {
-				e.preventDefault();
-				button.onPointerUp(
-					new window.PointerEvent('pointerup', {
-						...e,
-						isPrimary: true,
-						clientX: 1,
-						clientY: 1,
-					}),
-				);
-				return;
-			}
-
-			const touchpad = this.shadowRoot?.querySelector(
-				'remote-touchpad',
-			) as RemoteTouchpad;
-			if (touchpad && NAVIGATION_KEYS.includes(e.key)) {
-				e.preventDefault();
-				touchpad.onKeyUp(
-					new window.KeyboardEvent('keyup', {
-						...e,
-						key: e.key,
-					}),
-				);
+		if (NAVIGATION_KEYS.includes(e.key)) {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			if (!e.repeat) {
+				for (const type of ['circlepad', 'touchpad']) {
+					const element = this.shadowRoot?.querySelector(
+						`remote-${type}`,
+					) as BaseRemoteElement;
+					if (element) {
+						element.onKey(
+							new window.KeyboardEvent(e.type, {
+								...e,
+								key: e.key,
+							}),
+						);
+						return;
+					}
+				}
 			}
 		}
 	}

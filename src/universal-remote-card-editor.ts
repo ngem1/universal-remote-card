@@ -54,7 +54,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 	@state() baseTabIndex: number = 0;
 	@state() entryIndex: number = -1;
 	@state() actionsTabIndex: number = 0;
-	@state() touchpadTabIndex: number = 2;
+	@state() directionTabIndex: number = 2;
 
 	@state() guiMode: boolean = true;
 	@state() errors?: string[];
@@ -63,8 +63,8 @@ export class UniversalRemoteCardEditor extends LitElement {
 	yamlStringsCache: Record<string, string> = {};
 	people: Record<string, string>[] = [];
 
-	BASE_TABS = ['general', 'layout', 'actions', 'icons'];
-	TOUCHPAD_TABS = ['up', 'down', 'center', 'left', 'right'];
+	BASE_TABS = ['general', 'layout', 'elements', 'icons'];
+	DIRECTION_TABS = ['up', 'down', 'center', 'left', 'right'];
 	ACTION_TABS = ['default', 'momentary'];
 	DEFAULT_KEYS: IElementConfig[] = [];
 	DEFAULT_SOURCES: IElementConfig[] = [];
@@ -135,13 +135,14 @@ export class UniversalRemoteCardEditor extends LitElement {
 					)
 				) {
 					case 'touchpad':
-						if (this.touchpadTabIndex != 2) {
+					case 'circlepad':
+						if (this.directionTabIndex != 2) {
 							updatedEntry = {
 								...oldEntry,
-								[this.TOUCHPAD_TABS[this.touchpadTabIndex]]: {
+								[this.DIRECTION_TABS[this.directionTabIndex]]: {
 									...oldEntry[
-										this.TOUCHPAD_TABS[
-											this.touchpadTabIndex
+										this.DIRECTION_TABS[
+											this.directionTabIndex
 										] as DirectionAction
 									],
 									...entry,
@@ -189,11 +190,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 					)
 				) {
 					case 'touchpad':
-						if (this.touchpadTabIndex != 2) {
+					case 'circlepad':
+						if (this.directionTabIndex != 2) {
 							return (
 								(entry[
-									this.TOUCHPAD_TABS[
-										this.touchpadTabIndex
+									this.DIRECTION_TABS[
+										this.directionTabIndex
 									] as DirectionAction
 								] as IElementConfig) ?? {}
 							);
@@ -250,11 +252,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 						)
 					) {
 						case 'touchpad':
-							if (this.touchpadTabIndex != 2) {
+						case 'circlepad':
+							if (this.directionTabIndex != 2) {
 								entries[this.entryIndex] = {
 									...entries[this.entryIndex],
-									[this.TOUCHPAD_TABS[
-										this.touchpadTabIndex
+									[this.DIRECTION_TABS[
+										this.directionTabIndex
 									] as DirectionAction]: yamlObj,
 								};
 								break;
@@ -369,14 +372,14 @@ export class UniversalRemoteCardEditor extends LitElement {
 		this.actionsTabIndex = i;
 	}
 
-	handleTouchpadTabSelected(e: Event) {
+	handleDirectionTabSelected(e: Event) {
 		this.yamlString = undefined;
 		this.yamlStringsCache = {};
-		const i = this.TOUCHPAD_TABS.indexOf(e.detail.name);
-		if (this.touchpadTabIndex == i) {
+		const i = this.DIRECTION_TABS.indexOf(e.detail.name);
+		if (this.directionTabIndex == i) {
 			return;
 		}
-		this.touchpadTabIndex = i;
+		this.directionTabIndex = i;
 		this.setActionsTab(this.entryIndex);
 	}
 
@@ -537,7 +540,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 			case 2:
 			default:
 				this.setActionsTab(i);
-				this.touchpadTabIndex = 2;
+				this.directionTabIndex = 2;
 				break;
 		}
 		this.entryIndex = i;
@@ -554,58 +557,84 @@ export class UniversalRemoteCardEditor extends LitElement {
 			type: 'button',
 			name: '',
 		};
+		let context;
 		const entryType = entry.type;
-		if (entryType == 'touchpad' && this.touchpadTabIndex != 2) {
-			entry =
-				(entry[
-					this.TOUCHPAD_TABS[this.touchpadTabIndex] as DirectionAction
-				] as IElementConfig) ?? {};
-		}
-		const context = this.getEntryContext(entry);
-		if (
-			this.renderTemplate(
-				entry?.drag_action?.action ?? 'none',
-				context,
-			) != 'none' ||
-			this.renderTemplate(
-				entry?.multi_drag_action?.action ?? 'none',
-				context,
-			) != 'none'
-		) {
-			if (entryType == 'touchpad' && this.touchpadTabIndex == 2) {
-				this.actionsTabIndex = 2;
-			} else {
+		switch (entryType) {
+			case 'touchpad':
+				if (this.directionTabIndex != 2) {
+					entry =
+						(entry[
+							this.DIRECTION_TABS[
+								this.directionTabIndex
+							] as DirectionAction
+						] as IElementConfig) ?? {};
+				}
+				context = this.getEntryContext(entry);
+				if (
+					this.renderTemplate(
+						entry?.drag_action?.action ?? 'none',
+						context,
+					) != 'none' ||
+					this.renderTemplate(
+						entry?.multi_drag_action?.action ?? 'none',
+						context,
+					) != 'none'
+				) {
+					if (this.directionTabIndex == 2) {
+						this.actionsTabIndex = 2;
+					} else {
+						this.actionsTabIndex = 0;
+					}
+					break;
+				}
+
+				if (
+					this.renderTemplate(
+						entry?.multi_tap_action?.action ?? 'none',
+						context,
+					) != 'none' ||
+					this.renderTemplate(
+						entry?.multi_double_tap_action?.action ?? 'none',
+						context,
+					) != 'none' ||
+					this.renderTemplate(
+						entry?.multi_hold_action?.action ?? 'none',
+						context,
+					) != 'none'
+				) {
+					this.actionsTabIndex = 1;
+				} else {
+					this.actionsTabIndex = 0;
+				}
+				break;
+			case 'slider':
 				this.actionsTabIndex = 0;
-			}
-		} else if (
-			this.renderTemplate(
-				entry?.momentary_start_action?.action ?? 'none',
-				context,
-			) != 'none' ||
-			this.renderTemplate(
-				entry?.momentary_end_action?.action ?? 'none',
-				context,
-			) != 'none'
-		) {
-			this.actionsTabIndex = 1;
-		} else if (
-			entryType == 'touchpad' &&
-			(this.renderTemplate(
-				entry?.multi_tap_action?.action ?? 'none',
-				context,
-			) != 'none' ||
-				this.renderTemplate(
-					entry?.multi_double_tap_action?.action ?? 'none',
-					context,
-				) != 'none' ||
-				this.renderTemplate(
-					entry?.multi_hold_action?.action ?? 'none',
-					context,
-				) != 'none')
-		) {
-			this.actionsTabIndex = 1;
-		} else {
-			this.actionsTabIndex = 0;
+				break;
+			case 'circlepad':
+				if (this.directionTabIndex != 2) {
+					entry =
+						(entry[
+							this.DIRECTION_TABS[
+								this.directionTabIndex
+							] as DirectionAction
+						] as IElementConfig) ?? {};
+				}
+			// falls through
+			case 'button':
+				context = this.getEntryContext(entry);
+				if (
+					this.renderTemplate(
+						entry?.momentary_start_action?.action ?? 'none',
+						context,
+					) != 'none' ||
+					this.renderTemplate(
+						entry?.momentary_end_action?.action ?? 'none',
+						context,
+					) != 'none'
+				) {
+					this.actionsTabIndex = 1;
+				}
+				break;
 		}
 	}
 
@@ -633,6 +662,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 				case 'touchpad':
 					icon = 'mdi:gesture-tap-button';
 					break;
+				case 'circlepad':
+					icon = 'mdi:gamepad-circle';
+					break;
 				case 'slider':
 					if (
 						this.renderTemplate(
@@ -647,7 +679,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 					break;
 				case 'button':
 				default:
-					icon = 'mdi:circle-small';
+					icon = 'mdi:circle';
 					break;
 			}
 		}
@@ -669,7 +701,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 			case 2:
 			default:
 				entries = this.config.custom_actions ?? [];
-				header = 'Custom Actions';
+				header = 'Custom Elements';
 				break;
 		}
 		return html`
@@ -925,6 +957,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 				AUTOFILL,
 			this.getEntryContext(this.activeEntry as IElementConfig),
 		) as boolean;
+
 		const placeholderEntityId =
 			(Array.isArray(
 				(this.activeEntry as IElementConfig)?.tap_action?.target
@@ -937,12 +970,18 @@ export class UniversalRemoteCardEditor extends LitElement {
 			this.config.remote_id ??
 			this.config.media_player_id ??
 			this.config.keyboard_id;
+
 		return html`
 			${this.buildSelector('Name', 'name', {
 				select: {
 					custom_value: true,
 					mode: 'dropdown',
-					options: this.DEFAULT_ACTIONS.map((action) => action.name),
+					options: this.DEFAULT_ACTIONS.filter(
+						(action) =>
+							action.type ==
+							((this.activeEntry as IElementConfig).type ??
+								'button'),
+					).map((action) => action.name),
 				},
 			})}
 			${this.buildSelector(
@@ -1435,7 +1474,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		`;
 	}
 
-	buildButtonGuiEditor() {
+	buildButtonGuiEditor(isChild: boolean = false, keypress: boolean = true) {
 		this.ACTION_TABS = ['default', 'momentary'];
 		const actionsTabBar = this.buildTabBar(
 			this.actionsTabIndex,
@@ -1474,7 +1513,6 @@ export class UniversalRemoteCardEditor extends LitElement {
 					)}
 				`;
 				break;
-
 			case 0:
 			default:
 				actionSelectors = html`
@@ -1503,13 +1541,15 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 
 		return html`
-			${this.buildMainFeatureOptions()}
+			${isChild ? '' : this.buildMainFeatureOptions(undefined)}
 			${this.buildAppearancePanel(this.buildCommonAppearanceOptions())}
 			${this.buildInteractionsPanel(html`
 				${actionSelectors}
-				${this.buildSelector('Keyboard Key', 'keypress', {
-					text: {},
-				})}
+				${keypress
+					? this.buildSelector('Keyboard Key', 'keypress', {
+							text: {},
+					  })
+					: ''}
 			`)}
 		`;
 	}
@@ -1622,7 +1662,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 
 	buildTouchpadGuiEditor() {
 		this.ACTION_TABS = ['default', 'multi-touch'];
-		if (this.touchpadTabIndex == 2) {
+		if (this.directionTabIndex == 2) {
 			this.ACTION_TABS.push('drag');
 		}
 		const actionsTabBar = this.buildTabBar(
@@ -1663,12 +1703,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 					${actionsTabBar}
 					${this.buildActionOption(
 						`Multi-touch ${
-							this.touchpadTabIndex == 2 ? 'tap' : 'swipe'
+							this.directionTabIndex == 2 ? 'tap' : 'swipe'
 						} behavior (optional)`,
 						'multi_tap_action',
 						defaultUiActions,
 					)}
-					${this.touchpadTabIndex == 2
+					${this.directionTabIndex == 2
 						? this.buildActionOption(
 								'Multi-touch double tap behavior (optional)',
 								'multi_double_tap_action',
@@ -1692,12 +1732,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 					${actionsTabBar}
 					${this.buildActionOption(
 						`${
-							this.touchpadTabIndex == 2 ? 'Tap' : 'Swipe'
+							this.directionTabIndex == 2 ? 'Tap' : 'Swipe'
 						} behavior (optional)`,
 						'tap_action',
 						defaultUiActions,
 					)}
-					${this.touchpadTabIndex == 2
+					${this.directionTabIndex == 2
 						? this.buildActionOption(
 								'Double tap behavior (optional)',
 								'double_tap_action',
@@ -1717,22 +1757,31 @@ export class UniversalRemoteCardEditor extends LitElement {
 				break;
 		}
 
-		const touchpadTabBar = this.buildTabBar(
-			this.touchpadTabIndex,
-			this.handleTouchpadTabSelected,
-			this.TOUCHPAD_TABS,
+		const directionTabBar = this.buildTabBar(
+			this.directionTabIndex,
+			this.handleDirectionTabSelected,
+			this.DIRECTION_TABS,
 		);
 
 		return html`
-			${touchpadTabBar}
-			${this.touchpadTabIndex == 2 ? this.buildMainFeatureOptions() : ''}
+			${directionTabBar}
+			${this.directionTabIndex == 2 ? this.buildMainFeatureOptions() : ''}
 			${this.buildAppearancePanel(this.buildCommonAppearanceOptions())}
 			${this.buildInteractionsPanel(actionSelectors)}
 		`;
 	}
 
 	buildCirclepadGuiEditor() {
-		return html``;
+		const directionTabBar = this.buildTabBar(
+			this.directionTabIndex,
+			this.handleDirectionTabSelected,
+			this.DIRECTION_TABS,
+		);
+
+		return html`
+			${directionTabBar}
+			${this.buildButtonGuiEditor(this.directionTabIndex != 2, false)}
+		`;
 	}
 
 	buildIconGuiEditor() {
@@ -1768,6 +1817,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 						break;
 					case 'touchpad':
 						entryGuiEditor = this.buildTouchpadGuiEditor();
+						break;
+					case 'circlepad':
+						entryGuiEditor = this.buildCirclepadGuiEditor();
 						break;
 					case 'button':
 					default:
@@ -2556,18 +2608,14 @@ export class UniversalRemoteCardEditor extends LitElement {
 				}
 			}
 
-			if (
-				this.renderTemplate(entry.type as string, context) == 'touchpad'
-			) {
-				for (const direction of DirectionActions) {
-					if (entry[direction]) {
-						entry[direction] = this.autofillDefaultEntryFields(
-							config,
-							(entry[direction] ?? {}) as IElementConfig,
-							this.renderTemplate(entry.name, context) as string,
-							direction,
-						);
-					}
+			for (const direction of DirectionActions) {
+				if (entry[direction]) {
+					entry[direction] = this.autofillDefaultEntryFields(
+						config,
+						(entry[direction] ?? {}) as IElementConfig,
+						this.renderTemplate(entry.name, context) as string,
+						direction,
+					);
 				}
 			}
 		}
@@ -3278,6 +3326,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 				display: inline-flex;
 				justify-content: space-between;
 				align-items: center;
+				padding-top: 4px;
 			}
 			.text-icon {
 				color: var(--mdc-dialog-content-ink-color, rgba(0, 0, 0, 0.6));
@@ -3410,7 +3459,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 					var(--form-grid-column-count, auto-fit),
 					minmax(var(--form-grid-min-width, 200px), 1fr)
 				);
-				gap: 8px;
+				gap: 12px;
 				align-items: end;
 			}
 			.selector-margin {

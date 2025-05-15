@@ -962,33 +962,22 @@ export class BaseRemoteElement extends LitElement {
 		);
 	}
 
-	async onKeyDown(e: KeyboardEvent) {
+	onKey(e: KeyboardEvent) {
 		if (['Enter', ' '].includes(e.key)) {
 			e.preventDefault();
+			e.stopImmediatePropagation();
 			if (!e.repeat) {
-				this.onPointerDown(
-					new window.PointerEvent('pointerdown', {
-						...e,
-						isPrimary: true,
-						clientX: 1,
-						clientY: 1,
-					}),
-				);
-			}
-		}
-	}
-
-	async onKeyUp(e: KeyboardEvent) {
-		if (['Enter', ' '].includes(e.key)) {
-			e.preventDefault();
-			if (!e.repeat) {
-				this.onPointerUp(
-					new window.PointerEvent('pointerup', {
-						...e,
-						isPrimary: true,
-						clientX: 1,
-						clientY: 1,
-					}),
+				const direction = e.type == 'keydown' ? 'Down' : 'Up';
+				this[`onPointer${direction}`](
+					new window.PointerEvent(
+						`pointer${direction.toLowerCase()}`,
+						{
+							...e,
+							isPrimary: true,
+							clientX: 1,
+							clientY: 1,
+						},
+					),
 				);
 			}
 		}
@@ -1003,8 +992,8 @@ export class BaseRemoteElement extends LitElement {
 			passive: true,
 		});
 		this.addEventListener('touchend', this.onTouchEnd);
-		this.addEventListener('keydown', this.onKeyDown);
-		this.addEventListener('keyup', this.onKeyUp);
+		this.addEventListener('keydown', this.onKey);
+		this.addEventListener('keyup', this.onKey);
 	}
 
 	updated() {

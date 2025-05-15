@@ -287,36 +287,32 @@ export class RemoteSlider extends BaseRemoteElement {
 		}
 	}
 
-	async onKeyDown(e: KeyboardEvent) {
+	async onKey(e: KeyboardEvent) {
 		const keys = this.vertical
 			? ['ArrowDown', 'ArrowUp']
 			: ['ArrowLeft', 'ArrowRight'];
 		if (keys.includes(e.key)) {
 			e.preventDefault();
-			this.getValueFromHass = false;
-			this._value = Math.min(
-				Math.max(
-					parseFloat((this.value ?? this.range[0]) as string) +
-						(e.key == keys[!this.vertical && this.rtl ? 1 : 0]
-							? -1
-							: 1) *
-							this.step,
-					this.range[0],
-				),
-				this.range[1],
-			);
-		}
-	}
-
-	async onKeyUp(e: KeyboardEvent) {
-		const keys = this.vertical
-			? ['ArrowDown', 'ArrowUp']
-			: ['ArrowLeft', 'ArrowRight'];
-		if (keys.includes(e.key)) {
-			e.preventDefault();
-			await this.sendAction('tap_action');
-			this.endAction();
-			this.resetGetValueFromHass();
+			e.stopImmediatePropagation();
+			if (e.type == 'keydown') {
+				this.getValueFromHass = false;
+				this.pressed = true;
+				this._value = Math.min(
+					Math.max(
+						parseFloat((this.value ?? this.range[0]) as string) +
+							(e.key == keys[!this.vertical && this.rtl ? 1 : 0]
+								? -1
+								: 1) *
+								this.step,
+						this.range[0],
+					),
+					this.range[1],
+				);
+			} else {
+				await this.sendAction('tap_action');
+				this.endAction();
+				this.resetGetValueFromHass();
+			}
 		}
 	}
 
