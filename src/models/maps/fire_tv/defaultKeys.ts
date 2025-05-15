@@ -366,7 +366,7 @@ export const fireTVDefaultKeys: IElementConfig[] = [
 	},
 	{
 		type: 'button',
-		name: 'input',
+		name: 'source',
 		tap_action: { action: 'key', key: 'INPUT' },
 		icon: 'mdi:import',
 	},
