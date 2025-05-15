@@ -66,9 +66,10 @@ export class UniversalRemoteCardEditor extends LitElement {
 	BASE_TABS = ['general', 'layout', 'elements', 'icons'];
 	DIRECTION_TABS = ['up', 'down', 'center', 'left', 'right'];
 	ACTION_TABS = ['default', 'momentary'];
+
+	PLATFORM?: Platform;
 	DEFAULT_KEYS: IElementConfig[] = [];
 	DEFAULT_SOURCES: IElementConfig[] = [];
-	DEFAULT_ACTIONS: IElementConfig[] = [];
 
 	customActionsFromFile?: IElementConfig[];
 
@@ -976,12 +977,15 @@ export class UniversalRemoteCardEditor extends LitElement {
 				select: {
 					custom_value: true,
 					mode: 'dropdown',
-					options: this.DEFAULT_ACTIONS.filter(
-						(action) =>
-							action.type ==
-							((this.activeEntry as IElementConfig).type ??
-								'button'),
-					).map((action) => action.name),
+					options: [
+						...this.DEFAULT_KEYS.filter(
+							(action) =>
+								action.type ==
+								((this.activeEntry as IElementConfig).type ??
+									'button'),
+						).map((action) => action.name),
+						...this.DEFAULT_SOURCES.map((action) => action.name),
+					],
 				},
 			})}
 			${this.buildSelector(
@@ -2331,9 +2335,11 @@ export class UniversalRemoteCardEditor extends LitElement {
 			this.config.platform ?? 'Android TV',
 			context,
 		) as Platform;
-
-		[this.DEFAULT_KEYS, this.DEFAULT_SOURCES] = getDefaultActions(platform);
-		this.DEFAULT_ACTIONS = [...this.DEFAULT_KEYS, ...this.DEFAULT_SOURCES];
+		if (this.PLATFORM != platform) {
+			this.PLATFORM = platform;
+			[this.DEFAULT_KEYS, this.DEFAULT_SOURCES] =
+				getDefaultActions(platform);
+		}
 
 		const baseTabBar = this.buildTabBar(
 			this.baseTabIndex,
@@ -2529,7 +2535,8 @@ export class UniversalRemoteCardEditor extends LitElement {
 					structuredClone(
 						[
 							...(this.customActionsFromFile ?? []),
-							...this.DEFAULT_ACTIONS,
+							...this.DEFAULT_KEYS,
+							...this.DEFAULT_SOURCES,
 						].filter(
 							(defaultActions) =>
 								defaultActions.name == parentName,
@@ -2546,7 +2553,8 @@ export class UniversalRemoteCardEditor extends LitElement {
 					structuredClone(
 						[
 							...(this.customActionsFromFile ?? []),
-							...this.DEFAULT_ACTIONS,
+							...this.DEFAULT_KEYS,
+							...this.DEFAULT_SOURCES,
 						].filter(
 							(defaultActions) =>
 								defaultActions.name ==
@@ -3199,10 +3207,15 @@ export class UniversalRemoteCardEditor extends LitElement {
 						entry['template' as keyof IElementConfig] ==
 						customActions.name,
 				)[0] ??
-				this.DEFAULT_ACTIONS.filter(
-					(defaultActions) =>
+				this.DEFAULT_KEYS.filter(
+					(defaultKeys) =>
 						entry['template' as keyof IElementConfig] ==
-						defaultActions.name,
+						defaultKeys.name,
+				)[0] ??
+				this.DEFAULT_SOURCES.filter(
+					(defaultSources) =>
+						entry['template' as keyof IElementConfig] ==
+						defaultSources.name,
 				)[0] ??
 				{};
 			customAction = mergeDeep(
