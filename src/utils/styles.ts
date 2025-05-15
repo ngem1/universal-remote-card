@@ -49,7 +49,8 @@ export function getNumericPixels(pixels: string) {
  * @returns {string}
  */
 export function capitalizeWords(word: string): string {
-	return word
+	return (word ?? '')
+		.toString()
 		.replace('_', ' ')
 		.split(' ')
 		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))

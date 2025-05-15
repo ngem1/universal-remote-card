@@ -1210,7 +1210,7 @@ custom_actions:
 
 ## Example 12
 
-RGB Remote using Broadlink RM4 Pro.
+RGB Remote using Broadlink RM4 Pro and the Generic Remote platform.
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/rgb.png" width="500"/>
 
@@ -1229,27 +1229,24 @@ rows:
   - - up
     - null
     - down
-  - - 1
-    - 2
-    - 3
-  - - 4
-    - 5
-    - 6
-  - - 7
-    - 8
-    - 9
-  - - 10
-    - 11
-    - 12
+  - - red
+    - green
+    - dark_blue
+  - - yellow
+    - yellow_orange
+    - orange
+  - - orange_light
+    - cyan
+    - blue
+  - - pink
+    - green_light
+    - white
 custom_actions:
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: red
-    name: '1'
+      action: key
+      key: red
+    name: red
     type: button
     styles: |-
       :host {
@@ -1258,166 +1255,130 @@ custom_actions:
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: green
-    name: '2'
+      action: key
+      key: green
+    name: green
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: green;;
+        --icon-color: green;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: dark_blue
-    name: '3'
+      action: key
+      key: dark_blue
+    name: dark_blue
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: darkblue;;
+        --icon-color: darkblue;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: yellow
-    name: '4'
+      action: key
+      key: yellow
+    name: yellow
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: yellow;;
+        --icon-color: yellow;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: yellow-orange
-    name: '5'
+      action: key
+      key: yellow_orange
+    name: yellow_orange
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: goldenrod;;
+        --icon-color: goldenrod;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: orange
-    name: '6'
+      action: key
+      key: orange
+    name: orange
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: orange;;
+        --icon-color: orange;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: orange-light
-    name: '7'
+      action: key
+      key: orange_light
+    name: orange_light
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: lightsalmon;;
+        --icon-color: lightsalmon;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: cyan
-    name: '8'
+      action: key
+      key: cyan
+    name: cyan
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: cyan;;
+        --icon-color: cyan;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: blue
-    name: '9'
+      action: key
+      key: blue
+    name: blue
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: blue;;
+        --icon-color: blue;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: pink
-    name: '10'
+      action: key
+      key: pink
+    name: pink
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: magenta;;
+        --icon-color: magenta;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: green_light
-    name: '11'
+      action: key
+      key: green_light
+    name: green_light
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: mediumseagreen;;
+        --icon-color: mediumseagreen;
       }
   - icon: mdi:circle
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: white
-    name: '12'
+      action: key
+      key: white
+    name: white
     type: button
     styles: |-
       :host {
         --size: 42px;
-        --icon-color: white;;
+        --icon-color: white;
       }
   - type: button
     name: power
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: 'on'
+      action: key
+      key: on
     icon: mdi:power
     styles: |-
       :host {
@@ -1425,11 +1386,8 @@ custom_actions:
       }
   - icon: mdi:power
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: 'off'
+      action: key
+      key: off
     name: poweroff
     type: button
     styles: |-
@@ -1439,169 +1397,27 @@ custom_actions:
   - type: button
     name: up
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: brightness+
+      action: key
+      key: brightness+
     hold_action:
       action: repeat
     icon: mdi:chevron-up
   - type: button
     name: down
     tap_action:
-      action: perform-action
-      perform_action: remote.send_command
-      data:
-        device: Office TV Led
-        command: brightness-
+      action: key
+      key: brightness-
     hold_action:
       action: repeat
     icon: mdi:chevron-down
+platform: Generic Remote
 ```
 
 </details>
 
 ## Example 13
 
-Style `dpad` to be like the Google TV app remote. **Note**: You have to add the provided overall styles including matching the row number. You can find the CSS IDs of your navigation button rows by hovering over the remote in the editor as described [in this section](#css-styles).
-
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/google_tv_dpad.png" width="500"/>
-
-<details>
-
-<summary>Remote Config</summary>
-
-```yaml
-type: custom:universal-remote-card
-rows:
-  - - dpad
-custom_actions:
-  - type: button
-    name: center
-    tap_action:
-      action: key
-      key: DPAD_CENTER
-    icon: ''
-    styles: |-
-      :host {
-        border-radius: 50%;
-        z-index: 2;
-        pointer-events: none;
-        width: 200px;
-        height: 200px;
-        top: -75px;
-        left: -75px;
-      }
-      button {
-        height: 80%;
-        width: 80%;
-        border-radius: 50%;
-        background: rgb(94, 94, 94);
-        pointer-events: all;
-      }
-  - type: button
-    name: up
-    tap_action:
-      action: key
-      key: DPAD_UP
-    hold_action:
-      action: repeat
-    icon: mdi:chevron-up
-    styles: |-
-      button {
-        top: 10%;
-        left: 10%;
-        border-radius: 0;
-      }
-      .icon {
-        transform: rotate(-45deg);
-        color: rgb(197, 199, 197);
-      }
-  - type: button
-    name: down
-    tap_action:
-      action: key
-      key: DPAD_DOWN
-    hold_action:
-      action: repeat
-    icon: mdi:chevron-down
-    styles: |-
-      button {
-        bottom: 10%;
-        right: 10%;
-        border-radius: 0;
-      }
-      .icon {
-        transform: rotate(-45deg);
-        color: rgb(197, 199, 197);
-      }
-  - type: button
-    name: left
-    tap_action:
-      action: key
-      key: DPAD_LEFT
-    hold_action:
-      action: repeat
-    icon: mdi:chevron-left
-    styles: |-
-      button {
-        bottom: 10%;
-        left: 10%;
-        border-radius: 0;
-      }
-      .icon {
-        transform: rotate(-45deg);
-        color: rgb(197, 199, 197);
-      }
-  - type: button
-    name: right
-    tap_action:
-      action: key
-      key: DPAD_RIGHT
-    hold_action:
-      action: repeat
-    icon: mdi:chevron-right
-    styles: |-
-      button {
-        top: 10%;
-        right: 10%;
-        border-radius: 0;
-      }
-      .icon {
-        transform: rotate(-45deg);
-        color: rgb(197, 199, 197);
-      }
-styles: |-
-  .button-pad {
-    gap: 98px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: rgb(31, 31, 31);
-  }
-  .button-pad .empty-button {
-    width: 0;
-    height: 0;
-  }
-  .button-pad remote-button {
-    top: -125%;
-    left: -125%;
-    width: 170px;
-    height: 170px;
-    transform: rotate(45deg);
-    z-index: 1;
-  }
-  #row-1 {
-    width: fit-content;
-  }
-custom_icons: []
-```
-
-</details>
-
-## Example 14
-
-Style `dpad` to be like a traditional tv remote. **Note**: You have to add the provided overall styles.
+Style a `circlepad` to be like a traditional tv remote.
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/traditional_dpad.png" width="500"/>
 
@@ -1612,115 +1428,62 @@ Style `dpad` to be like a traditional tv remote. **Note**: You have to add the p
 ```yaml
 type: custom:universal-remote-card
 rows:
-  - dpad
+  - - circlepad
 custom_actions:
-  - type: button
-    name: center
+  - type: circlepad
+    name: circlepad
     tap_action:
       action: key
-      key: DPAD_CENTER
-    icon: ok
+      key: center
+    up:
+      icon: mdi:chevron-up
+      tap_action:
+        action: key
+        key: up
+      hold_action:
+        action: repeat
+    down:
+      icon: mdi:chevron-down
+      tap_action:
+        action: key
+        key: down
+      hold_action:
+        action: repeat
+    left:
+      icon: mdi:chevron-left
+      tap_action:
+        action: key
+        key: left
+      hold_action:
+        action: repeat
+    right:
+      icon: mdi:chevron-right
+      tap_action:
+        action: key
+        key: right
+      hold_action:
+        action: repeat
     styles: |-
       :host {
+        --circlepad-size: 174px;
+        --center-button-size: 77px;
+        --direction-button-size: 88px;
+        --icon-color: rgba(128,128,128,0.5);
+      }
+      .circlepad {
+        border: 1px solid #444;
+        background: radial-gradient(circle at top left, #202020 15%, #303030 100%);
+      }
+      #center {
+        background: radial-gradient(circle at top left, #303030 15%, #101010 100%);
+        border: 1px solid rgba(0, 0, 0, 0.5);
+      }
+      #center::part(icon) {
+        color: rgba(128,128,128, 0.8);
         --size: 36px;
-        top: -30%;
-        left: -30%;
-        width: 160%;
-        height: 160%;
-        border: 1px solid rgba(0,0,0,0.5);
-        border-radius: 50%;
-        transform: rotate(0deg);
-        background: radial-gradient(circle at top left,#303030 15%,#101010 100%);
-        z-index: 2;
       }
-      .icon {
-        color:rgba(128,128,128,0.8);
-      }
-  - type: button
-    name: up
-    tap_action:
-      action: key
-      key: DPAD_UP
-    hold_action:
-      action: repeat
-    icon: mdi:chevron-up
-    styles: |-
-      .icon {
-        transform: rotate(-45deg);
-        color: rgba(96,96,96,0.8);
-      }
-      button {
-        border-radius: 0;
-      }
-  - type: button
-    name: down
-    tap_action:
-      action: key
-      key: DPAD_DOWN
-    hold_action:
-      action: repeat
-    icon: mdi:chevron-down
-    styles: |-
-      .icon {
-        transform: rotate(-45deg);
-        color: rgba(96,96,96,0.8);
-      }
-      button {
-        border-radius: 0;
-      }
-  - type: button
-    name: left
-    tap_action:
-      action: key
-      key: DPAD_LEFT
-    hold_action:
-      action: repeat
-    icon: mdi:chevron-left
-    styles: |-
-      .icon {
-        transform: rotate(-45deg);
-        color: rgba(96,96,96,0.8);
-      }
-      button {
-        border-radius: 0;
-      }
-  - type: button
-    name: right
-    tap_action:
-      action: key
-      key: DPAD_RIGHT
-    hold_action:
-      action: repeat
-    icon: mdi:chevron-right
-    styles: |-
-      .icon {
-        transform: rotate(-45deg);
-        color: rgba(96,96,96,0.8);
-      }
-      button {
-        border-radius: 0;
-      }
-styles: |-
-  .button-pad {
-    gap: 14px;
-    border: 1px solid #444;
-    border-radius: 50%;
-    overflow: hidden;
-    background: radial-gradient(circle at top left,#202020 15%,#303030 100%);
-  }
-  .button-pad .empty-button {
-    width: 0;
-    height: 0;
-  }
-  .button-pad remote-button {
-    top: -40%;
-    left: -40%;
-    width: 180%;
-    height: 180%;
-    transform: rotate(45deg);
-    overflow: hidden;
-    border-radius: 0;
-  }
+    icon: ok
+styles: ''
 custom_icons:
   - name: ok
     path: >-
@@ -1730,7 +1493,7 @@ custom_icons:
 
 </details>
 
-## Example 15
+## Example 14
 
 A Spotify app influenced music controller, with album art, album colored background, song info, media position information, controls, and a hidden vertical volume slider. Set `--max-album-height` in the global styles to reduce its size.
 
@@ -2070,7 +1833,7 @@ haptics: false
 
 </details>
 
-## Example 16
+## Example 15
 
 Multiple sliders for light color control.
 
@@ -2083,9 +1846,11 @@ Multiple sliders for light color control.
 ```yaml
 type: custom:universal-remote-card
 rows:
-  - - brightness
+  - - - brightness
+      - light_toggle
     - color_temp
-    - hs_color
+    - - hs_color
+      - light_color
 custom_actions:
   - type: slider
     vertical: true
@@ -2100,8 +1865,6 @@ custom_actions:
       perform_action: light.turn_on
       data:
         brightness_pct: '{{ value | int }}'
-      target:
-        entity_id: '{{ config.entity }}'
     styles: |
       :host {
         height: 400px;
@@ -2131,9 +1894,7 @@ custom_actions:
       data:
         color_temp: '{{ value | int }}'
       perform_action: light.turn_on
-      target:
-        entity_id: '{{ config.entity }}'
-    styles: |
+    styles: |-
       :host {
         height: 400px;
         --color: rgba(0, 0, 0, 0.2);
@@ -2143,6 +1904,9 @@ custom_actions:
       .icon {
         filter: invert(1);
         mix-blend-mode: difference;
+      }
+      .thumb .active {
+        display: none;
       }
     name: color_temp
     icon: mdi:thermometer
@@ -2158,8 +1922,6 @@ custom_actions:
         hs_color:
           - '{{ value | int }}'
           - 100
-      target:
-        entity_id: '{{ config.entity }}'
     vertical: true
     step: 0.1
     icon: mdi:palette
@@ -2171,8 +1933,61 @@ custom_actions:
         --background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 66%, #f0f 83%, #f00 100%);
         --thumb-box-shadow: none;
       }
+      .thumb .active {
+        display: none;
+      }
     entity_id: light.sunroom_ceiling
     name: hs_color
+  - type: button
+    name: light_toggle
+    entity_id: light.sunroom_ceiling
+    tap_action:
+      action: perform-action
+      perform_action: light.toggle
+      target:
+        entity_id: light.sunroom_ceiling
+      data: {}
+      confirmation:
+        exemptions: []
+    icon: mdi:lightbulb
+    haptics: true
+  - type: button
+    name: light_color
+    entity_id: light.sunroom_ceiling
+    tap_action:
+      action: perform-action
+      perform_action: light.turn_on
+      target:
+        entity_id: light.sunroom_ceiling
+      data:
+        color_name: red
+    double_tap_action:
+      action: perform-action
+      perform_action: light.turn_on
+      target:
+        entity_id: light.sunroom_ceiling
+      data:
+        color_name: green
+    hold_action:
+      action: perform-action
+      perform_action: light.turn_on
+      target:
+        entity_id: light.sunroom_ceiling
+      data:
+        color_name: blue
+    icon: mdi:palette
+    styles: |-
+      .icon {
+        color: rgb({{ value }});
+      }
+    value_attribute: rgb_color
+styles: |-
+  .column {
+    flex: 0;
+  }
+  remote-slider {
+    align-self: center;
+  }
 ```
 
 </details>
