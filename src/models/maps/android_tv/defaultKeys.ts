@@ -126,6 +126,34 @@ export const androidTVDefaultKeys: IElementConfig[] = [
 		icon: 'mdi:gamepad',
 	},
 	{
+		type: 'circlepad',
+		name: 'circlepad',
+		tap_action: {
+			action: 'key',
+			key: 'DPAD_CENTER',
+		},
+		up: {
+			icon: 'mdi:chevron-up',
+			tap_action: { action: 'key', key: 'DPAD_UP' },
+			hold_action: { action: 'repeat' },
+		},
+		down: {
+			icon: 'mdi:chevron-down',
+			tap_action: { action: 'key', key: 'DPAD_DOWN' },
+			hold_action: { action: 'repeat' },
+		},
+		left: {
+			icon: 'mdi:chevron-left',
+			tap_action: { action: 'key', key: 'DPAD_LEFT' },
+			hold_action: { action: 'repeat' },
+		},
+		right: {
+			icon: 'mdi:chevron-right',
+			tap_action: { action: 'key', key: 'DPAD_RIGHT' },
+			hold_action: { action: 'repeat' },
+		},
+	},
+	{
 		type: 'touchpad',
 		name: 'touchpad',
 		tap_action: {

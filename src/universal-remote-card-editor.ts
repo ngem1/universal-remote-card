@@ -860,6 +860,8 @@ export class UniversalRemoteCardEditor extends LitElement {
 		selector: object,
 		placeholder?: string | number | boolean | object,
 	) {
+		// https://github.com/home-assistant/frontend/tree/dev/src/components/ha-selector
+		// https://github.com/home-assistant/frontend/blob/dev/src/data/selector.ts
 		const hass: HomeAssistant = {
 			...this.hass,
 			localize: (key, values) => {
@@ -937,7 +939,11 @@ export class UniversalRemoteCardEditor extends LitElement {
 			this.config.keyboard_id;
 		return html`
 			${this.buildSelector('Name', 'name', {
-				text: {},
+				select: {
+					custom_value: true,
+					mode: 'dropdown',
+					options: this.DEFAULT_ACTIONS.map((action) => action.name),
+				},
 			})}
 			${this.buildSelector(
 				'Entity',
@@ -1723,6 +1729,10 @@ export class UniversalRemoteCardEditor extends LitElement {
 			${this.buildAppearancePanel(this.buildCommonAppearanceOptions())}
 			${this.buildInteractionsPanel(actionSelectors)}
 		`;
+	}
+
+	buildCirclepadGuiEditor() {
+		return html``;
 	}
 
 	buildIconGuiEditor() {

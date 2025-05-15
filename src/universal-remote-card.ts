@@ -22,6 +22,7 @@ import { getDefaultActions } from './utils';
 
 import './classes/remote-button';
 import { RemoteButton } from './classes/remote-button';
+import './classes/remote-circlepad';
 import './classes/remote-dialog';
 import { RemoteDialog } from './classes/remote-dialog';
 import './classes/remote-slider';
@@ -417,6 +418,19 @@ class UniversalRemoteCard extends LitElement {
 		></remote-touchpad>`;
 	}
 
+	buildCirclepad(
+		elementName: string,
+		actions: IElementConfig,
+	): TemplateResult {
+		return html`<remote-circlepad
+			id="${elementName}"
+			title="${capitalizeWords(elementName)}"
+			.hass=${this.hass}
+			.config=${actions}
+			.icons=${this.config.custom_icons}
+		></remote-touchpad>`;
+	}
+
 	buildVolumeButtons(): TemplateResult[] {
 		return [
 			this.buildButton(
@@ -557,6 +571,11 @@ class UniversalRemoteCard extends LitElement {
 							case 'touchpad':
 								rowContent.push(
 									this.buildTouchpad(elementName, actions),
+								);
+								break;
+							case 'circlepad':
+								rowContent.push(
+									this.buildCirclepad(elementName, actions),
 								);
 								break;
 							case 'button':
@@ -812,13 +831,9 @@ class UniversalRemoteCard extends LitElement {
 				justify-content: space-evenly;
 				align-items: center;
 			}
-			.edit-mode {
-				outline: none;
-			}
-			@media (hover: hover) {
-				.edit-mode :hover:not(:has(div:hover)) {
-					outline: 1px dashed var(--red-color);
-				}
+
+			.row:has(remote-circlepad) {
+				justify-content: center;
 			}
 
 			.empty-button {
@@ -832,6 +847,15 @@ class UniversalRemoteCard extends LitElement {
 				grid-template-rows: repeat(3, var(--size, 48px));
 				grid-template-columns: repeat(3, var(--size, 48px));
 				grid-gap: 8px 16px;
+			}
+
+			.edit-mode {
+				outline: none;
+			}
+			@media (hover: hover) {
+				.edit-mode :hover:not(:has(div:hover)) {
+					outline: 1px dashed var(--red-color);
+				}
 			}
 		`;
 	}

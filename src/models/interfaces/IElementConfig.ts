@@ -7,7 +7,12 @@ import {
 	IMultiActions,
 } from '.';
 
-export const RemoteElementTypes = ['button', 'slider', 'touchpad'] as const;
+export const RemoteElementTypes = [
+	'button',
+	'slider',
+	'touchpad',
+	'circlepad',
+] as const;
 export type RemoteElementType = (typeof RemoteElementTypes)[number];
 
 export interface IElementConfig
@@ -53,6 +58,13 @@ export const DirectionActions = ['up', 'down', 'left', 'right'] as const;
 export type DirectionAction = (typeof DirectionActions)[number];
 
 export interface ITouchpadConfig extends IBaseElementConfig, IActions {
+	up?: IBasicActions & IMultiActions & IDisplayConfig;
+	down?: IBasicActions & IMultiActions & IDisplayConfig;
+	left?: IBasicActions & IMultiActions & IDisplayConfig;
+	right?: IBasicActions & IMultiActions & IDisplayConfig;
+}
+
+export interface ICirclepadConfig extends IBaseElementConfig, IActions {
 	up?: IBasicActions & IMultiActions & IMomentaryActions & IDisplayConfig;
 	down?: IBasicActions & IMultiActions & IMomentaryActions & IDisplayConfig;
 	left?: IBasicActions & IMultiActions & IMomentaryActions & IDisplayConfig;
