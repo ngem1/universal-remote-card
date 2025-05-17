@@ -1469,15 +1469,14 @@ custom_actions:
         action: repeat
     styles: |-
       :host {
-        --circlepad-size: 174px;
-        --center-button-size: 77px;
-        --direction-button-size: 88px;
+       width: 174px;
         --icon-color: rgba(128,128,128,0.5);
       }
       .circlepad {
         border: 1px solid #444;
         background: radial-gradient(circle at top left, #202020 15%, #303030 100%);
       }
+
       #center {
         background: radial-gradient(circle at top left, #303030 15%, #101010 100%);
         border: 1px solid rgba(0, 0, 0, 0.5);
@@ -1485,6 +1484,11 @@ custom_actions:
       #center::part(icon) {
         color: rgba(128,128,128, 0.8);
         --size: 36px;
+      }
+
+      #left,
+      #right {
+        width: 100%;
       }
     icon: ok
 styles: ''
