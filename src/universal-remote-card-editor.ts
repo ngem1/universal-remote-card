@@ -2002,7 +2002,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 									class="action-list-container custom-action-list-container"
 								>
 									<div class="title-header">
-										Custom Actions
+										Custom Elements
 									</div>
 									<ul
 										class="action-list two-column-action-list"
@@ -2207,7 +2207,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 						</div>
 						<div class="selector-margin">
 							${this.buildSelector(
-								'Custom Actions File',
+								'Custom Elements File',
 								'custom_actions_file',
 								{ text: {} },
 							)}

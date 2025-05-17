@@ -6,7 +6,7 @@
 [![Project Maintenance](https://img.shields.io/badge/maintainer-Nerwyn-blue.svg?style=for-the-badge)](https://github.com/Nerwyn)
 ![Github](https://img.shields.io/github/followers/Nerwyn.svg?style=for-the-badge)
 [![GitHub Activity](https://img.shields.io/github/last-commit/Nerwyn/universal-remote-card?style=for-the-badge)](https://github.com/Nerwyn/universal-remote-card/commits/main)
-[![Community Forum](https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge)](https://community.home-assistant.io/t/universal-remote-card-a-tv-card-fork-for-android-tv/585089)
+[![Community Forum](https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge)](https://community.home-assistant.io/t/universal-remote-card-buttons-touchpads-sliders-and-keyboards-for-multiple-platforms/)
 [![Buy Me A Coffee](https://img.shields.io/badge/donate-☕buy_me_a_coffee-yellow.svg?style=for-the-badge)](https://www.buymeacoffee.com/nerwyn)
 
 [![My Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?repository=universal-remote-card&owner=Nerwyn&category=Plugin)
@@ -31,13 +31,11 @@ A super customizable universal remote card iterating on the work of several othe
   - Philips TV
   - Jellyfin
   - Generic Remote
-- Support for multiple buttons, touchpads, and sliders using default or user defined custom actions.
+- Support for multiple buttons, circlepads, touchpads, and sliders using default or user defined actions.
 - Complete [Home Assistant actions](https://www.home-assistant.io/dashboards/actions/) support.
 - [Keyboard and search](#keyboard-textbox-and-search) dialog actions for most platforms.
-- [Template](#a-note-on-templating) support for almost all fields using nunjucks.
+- [Template](#a-note-on-templating) support for almost all fields using ha-nunjucks.
 - Toggleable haptics.
-- Remappable touchpad with [swipe, multi-touch, and drag](#touchpad-actions) gesture support.
-- Remappable slider with vertical orientation support.
 - User configurable remote [layout](#layout).
 - Icons and labels for all elements.
 - Custom SVG icon support.
@@ -47,32 +45,32 @@ A super customizable universal remote card iterating on the work of several othe
 
 This project now has a fully featured configuration user interface! To get started, install this project using HACS. Then go to a dashboard and create a universal remote card or edit an existing one.
 
-The editor has four tabs - General, Layout, Actions, and Icons.
+The editor has four tabs - General, Layout, Elements, and Icons.
 
 # General
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_general_tab.png" width="600"/>
 
-Platform, entity ID, and timing fields set in the general tab will be used for default keys and sources. If you do not set these fields for custom actions and autofill is enabled, they will also use these fields. If you explicitly set one of these fields in a custom action, it will not be overwritten if you change the matching general field until you clear the field in the custom action. To completely clear toggle fields, you must remove them from the config using the code editor.
+Platform, entity ID, and timing fields set in the general tab will be used for default keys and sources. If you do not set these fields for custom elements and autofill is enabled, they will also use these fields. If you explicitly set one of these fields in a custom action, it will not be overwritten if you change the matching general field until you clear the field in the custom action. To completely clear toggle fields, you must remove them from the config using the code editor.
 
 ## Media Platform and Entity IDs
 
-This card supports several media platforms with default key and source lists. For the most part it uses the Home Assistant integrations for these platforms via their remote and/or media player entities. Some platforms require custom integrations as listed below. Different platforms use the remote and media player entities for different functions as shown below. For platforms with keyboard support, the keyboard entity ID (which doesn't always match the remote and media player entities) can also be provided.
+This card supports several media platforms with default key and source lists. For the most part it uses the Home Assistant integrations for these platforms via their remote and/or media player entities. Some platforms require custom integrations as listed below. Different platforms require different entities as shown below. For platforms with keyboard support via an alternate integration, the keyboard entity ID (which doesn't always match the remote and media player entities) can also be provided.
 
-| Platform                                                                   | Remote                   | Media Player                                                                                                                           | Keyboard                                                                                                  |
-| -------------------------------------------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| [Android TV](https://www.home-assistant.io/integrations/androidtv_remote/) | Default keys and sources | Default slider                                                                                                                         | [ADB](https://www.home-assistant.io/integrations/androidtv/) remote (preferred) or media player           |
-| [Sony BRAVIA](https://www.home-assistant.io/integrations/braviatv/)        | Default keys             | Default sources and slider                                                                                                             | [ADB](https://www.home-assistant.io/integrations/androidtv/) remote (preferred) or media player           |
-| [Fire TV](https://www.home-assistant.io/integrations/androidtv/)           | Default keys             | Default sources and slider                                                                                                             | Remote (preferred) or media player                                                                        |
-| [Roku](https://www.home-assistant.io/integrations/roku/)                   | Default keys             | Default sources and slider                                                                                                             | Remote for keyboard, media player for search (provide one for keyboard ID and the others in their fields) |
-| [LG webOS](https://www.home-assistant.io/integrations/webostv/)            | NA                       | Default keys, sources, and slider                                                                                                      | Media player                                                                                              |
-| [Kodi](https://www.home-assistant.io/integrations/kodi/)                   | NA                       | Default keys, sources, and slider                                                                                                      | Media player                                                                                              |
-| [Unified Remote](https://github.com/DaviPtrs/hass-unified-remote)          | NA (see below)           | NA (see below)                                                                                                                         | NA (see below)                                                                                            |
-| [Apple TV](https://www.home-assistant.io/integrations/apple_tv)            | Default keys             | Default sources and slider                                                                                                             | NA                                                                                                        |
-| [Samsung TV](https://www.home-assistant.io/integrations/samsungtv/)        | Default keys             | Default sources (requires the [SamsungTV Smart Component custom integration](https://github.com/ollo69/ha-samsungtv-smart)) and slider | NA                                                                                                        |
-| [Philips TV](https://www.home-assistant.io/integrations/philips_js/)       | Default keys             | Play/pause and slider                                                                                                                  | NA                                                                                                        |
-| [Jellyfin](https://www.home-assistant.io/integrations/jellyfin/)           | Default keys             | Play/pause and slider                                                                                                                  | NA                                                                                                        |
-| Generic Remote                                                             | Default keys and sources | NA                                                                                                                                     | NA                                                                                                        |
+| Platform                                                                   | Remote ID                | Media Player ID                                                                                                                        | Keyboard ID                                                                                     | Remote/Device Name                   |
+| -------------------------------------------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------ |
+| [Android TV](https://www.home-assistant.io/integrations/androidtv_remote/) | Default keys and sources | Default slider                                                                                                                         | [ADB](https://www.home-assistant.io/integrations/androidtv/) remote (preferred) or media player | NA                                   |
+| [Sony BRAVIA](https://www.home-assistant.io/integrations/braviatv/)        | Default keys             | Default sources and slider                                                                                                             | [ADB](https://www.home-assistant.io/integrations/androidtv/) remote (preferred) or media player | NA                                   |
+| [Fire TV](https://www.home-assistant.io/integrations/androidtv/)           | Default keys             | Default sources and slider                                                                                                             | NA                                                                                              | NA                                   |
+| [Roku](https://www.home-assistant.io/integrations/roku/)                   | Default keys             | Default sources and slider                                                                                                             | NA                                                                                              | NA                                   |
+| [LG webOS](https://www.home-assistant.io/integrations/webostv/)            | NA                       | Default keys, sources, and slider                                                                                                      | NA                                                                                              | NA                                   |
+| [Kodi](https://www.home-assistant.io/integrations/kodi/)                   | NA                       | Default keys, sources, and slider                                                                                                      | NA                                                                                              | NA                                   |
+| [Unified Remote](https://github.com/DaviPtrs/hass-unified-remote)          | NA                       | NA                                                                                                                                     | NA                                                                                              | Configured remote name or IP address |
+| [Apple TV](https://www.home-assistant.io/integrations/apple_tv)            | Default keys             | Default sources and slider                                                                                                             | NA                                                                                              | NA                                   |
+| [Samsung TV](https://www.home-assistant.io/integrations/samsungtv/)        | Default keys             | Default sources (requires the [SamsungTV Smart Component custom integration](https://github.com/ollo69/ha-samsungtv-smart)) and slider | NA                                                                                              | NA                                   |
+| [Philips TV](https://www.home-assistant.io/integrations/philips_js/)       | Default keys             | Play/pause and slider                                                                                                                  | NA                                                                                              | NA                                   |
+| [Jellyfin](https://www.home-assistant.io/integrations/jellyfin/)           | Default keys             | Play/pause and slider                                                                                                                  | NA                                                                                              | NA                                   |
+| Generic Remote                                                             | Default keys and sources | NA                                                                                                                                     | NA                                                                                              | Device name to include in calls      |
 
 ### Samsung TV Sources
 
@@ -84,7 +82,7 @@ Unlike most platforms, Unified Remote relies entirely on [a custom integration](
 
 ### Generic Remote
 
-The generic remote platform takes all default key and source buttons of all other platforms and creates generic remote actions using their names and icons.
+The generic remote platform takes all default key and source buttons of all other platforms and creates generic remote actions using their names and icons. It also includes a default circlepad and touchpads.
 
 ```yaml
 name: power
@@ -92,6 +90,7 @@ icon: mdi:power
 tap_action:
   action: key
   key: power
+  device: Generic Device
 ```
 
 You can use `remote.learn_command` on supported platforms like [Broadlink Remote](https://www.home-assistant.io/integrations/broadlink/#remote) to create commands that match these actions. If needed a remote/device name can be provided which will be included in the key actions data.
@@ -165,13 +164,13 @@ If you hover over the card preview window, a red dashed outline will appear alon
 
 ### Autofill and Haptics
 
-When creating custom actions, the card editor will autofill fields using information set in the general tab. This can be disabled by toggling `Autofill` off. This value can also be set at the custom remote element level. Haptics can be similarly toggled globally or for individual custom remote elements and are enabled by default.
+When creating custom elements, the card editor will autofill fields using information set in the general tab. This can be disabled by toggling `Autofill` off. This value can also be set at the custom remote element level. Haptics can be similarly toggled globally or for individual custom remote elements and are enabled by default.
 
 ### Other
 
 You can add a title to the card with the title field.
 
-Instead of copying the same custom actions across multiple remote cards, you can put custom actions in an array in a JSON or YAML file on your Home Assistant server's config www folder and fetch them by filename, like `local/remote_card_custom_actions.yaml`.
+Instead of copying the same custom elements across multiple remote cards, you can put custom elements in an array in a JSON or YAML file on your Home Assistant server's config www folder and fetch them by filename, like `local/remote_card_custom_elements.yaml`.
 
 If you are updating from an older version of this card, you may find that your configurations no longer work. Sorry! To upgrade them, click the button `Update old config` at the bottom of the general tab. It should update your configuration to work with newer versions of this card.
 
@@ -205,6 +204,7 @@ The default keys and sources lists for your selected platform are displayed belo
 
 | Name               | Type        | Description                                                                                                                                                                                     |
 | ------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| circlepad          | circlepad   | A circlepad with five buttons for navigation.                                                                                                                                                   |
 | touchpad           | touchpad    | A touchpad for swipe navigation.                                                                                                                                                                |
 | dragpad            | touchpad    | A touchpad for drag navigation. Use two fingers for faster movement.                                                                                                                            |
 | mousepad           | touchpad    | A touchpad for mouse navigation. **Note**: mousepad support is dependent on the platform supporting mouse movement via a Home Assistant action.                                                 |
@@ -255,11 +255,11 @@ Sliders have some additional general options. They have a range `Min` and `Max` 
 
 Sliders will wait one second before updating their internal values from Home Assistant to prevent it from bouncing between the old and new values. This time can be changed by setting `Update after action delay`, which defaults to 1000ms
 
-### Touchpad Tabs
+### Circlepad and Touchpad Tabs
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_general_options_touchpad.png" width="600"/>
 
-Touchpads have five tabs at the top of their actions page for each direction and it's center. Only the center tab has general options as these apply to the entire touchpad remote element. Each direction and center have their own options for appearance and interactions as described below.
+Circlepads and touchpads have five tabs at the top of their actions page for each direction and it's center. Only the center tab has general options as these apply to the entire touchpad remote element. Each direction and center have their own options for appearance and interactions as described below.
 
 ## Appearance
 
@@ -269,19 +269,21 @@ All remote elements can have a `Label`, `Icon`, and `Units`. These fields can al
 
 You may find the following CSS selectors useful for styling:
 
-| CSS Selector   | Element                                            |
-| -------------- | -------------------------------------------------- |
-| :host          | The element itself.                                |
-| .icon          | The element icon.                                  |
-| .label         | The element label.                                 |
-| button         | A button element background.                       |
-| toucharea      | A touchpad element background.                     |
-| input          | A slider element.                                  |
-| .thumb         | A slider thumb visual element.                     |
-| .thumb .active | A slider thumb trailing / active track area.       |
-| .background    | A slider element background / inactive track area. |
-| .tooltip       | A slider element tooltip.                          |
-| .button-pad    | All button pads.                                   |
+| CSS Selector                       | Element                                            |
+| ---------------------------------- | -------------------------------------------------- |
+| :host                              | The element itself.                                |
+| .icon                              | The element icon.                                  |
+| .label                             | The element label.                                 |
+| .circlepad                         | The circlepad outer element.                       |
+| #up, #down, #left, #right, #center | The circlepad buttons.                             |
+| button                             | A button element background.                       |
+| toucharea                          | A touchpad element background.                     |
+| input                              | A slider range element.                            |
+| .thumb                             | A slider thumb visual element.                     |
+| .thumb .active                     | A slider thumb trailing / active track area.       |
+| .background                        | A slider element background / inactive track area. |
+| .tooltip                           | A slider element tooltip.                          |
+| .button-pad                        | All button pads.                                   |
 
 While you can now set most CSS fields directly using their sub-element selectors, you may find the following CSS properties useful, especially for sliders which use and modify them internally.
 
@@ -290,8 +292,13 @@ While you can now set most CSS fields directly using their sub-element selectors
 | --size                      | Height and width of the icon.                                                                                                                                                                                                                                               |
 | --thumb-width               | Slider thumb interactable area width, defaults to `48px`. Does not represent the visually seen active area.                                                                                                                                                                 |
 | --height                    | Slider height when horizontal and width when vertical.                                                                                                                                                                                                                      |
+| --thumb-translate           | Slider thumb translation function, defaults to `var(--thumb-offset) 0`.                                                                                                                                                                                                     |
+| --thumb-transition          | Slider thumb transition animation, defaults to `translate 180ms ease-in-out, background 180ms ease-in-out`.                                                                                                                                                                 |
 | --tooltip-label             | Slider tooltip label template, defaults to `'{{ value }}'`.                                                                                                                                                                                                                 |
 | --tooltip-transform         | Slider tooltip location transform function, defaults to `translate(var(--thumb-offset), calc(-0.5 * var(--height) - 0.4em - 10px))` for horizontal sliders and `translate(calc(-0.3 * var(--height) - 0.8em - 18px), calc(-1 * var(--thumb-offset)))` for vertical sliders. |
+| --circlepad-size            | Circlepad background size, defaults to 340px.                                                                                                                                                                                                                               |
+| --center-button-size        | Circlepad center button size, defaults to 160px.                                                                                                                                                                                                                            |
+| --direction-button-size     | Circlepad direction butto nsize, defaults to 177px.                                                                                                                                                                                                                         |
 | --ha-ripple-color           | Color of ripples when hovered over or pressed, defaults to `var(--secondary-text-color)`.                                                                                                                                                                                   |
 | --ha-ripple-hover-color     | Color of ripples when hovered over, defaults to `var(--secondary-text-color)`.                                                                                                                                                                                              |
 | --ha-ripple-pressed-color   | Color of riples when pressed, defaults to `var(--secondary-text-color)`.                                                                                                                                                                                                    |
@@ -312,9 +319,9 @@ Sliders have an additional `Vertical` toggle which rotates it 90 degrees to make
 }
 ```
 
-### Multiple Icons and Labels for Touchpads
+### Multiple Icons and Labels for Circlepads and Touchpads
 
-Touchpads can have a separate icon and label for the center and each direction. You can also style each of these icons and labels independently using their own `CSS Styles` fields. General touchpad styles such as those for `toucharea` like height should go in the center tab styles.
+Circlepads and touchpads can have a separate icon and label for the center and each direction. You can also style each of these icons and labels independently using their own `CSS Styles` fields. General styles such as those for `toucharea` or `#center` like height should go in the center tab styles.
 
 ### A Note on Templating
 
@@ -402,15 +409,15 @@ Touchpads also support an alternate drag mode. This action is called whenever mo
 
 This card supports sending text to the following platforms:
 
-| Platform                        | Seamless       | Bulk | Search | Notes                                                                                 |
-| ------------------------------- | -------------- | ---- | ------ | ------------------------------------------------------------------------------------- |
-| Android TV                      | Yes (inserts)  | Yes  | Yes    | Requires ADB.                                                                         |
-| Sony BRAVIA                     | Yes (inserts)  | Yes  | Yes    | Requires ADB.                                                                         |
-| Fire TV                         | Yes (inserts)  | Yes  | Yes    | Requires ADB (the Fire TV integration itself is the ADB integration).                 |
-| Roku                            | Yes (inserts)  | Yes  | Yes    | Uses the remote entity for send text and the media player entity for search.          |
-| LG webOS                        | Yes (replaces) | Yes  | No     | Fully replaces on screen text rather than appending. Does not have a search function. |
-| Kodi                            | Yes (replaces) | Yes  | Yes    | Fully replaces on screen text rather than appending.                                  |
-| Unified Remote (PC, Mac, Linux) | Yes (inserts)  | Yes  | No     | Search methods vary by Unified Remote server platform, so we can't really pick one.   |
+| Platform                        | Seamless      | Bulk | Search |
+| ------------------------------- | ------------- | ---- | ------ |
+| Android TV                      | Yes, inserts  | Yes  | Yes    |
+| Sony BRAVIA                     | Yes, inserts  | Yes  | Yes    |
+| Fire TV                         | Yes, inserts  | Yes  | Yes    |
+| Roku                            | Yes, inserts  | Yes  | Yes    |
+| LG webOS                        | Yes, replaces | Yes  | No     |
+| Kodi                            | Yes, replaces | Yes  | Yes    |
+| Unified Remote (PC, Mac, Linux) | Yes, inserts  | Yes  | No     |
 
 If the user defined general platform is listed above, then any action set to a keyboard action (that has autofill enabled) will inherit it. Otherwise it will default to `Android TV`. Keyboard support for more platforms can be added if there is a way to do so through their Home Assistant (or community made) integrations.
 

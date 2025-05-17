@@ -194,9 +194,9 @@ export class RemoteSlider extends BaseRemoteElement {
 	buildSlider() {
 		return html`
 			<input
+				type="range"
 				part="range"
 				tabindex="-1"
-				type="range"
 				min="${this.range[0]}"
 				max="${this.range[1]}"
 				step=${this.step}
