@@ -1053,12 +1053,13 @@ export class BaseRemoteElement extends LitElement {
 				position: relative;
 				flex-flow: column;
 				place-content: center;
+				aspect-ratio: 1 / 1;
+				justify-content: center;
+				align-items: center;
 				display: var(--icon-display, inline-flex);
 				transform: var(--icon-transform);
 				color: var(--icon-color, var(--primary-text-color));
 				filter: var(--icon-filter, none);
-				height: var(--size, 48px);
-				width: var(--size, 48px);
 
 				--mdc-icon-size: var(--size, 48px);
 			}
@@ -1070,8 +1071,6 @@ export class BaseRemoteElement extends LitElement {
 				text-align: center;
 				align-items: center;
 				vertical-align: middle;
-				height: var(--size, 48px);
-				width: var(--size, 48px);
 				pointer-events: none;
 			}
 

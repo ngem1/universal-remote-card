@@ -808,10 +808,6 @@ class UniversalRemoteCard extends LitElement {
 				align-items: center;
 			}
 
-			.row:has(remote-circlepad) {
-				justify-content: center;
-			}
-
 			.empty-button {
 				width: var(--size, 48px);
 				height: var(--size, 48px);

@@ -136,26 +136,15 @@ export class RemoteCirclepad extends BaseRemoteElement {
 			super.styles as CSSResult,
 			css`
 				:host {
-					height: var(--circlepad-size);
-					width: var(--circlepad-size);
-					min-height: var(--circlepad-size);
-					min-width: var(--circlepad-size);
-					border-radius: var(--circlepad-size);
+					aspect-ratio: 1 / 1;
+					width: 340px;
+					border-radius: 999px;
 					display: flex;
 					flex-direction: column;
 					background: #1f1f1f;
 					overflow: hidden;
 
-					--circlepad-size: calc(
-						var(--circlepad-scale, 1) * min(340px, 80vw)
-					);
-					--center-button-size: calc(
-						var(--circlepad-scale, 1) * min(160px, 40vw)
-					);
-					--direction-button-size: calc(
-						var(--circlepad-scale, 1) * min(177px, 50vw)
-					);
-					--size: calc(var(--circlepad-scale, 1) * min(48px, 14vw));
+					--size: min(48px, 12vw);
 					--icon-color: #c4c7c5;
 				}
 
@@ -166,29 +155,40 @@ export class RemoteCirclepad extends BaseRemoteElement {
 
 				.circlepad {
 					all: inherit;
+					max-width: 100%;
+					aspect-ratio: 1 / 1;
+					scale: 1;
 				}
 
 				.center-row {
+					height: 48%;
+					width: 100%;
+					aspect-ratio: 3 / 1;
 					display: flex;
 					flex-direction: row;
-					width: 100%;
 					justify-content: space-evenly;
+					align-items: center;
 				}
 				#center {
-					height: var(--center-button-size);
-					width: var(--center-button-size);
-					border-radius: var(--center-button-size);
+					aspect-ratio: 1 / 1;
+					height: 100%;
+					border-radius: 999px;
 					background: #5e5e5e;
 					z-index: 1;
 				}
 				#center::part(button) {
-					border-radius: var(--center-button-size);
+					border-radius: 999px;
+				}
+
+				.direction {
+					width: 26%;
+					aspect-ratio: 1 / 1;
 				}
 
 				.direction::part(button) {
 					position: absolute;
-					height: var(--direction-button-size);
-					width: var(--direction-button-size);
+					height: 200%;
+					width: 200%;
 					border-radius: 0;
 					rotate: -45deg;
 				}
