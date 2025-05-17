@@ -984,7 +984,10 @@ export class UniversalRemoteCardEditor extends LitElement {
 								((this.activeEntry as IElementConfig).type ??
 									'button'),
 						).map((action) => action.name),
-						...this.DEFAULT_SOURCES.map((action) => action.name),
+						...(((this.activeEntry as IElementConfig).type ??
+							'button') == 'button'
+							? this.DEFAULT_SOURCES.map((action) => action.name)
+							: []),
 					],
 				},
 			})}

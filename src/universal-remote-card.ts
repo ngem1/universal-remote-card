@@ -268,8 +268,8 @@ class UniversalRemoteCard extends LitElement {
 				this.config.keyboard_id;
 		}
 
-		// Update touchpad directions
-		if (elementType == 'touchpad') {
+		// Update circlepad and touchpad directions
+		if (['circlepad', 'touchpad'].includes(elementType as string)) {
 			for (const direction of DirectionActions) {
 				const directionElement = (updatedElement[direction] ??
 					{}) as IElementConfig;
