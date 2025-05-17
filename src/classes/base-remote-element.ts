@@ -962,13 +962,13 @@ export class BaseRemoteElement extends LitElement {
 		);
 	}
 
-	onKey(e: KeyboardEvent) {
+	async onKey(e: KeyboardEvent) {
 		if (['Enter', ' '].includes(e.key)) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
 			if (!e.repeat) {
 				const direction = e.type == 'keydown' ? 'Down' : 'Up';
-				this[`onPointer${direction}`](
+				await this[`onPointer${direction}`](
 					new window.PointerEvent(
 						`pointer${direction.toLowerCase()}`,
 						{

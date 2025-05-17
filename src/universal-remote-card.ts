@@ -722,7 +722,7 @@ class UniversalRemoteCard extends LitElement {
 		this.addEventListener('dialog-show', this.showDialog);
 	}
 
-	onKey(e: KeyboardEvent) {
+	async onKey(e: KeyboardEvent) {
 		const button = this.shadowRoot?.querySelector(
 			`[key="${e.key}"]`,
 		) as RemoteButton;
@@ -733,7 +733,7 @@ class UniversalRemoteCard extends LitElement {
 			e.stopImmediatePropagation();
 			if (!e.repeat) {
 				e.preventDefault();
-				button[`onPointer${direction}`](
+				await button[`onPointer${direction}`](
 					new window.PointerEvent(
 						`pointer${direction.toLowerCase()}`,
 						{
@@ -757,10 +757,11 @@ class UniversalRemoteCard extends LitElement {
 						`remote-${type}`,
 					) as BaseRemoteElement;
 					if (element) {
-						element.onKey(
+						await element.onKey(
 							new window.KeyboardEvent(e.type, {
 								...e,
 								key: e.key,
+								shiftKey: e.shiftKey,
 							}),
 						);
 						return;

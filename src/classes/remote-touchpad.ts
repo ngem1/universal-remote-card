@@ -313,7 +313,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 		`;
 	}
 
-	onKey(e: KeyboardEvent) {
+	async onKey(e: KeyboardEvent) {
 		if (NAVIGATION_KEYS.includes(e.key)) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
@@ -322,7 +322,8 @@ export class RemoteTouchpad extends BaseRemoteElement {
 					this.pointers++;
 				}
 				const direction = e.type == 'keydown' ? 'Down' : 'Up';
-				this[`onPointer${direction}`](
+
+				await this[`onPointer${direction}`](
 					new window.PointerEvent(
 						`pointer${direction.toLowerCase()}`,
 						{
@@ -333,10 +334,15 @@ export class RemoteTouchpad extends BaseRemoteElement {
 						},
 					),
 				);
+				if (direction == 'Up') {
+					this.holdMove = false;
+				}
+
 				if (direction == 'Down' && DIRECTION_KEYS.includes(e.key)) {
 					e.preventDefault();
+
 					if (!e.repeat) {
-						this.onPointerMove(
+						await this.onPointerMove(
 							new window.PointerEvent('pointermove', {
 								...e,
 								isPrimary: true,

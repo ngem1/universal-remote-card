@@ -51,7 +51,7 @@ The editor has four tabs - General, Layout, Elements, and Icons.
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_general_tab.png" width="600"/>
 
-Platform, entity ID, and timing fields set in the general tab will be used for default keys and sources. If you do not set these fields for custom elements and autofill is enabled, they will also use these fields. If you explicitly set one of these fields in a custom action, it will not be overwritten if you change the matching general field until you clear the field in the custom action. To completely clear toggle fields, you must remove them from the config using the code editor.
+Platform, entity ID, and timing fields set in the general tab will be used for default keys and sources. If you do not set these fields for custom elements and autofill is enabled, they will also use these fields. If you explicitly set one of these fields in a custom element, it will not be overwritten if you change the matching general field until you clear the field in the custom element. To completely clear toggle fields, you must remove them from the config using the code editor.
 
 ## Media Platform and Entity IDs
 
@@ -97,7 +97,7 @@ You can use `remote.learn_command` on supported platforms like [Broadlink Remote
 
 ## Action Timings
 
-Double tap and hold actions have user adjustable timings to change how they are triggered. These values can be set globally in the general tab or for each custom action.
+Double tap and hold actions have user adjustable timings to change how they are triggered. These values can be set globally in the general tab or for each custom element.
 
 ### Hold Time
 
@@ -107,7 +107,7 @@ Hold actions are triggered by holding down on a button for a defined amount of t
 
 By setting a hold action to `repeat`, the tap action will repeat while the button is held down. The default delay between repeats is 100ms. You can change this by setting `Repeat delay` in the hold action to a different number.
 
-The following default keys have hold actions set to `repeat` by default. You can disable this by creating a custom action for them and setting their hold actions to `none` or a different action. The touchpad direction actions also are set to repeat when held, and can similarly be disabled or remapped by creating a custom action for the touchpad and changing it's hold action.
+The following default keys have hold actions set to `repeat` by default. You can disable this by creating a custom element for them and setting their hold actions to `none` or a different action. The touchpad direction actions also are set to repeat when held, and can similarly be disabled or remapped by creating a custom element for the touchpad and changing it's hold action.
 
 - up
 - down
@@ -123,7 +123,7 @@ The following default keys have hold actions set to `repeat` by default. You can
 
 Double tap actions have a default window of 200ms to trigger before a single tap action is triggered instead. You can change this by setting `Double tap window` in the double tap action to a different number.
 
-**Note**: Setting `Double tap window` above or too close to `Hold time` can result in undesirable behavior, as the hold timer expires before the double tap timer does. If you increase the `Double tap window` you should also increase `Hold time` to not be too close to it by at least 100ms if not more. In a custom action without a hold action defined, you can set `Hold behavior` explicitly to `Nothing` to render the `Hold time` field.
+**Note**: Setting `Double tap window` above or too close to `Hold time` can result in undesirable behavior, as the hold timer expires before the double tap timer does. If you increase the `Double tap window` you should also increase `Hold time` to not be too close to it by at least 100ms if not more. In a custom element without a hold action defined, you can set `Hold behavior` explicitly to `Nothing` to render the `Hold time` field.
 
 ## Miscellaneous
 
@@ -200,7 +200,7 @@ The remote layout is defined using a series of nested arrays. The lowest level o
   - search
 ```
 
-The default keys and sources lists for your selected platform are displayed below the layout code editor. If you have configured any custom actions, they will be displayed above this. You can use this as reference as you create your remote, or drag and drop entries from these lists to the editor. The default keys list also includes the default touchpad and slider, along with some special elements for button pads and layouts. Not all special elements are available for all platforms.
+The default keys and sources lists for your selected platform are displayed below the layout code editor. If you have configured any custom elements, they will be displayed above this. You can use this as reference as you create your remote, or drag and drop entries from these lists to the editor. The default keys list also includes the default touchpad and slider, along with some special elements for button pads and layouts. Not all special elements are available for all platforms.
 
 | Name               | Type        | Description                                                                                                                                                                                     |
 | ------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -216,15 +216,15 @@ The default keys and sources lists for your selected platform are displayed belo
 | xpad               | button grid | Shorthand to generate a set of A, B, X, and Y buttons arranged in a square grid.                                                                                                                |
 | npad               | button grid | Shorthand to generate a set of A, B, X, and Y buttons arranged in an alternate square grid.                                                                                                     |
 
-# Actions
+# Custom
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_tab.png" width="600"/>
 
-In addition to the default keys and sources, you can create your own custom actions. You can also overwrite default keys and sources (including the default touchpad and slider) by setting the custom action name to match a default one. If you do so the default key or source information will be autopopulated if autofill is enabled.
+In addition to the default keys and sources, you can create your own custom elements. You can also overwrite default keys and sources (including the default touchpad and slider) by setting the custom element name to match a default one. If you do so the default key or source information will be autopopulated if autofill is enabled.
 
-**Note**: If the remote element (default or custom) actions targets are not explicitly set in the UI they will be autofilled (if autofill is enabled) using the custom action entity or global IDs depending on which best matches the `perform-action` domain.
+**Note**: If the remote element (default or custom) actions targets are not explicitly set in the UI they will be autofilled (if autofill is enabled) using the custom element entity or global IDs depending on which best matches the `perform-action` domain.
 
-Click the `Add remote element` button to add a custom action remote element. Custom action remote elements can be buttons, sliders, or touchpads.
+Click the `Add remote element` button to add a custom element remote element. Custom action remote elements can be buttons, sliders, or touchpads.
 
 Custom actions in this list can be reordered for organization, but doing so does not have any effect on the the remote card layout. They can also be deleted, copied, and edited.
 
@@ -245,7 +245,7 @@ Some additional value logic is applied for certain attributes:
 
 If you find that the autofilling of fields in actions or remote element values is causing issues, setting `Autofill` to false may help. Just remember to set the entity ID of the remote element and the entity, device, area, or label ID of the action target.
 
-Haptics are enabled for remote elements by default, but can be toggled globally or at the custom action level.
+Haptics are enabled for remote elements by default, but can be toggled globally or at the custom element level.
 
 ### Slider General Options
 
@@ -374,7 +374,7 @@ data: |
 
 ### Key and Source
 
-`Key` and `Source` are shortcuts for `perform-action` actions and vary by platform. Read the Home Assistant documentation as linked above [in this table](#media-platform-and-entity-ids) for more information on the actions performed by each platform. You can also look at the default key and source map files [here](https://github.com/Nerwyn/universal-remote-card/tree/main/src/models/maps). They will use the general remote or media player ID if set but can be overridden at the custom action level.
+`Key` and `Source` are shortcuts for `perform-action` actions and vary by platform. Read the Home Assistant documentation as linked above [in this table](#media-platform-and-entity-ids) for more information on the actions performed by each platform. You can also look at the default key and source map files [here](https://github.com/Nerwyn/universal-remote-card/tree/main/src/models/maps). They will use the general remote or media player ID if set but can be overridden at the custom element level.
 
 For Android TV you may find the [Android TV deep linking guide helpful](https://community.home-assistant.io/t/android-tv-remote-app-links-deep-linking-guide/567921).
 
@@ -452,17 +452,21 @@ Send text to your supported media platform in bulk using the action or default b
 
 Send a global search query to your media platform using the action or default button `search`. Like the bulk entry method, the dialog will not send any information until you tap the search button. This method cannot be used to enter text into currently visible text fields.
 
+### Keyboard Interactions and Accessability
+
+Not to be confused with keyboard input to platforms. You can control the elements of this card with your keyboard. By default you can focus on any element in the remote by tabbing to or click on it and then actuating it with the arrow or space/enter keys. For easier input, any arrow or space/enter keys you type while focused on the remote card itself will be sent to the first circlepad or touchpad in the remote. You can also assign any key to any button using the `Keyboard Key` field at the bottom of the interactions pane. This button will then actuate when you press this key. All actions are supported when using keyboard interactions. Multi touch actions can be forwarded to touchpads by holding down the shift key.
+
 ## Icons
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_icons.png" width="600"/>
 
-You can add custom SVG path icons to use with this card using the icons tab. The custom icons list works the same as the custom actions list, except that there is only one type of custom icon you can add.
+You can add custom SVG path icons to use with this card using the icons tab. The custom icons list works the same as the custom elements list, except that there is only one type of custom icon you can add.
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_icons_editor.png" width="600"/>
 
 Each custom icon has to have a name and a SVG path. The SVG path must generate a 24x24 pixel icon to properly render in the remote. A preview of the icon is shown below the path. I highly recommend using a tool like [this SVG path editor](https://yqnn.github.io/svg-path-editor/) to modify SVG paths to work with this card.
 
-Once setup, you can reference these icons in custom actions in the icon field by name. Many default sources similarly use SVG paths instead of the Home Assistant built in icons. If you have an SVG icon you wish to add to this project, you can create a feature or pull request to do so.
+Once setup, you can reference these icons in custom elements in the icon field by name. Many default sources similarly use SVG paths instead of the Home Assistant built in icons. If you have an SVG icon you wish to add to this project, you can create a feature or pull request to do so.
 
 # YAML Examples
 

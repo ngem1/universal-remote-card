@@ -98,7 +98,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 		`;
 	}
 
-	onKey(e: KeyboardEvent) {
+	async onKey(e: KeyboardEvent) {
 		const id = this.key2Button[e.key];
 		if (id) {
 			e.preventDefault();
@@ -106,7 +106,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 			const button = this.shadowRoot?.getElementById(id) as RemoteButton;
 			if (button) {
 				const direction = e.type == 'keydown' ? 'Down' : 'Up';
-				button[`onPointer${direction}`](
+				await button[`onPointer${direction}`](
 					new window.PointerEvent(
 						`pointer${direction.toLowerCase()}`,
 						{
@@ -127,7 +127,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 			[]) as RemoteButton[];
 		for (const button of buttons) {
 			button.removeAttribute('tabindex');
-			button.onKey = () => {};
+			button.onKey = async () => {};
 		}
 	}
 
