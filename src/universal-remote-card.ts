@@ -674,7 +674,6 @@ class UniversalRemoteCard extends LitElement {
 			this.config.platform ?? 'Android TV',
 			context,
 		) as Platform;
-
 		if (platform != this.PLATFORM) {
 			this.PLATFORM = platform;
 			[this.DEFAULT_KEYS, this.DEFAULT_SOURCES] =

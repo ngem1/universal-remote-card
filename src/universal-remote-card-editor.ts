@@ -2257,18 +2257,19 @@ export class UniversalRemoteCardEditor extends LitElement {
 	}
 
 	buildPeopleList() {
-		this.people = [];
-		const peopleEntities = Object.keys(this.hass.states).filter((entity) =>
-			entity.startsWith('person.'),
-		);
-		for (const person of peopleEntities) {
-			this.people.push({
-				value: this.hass.states[person].attributes.user_id,
-				label:
-					this.hass.states[person].attributes.friendly_name ??
-					this.hass.states[person].attributes.id ??
-					person,
-			});
+		if (!this.people.length) {
+			const peopleEntities = Object.keys(this.hass.states).filter(
+				(entity) => entity.startsWith('person.'),
+			);
+			for (const person of peopleEntities) {
+				this.people.push({
+					value: this.hass.states[person].attributes.user_id,
+					label:
+						this.hass.states[person].attributes.friendly_name ??
+						this.hass.states[person].attributes.id ??
+						person,
+				});
+			}
 		}
 	}
 

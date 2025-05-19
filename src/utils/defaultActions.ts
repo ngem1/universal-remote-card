@@ -27,7 +27,7 @@ export function getDefaultActions(platform: Platform) {
 	switch (platform) {
 		case 'Generic Remote':
 			const names = new Set();
-			defaultKeys = genericRemoteDefaultKeys;
+			defaultKeys = [...genericRemoteDefaultKeys];
 			defaultSources = [];
 			for (const p of Platforms.filter((p) => p != 'Generic Remote')) {
 				const [keys, sources] = getDefaultActions(p);
