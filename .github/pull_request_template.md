@@ -21,7 +21,7 @@ Or at the very least make sure you include enough information so I know what you
 - [ ] I've tested that my changes work on my Home Assistant instance, on different browsers and webviews in needed.
 - [ ] I've ensured that my changes are not causing any new JavaScript errors in the browser console.
 - [ ] I've updated the editor to include new fields for new features if needed.
-  - The editor is a mess and the main developer open to working on these changes if needed, but the ability to modify all configuration fields via the editor is a requirement to release the changes.
+  - The editor is a mess and the main developer is open to working on these changes if needed, but the ability to modify all configuration fields via the editor is a requirement to release the changes.
 - [ ] I've updated the README if needed.
 
 **Type of Change:**
