@@ -146,15 +146,25 @@ Styles can be set and changed for all remote sub-elements using regular CSS and 
 | #power::part(icon) | The icon of a specific element. |
 
 ```css
+/* All rows */
 .row {
   justify-content: center;
 }
+
+/* All buttons */
 remote-button {
   background: rgb(27, 27, 27);
   padding: 8px;
   margin: 4px;
   border-radius: 24px;
   --size: 24px;
+}
+
+/* The icon of the power button
+ * You no longer need to create a custom element just to style default ones by using ::part pseudo-elements
+ */
+#power::part(icon) {
+  color: red;
 }
 ```
 
@@ -653,40 +663,11 @@ rows:
     - - - keyboard
         - search
       - - touchpad
-custom_actions:
-  - type: touchpad # All of this except styles will be autofilled
-    name: touchpad # when you create a custom touchpad with the name touchpad
-    tap_action:
-      action: key
-      key: DPAD_CENTER
-    up:
-      tap_action:
-        action: key
-        key: DPAD_UP
-      hold_action:
-        action: repeat
-    down:
-      tap_action:
-        action: key
-        key: DPAD_DOWN
-      hold_action:
-        action: repeat
-    left:
-      tap_action:
-        action: key
-        key: DPAD_LEFT
-      hold_action:
-        action: repeat
-    right:
-      tap_action:
-        action: key
-        key: DPAD_RIGHT
-      hold_action:
-        action: repeat
-    styles: |-
-      toucharea {
-        height: 300px;
-      }
+custom_actions: []
+styles: |-
+  remote-touchpad::part(toucharea) {
+    height: 300px;
+  }
 ```
 
 </details>
@@ -726,7 +707,7 @@ rows:
     - skyshowtime
     - plex
   - - viaplay
-    - discovery
+    - discoveryplus
     - spotify
     - youtube
 custom_actions:
@@ -946,56 +927,6 @@ rows:
   - - slider
     - search
 custom_actions:
-  - type: button
-    name: netflix
-    tap_action:
-      action: source
-      source: netflix://
-    icon: mdi:netflix
-    styles: |-
-      :host {
-        --icon-color: rgb(229, 9, 20);
-      }
-  - type: button
-    name: hulu
-    tap_action:
-      action: source
-      source: hulu://
-    icon: mdi:hulu
-    styles: |-
-      :host {
-        --icon-color: rgb(28, 231, 131);
-      }
-  - type: button
-    name: disney
-    tap_action:
-      action: source
-      source: https://www.disneyplus.com
-    icon: disney
-    styles: |-
-      :host {
-        --icon-color: rgb(17, 60, 207);
-      }
-  - type: button
-    name: max
-    tap_action:
-      action: source
-      source: market://launch?id=com.wbd.stream
-    icon: max
-    styles: |-
-      :host {
-        --icon-color: rgb(0, 35, 246);
-      }
-  - type: button
-    name: primevideo
-    tap_action:
-      action: source
-      source: https://app.primevideo.com
-    icon: primevideo
-    styles: |-
-      :host {
-        --icon-color: rgb(0, 165, 222);
-      }
   - type: slider
     name: slider
     range:
@@ -1033,46 +964,32 @@ custom_actions:
         display: none;
       }
     label: '{{ (value * 100 ) | int }}%'
-  - type: touchpad
-    name: touchpad
-    tap_action:
-      action: key
-      key: DPAD_CENTER
-    up:
-      tap_action:
-        action: key
-        key: DPAD_UP
-      hold_action:
-        action: repeat
-    down:
-      tap_action:
-        action: key
-        key: DPAD_DOWN
-      hold_action:
-        action: repeat
-    left:
-      tap_action:
-        action: key
-        key: DPAD_LEFT
-      hold_action:
-        action: repeat
-    right:
-      tap_action:
-        action: key
-        key: DPAD_RIGHT
-      hold_action:
-        action: repeat
-    styles: |-
-      toucharea {
-        background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%), linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
-      }
+styles: |-
+  #netflix::part(icon) {
+    color: rgb(229, 9, 20);
+  }
+  #hulu::part(icon) {
+    color: rgb(28, 231, 131);
+  }
+  #disney::part(icon) {
+    color: rgb(17, 60, 207);
+  }
+  #max::part(icon) {
+    color: rgb(0, 35, 246);
+  }
+  #primevideo::part(icon) {
+    color: rgb(0, 165, 222);
+  }
+  remote-touchpad::part(toucharea) {
+    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%), linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+  }
 ```
 
 </details>
 
 ## Example 10
 
-A simple gamepad with a custom button grid
+A gamepad using a circlepad and custom styles for buttons.
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/gamepad.png" width="500"/>
 
@@ -1081,19 +998,23 @@ A simple gamepad with a custom button grid
 <summary>Remote Config</summary>
 
 ```yaml
-ttype: custom:universal-remote-card
+type: custom:universal-remote-card
 remote_id: remote.google_chromecast
 rows:
-  - - - null
-      - up
-      - null
-      - left
-      - null
-      - right
-      - null
-      - down
-      - null
+  - - l1
+    - l2
+    - l3
+    - r3
+    - r2
+    - r1
+  - - circlepad
     - xpad
+  - - null
+    - null
+    - select
+    - start
+    - null
+    - null
 custom_actions:
   - type: button
     name: a
@@ -1148,6 +1069,12 @@ custom_actions:
         --icon-color: #007243;
       }
 styles: |-
+  #circlepad {
+    width: 175px;
+  }
+  #circlepad::part(center) {
+    visibility: hidden;
+  }
   remote-button {
     background: var(--lovelace-background, var(--primary-background-color, #6f767d));;
     padding: 8px;
@@ -1155,21 +1082,6 @@ styles: |-
     border-radius: 24px;
     --size: 24px;
   }
-  .row {
-    justify-content: center;
-  }
-  #column-1 {
-    display: grid;
-    direction: ltr;
-    grid-template-rows: repeat(3, var(--size, 48px));
-    grid-template-columns: repeat(3, var(--size, 48px));
-    grid-gap: 8px 16px;
-    padding: 0;
-    flex: 0;
-    background: var(--lovelace-background, var(--primary-background-color, #6f767d));;
-    border-radius: 128px;
-  }
-haptics: false
 ```
 
 </details>
