@@ -127,11 +127,6 @@ export class RemoteSlider extends BaseRemoteElement {
 	}
 
 	setSliderStyles() {
-		const tooltipLabel = `'${this.renderTemplate(
-			'{{ value }}{{ unit }}',
-		)}'`;
-		this.style.setProperty('--tooltip-label', tooltipLabel);
-
 		this.style.setProperty(
 			'--feature-height',
 			`${this.vertical ? this.clientWidth : this.clientHeight}px`,
@@ -143,9 +138,7 @@ export class RemoteSlider extends BaseRemoteElement {
 
 		this.style.setProperty(
 			'--thumb-offset',
-			`calc(${this.rtl && !this.vertical ? '-1 * ' : ''}${
-				this.thumbOffset
-			}px)`,
+			`${(this.rtl && !this.vertical ? -1 : 1) * this.thumbOffset}px`,
 		);
 	}
 
@@ -336,6 +329,7 @@ export class RemoteSlider extends BaseRemoteElement {
 						var(--thumb-offset),
 						calc(-0.5 * var(--feature-height) - 0.4em - 10px)
 					);
+					--tooltip-label: attr(value) attr(unit);
 				}
 				:host(:focus-visible) {
 					box-shadow: 0 0 0 2px
