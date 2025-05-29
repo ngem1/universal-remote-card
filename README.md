@@ -226,7 +226,7 @@ The default keys and sources lists for your selected platform are displayed belo
 | xpad               | button grid | Shorthand to generate a set of A, B, X, and Y buttons arranged in a square grid.                                                                                                                |
 | npad               | button grid | Shorthand to generate a set of A, B, X, and Y buttons arranged in an alternate square grid.                                                                                                     |
 
-# Custom
+# Custom Elements
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_tab.png" width="600"/>
 
@@ -277,6 +277,30 @@ Circlepads and touchpads have five tabs at the top of their actions page for eac
 
 All remote elements can have a `Label`, `Icon`, and `Units`. These fields can also be set using templates. Similar to the general tab, each remote element can have it's CSS styles set (also supports templates).
 
+### Vertical Sliders
+
+Sliders have an additional `Vertical` toggle which rotates it 90 degrees to make it vertical. By default sliders will be horizontal. Vertical slider heights are determined by the slider's sibling elements. If it has no sibling elements or you find that it is not consistently rendering correctly, then you may need to explicitly set it's height using the style options like so:
+
+```css
+:host {
+  height: 350px;
+}
+```
+
+### Multiple Icons and Labels for Circlepads and Touchpads
+
+Circlepads and touchpads can have a separate icon and label for the center and each direction. You can also style each of these icons and labels independently using their own `CSS Styles` fields. General styles such as those for `toucharea` or `#center` like height should go in the center tab styles.
+
+### A Note on Templating
+
+Almost all fields support nunjucks templating. Nunjucks is a templating engine for JavaScript, which is heavily based on the jinja2 templating engine for Python which Home Assistant uses. While the syntax of nunjucks and jinja2 is almost identical, you may find the [nunjucks documentation](https://mozilla.github.io/nunjucks/templating.html) useful. Most extensions supported by Home Assistant templates are supported by this templating system, but not all and the syntax may vary. Please see the [ha-nunjucks](https://github.com/Nerwyn/ha-nunjucks) repository for a list of available extensions. If you want additional extensions to be added or have templating questions or bugs, please make an issue or discussion on that repository, not this one.
+
+You can include the current value of a remote element and it's units by using the variables `value` and `unit` in a label template. You can also include `hold_secs` in a template if performing a momentary end action. Each remote element can also reference it's configuration using `config` within templates. `config.entity` and `config.attribute` will return the remote element's entity ID and attribute with their templates rendered (if they have them), and other templated config fields can be rendered within templates by wrapping them in the function `render` within a template. You can access the entire card config in a template via `config.card`, and global values such as remote ID within that like `config.card.remote_id`. Note that default values for some fields are not actually in the config and will not appear in templates, and you have to default to them using "or", like `config.card.platform or 'Android TV'`.
+
+You can include touch location information in your templates using the values `initialX`, `initialY`, `currentX`, `currentY`, `deltaX`, and `deltaY` This is especially useful when using drag interactions on the touchpad, like with the Unified Remote default mousepad or as a dragpad on all platforms.
+
+### CSS Styles
+
 You may find the following CSS selectors useful for styling:
 
 | CSS Selector                       | Element                                            |
@@ -316,27 +340,109 @@ While you can now set most CSS fields directly using their sub-element selectors
 | --ha-ripple-top             | Ripple top offset, defaults to `0`.                                                                                                                                                                                                                                         |
 | --ha-ripple-left            | Ripple left offset, defaults to `0`.                                                                                                                                                                                                                                        |
 
-### Vertical Sliders
+You may also find the actual HTML of the remote elements useful for directly styling its subelements.
 
-Sliders have an additional `Vertical` toggle which rotates it 90 degrees to make it vertical. By default sliders will be horizontal. Vertical slider heights are determined by the slider's sibling elements. If it has no sibling elements or you find that it is not consistently rendering correctly, then you may need to explicitly set it's height using the style options like so:
+#### Button HTML
 
-```css
-:host {
-  height: 350px;
-}
+```html
+<remote-button tabindex="0" id="power" title="Power" key="p">
+  #shadow-root
+  <button part="button" tabindex="-1">
+    <div class="icon" part="icon">
+      <ha-icon></ha-icon>
+    </div>
+    <pre class="label" part="label">"Power"</pre>
+    <md-ripple part="ripple"></md-ripple>
+    ::after
+  </button>
+</remote-button>
 ```
 
-### Multiple Icons and Labels for Circlepads and Touchpads
+#### Circlepad HTML
 
-Circlepads and touchpads can have a separate icon and label for the center and each direction. You can also style each of these icons and labels independently using their own `CSS Styles` fields. General styles such as those for `toucharea` or `#center` like height should go in the center tab styles.
+```html
+<remote-circlepad tab-index="0" id="circlepad" title="Circlepad">
+  #shadow-root
+  <remote-button class="direction" id="up" title="Up" part="up"></remote-button>
+  <div class="center-row">
+    <remote-button
+      class="direction"
+      id="left"
+      title="Left"
+      part="left"
+    ></remote-button>
+    <remote-button id="center" title="Center" part="center"></remote-button>
+    <remote-button
+      class="direction"
+      id="right"
+      title="Right"
+      part="right"
+    ></remote-button>
+  </div>
+  <remote-button
+    class="direction"
+    id="down"
+    title="Down"
+    part="down"
+  ></remote-button>
+</remote-circlepad>
+```
 
-### A Note on Templating
+#### Touchpad HTML
 
-Almost all fields support nunjucks templating. Nunjucks is a templating engine for JavaScript, which is heavily based on the jinja2 templating engine for Python which Home Assistant uses. While the syntax of nunjucks and jinja2 is almost identical, you may find the [nunjucks documentation](https://mozilla.github.io/nunjucks/templating.html) useful. Most extensions supported by Home Assistant templates are supported by this templating system, but not all and the syntax may vary. Please see the [ha-nunjucks](https://github.com/Nerwyn/ha-nunjucks) repository for a list of available extensions. If you want additional extensions to be added or have templating questions or bugs, please make an issue or discussion on that repository, not this one.
+```html
+<remote-touchpad id="touchpad" title="Touchpad">
+  #shadow-root
+  <toucharea part="toucharea" tabindex="0">
+    <div class="toucharea-row" part="top-row">
+      <remote-icon-label id="up" part="up">
+        #shadow-root
+        <div class="icon" part="icon">
+          <ha-icon></ha-icon>
+        </div>
+        <pre class="label" part="label"></pre>
+      </remote-icon-label>
+    </div>
+    <div class="toucharea-row" part="center-row">
+      <remote-icon-label id="left" part="left"></remote-icon-label>
+      <remote-icon-label id="center" part="center"></remote-icon-label>
+      <remote-icon-label id="right" part="right"></remote-icon-label>
+    </div>
+    <div class="toucharea-row" part="bottom-row">
+      <remote-icon-label id="down" part="down"></remote-icon-label>
+    </div>
+    <md-ripple part="ripple"></md-ripple>
+  </toucharea>
+</remote-touchpad>
+```
 
-You can include the current value of a remote element and it's units by using the variables `value` and `unit` in a label template. You can also include `hold_secs` in a template if performing a momentary end action. Each remote element can also reference it's configuration using `config` within templates. `config.entity` and `config.attribute` will return the remote element's entity ID and attribute with their templates rendered (if they have them), and other templated config fields can be rendered within templates by wrapping them in the function `render` within a template. You can access the entire card config in a template via `config.card`, and global values such as remote ID within that like `config.card.remote_id`. Note that default values for some fields are not actually in the config and will not appear in templates, and you have to default to them using "or", like `config.card.platform or 'Android TV'`.
+#### Slider HTML
 
-You can include touch location information in your templates using the values `initialX`, `initialY`, `currentX`, `currentY`, `deltaX`, and `deltaY` This is especially useful when using drag interactions on the touchpad, like with the Unified Remote default mousepad or as a dragpad on all platforms.
+```html
+<remote-slider id="slider" title="Slider">
+  #shadow-root
+  <div class="container" part="container">
+    <div class="background" part="background"></div>
+    <input
+      type="range"
+      part="range"
+      tabindex="-1"
+      min="0"
+      max="1"
+      step="0.01"
+      value="1"
+    />
+    <div class="thumb" part="thumb">
+      <div class="active" part="active"></div>
+    </div>
+    <div class="icon" part="icon">
+      <ha-icon></ha-icon>
+    </div>
+    <pre class="label" part="label"></pre>
+  </div>
+  <div class="tooltip" part="tooltip">::after</div>
+</remote-slider>
+```
 
 ## Interactions
 
