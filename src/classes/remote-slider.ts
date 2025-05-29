@@ -274,14 +274,23 @@ export class RemoteSlider extends BaseRemoteElement {
 		const style = getComputedStyle(thumb);
 		const userThumbWidth = style.getPropertyValue('--thumb-width');
 
-		let pixels: number;
 		if (userThumbWidth) {
-			pixels = getNumericPixels(userThumbWidth);
-		} else {
-			const height = style.getPropertyValue('height');
-			pixels = getNumericPixels(height);
+			const pixels = getNumericPixels(userThumbWidth);
+			if (!isNaN(pixels)) {
+				this.thumbWidth = pixels;
+			}
+			return;
 		}
-		if (!isNaN(pixels) && pixels) {
+
+		const pixels = thumb?.clientWidth || thumb?.clientHeight;
+
+		// Ensure that thumb width is valid, as it can return an invalid massive number at high dpi
+		if (
+			pixels &&
+			!isNaN(pixels) &&
+			pixels < document.body.clientHeight &&
+			pixels < document.body.clientWidth
+		) {
 			this.thumbWidth = pixels;
 			this.style.setProperty('--thumb-width', `${this.thumbWidth}px`);
 		}
