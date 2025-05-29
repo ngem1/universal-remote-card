@@ -42,7 +42,6 @@ export class RemoteSlider extends BaseRemoteElement {
 			clearTimeout(this.getValueFromHassTimer);
 			this.getValueFromHass = false;
 			this._value = slider.value;
-			this.setThumbOffset();
 			this.sliderOn = true;
 		}
 	}
@@ -65,7 +64,6 @@ export class RemoteSlider extends BaseRemoteElement {
 	async onPointerUp(e: PointerEvent) {
 		clearTimeout(this.pressedTimeout);
 		super.onPointerUp(e);
-		this.setThumbOffset();
 		const slider = e.currentTarget as HTMLInputElement;
 
 		if (!this.swiping && this.pointers) {
@@ -75,7 +73,6 @@ export class RemoteSlider extends BaseRemoteElement {
 		} else {
 			this.getValueFromHass = true;
 			this.setValue();
-			this.setThumbOffset();
 			this.setSliderState();
 		}
 
@@ -99,7 +96,6 @@ export class RemoteSlider extends BaseRemoteElement {
 				this.swiping = true;
 				this.getValueFromHass = true;
 				this.setValue();
-				this.setThumbOffset();
 				this.setSliderState();
 			} else {
 				this._value = slider.value;
