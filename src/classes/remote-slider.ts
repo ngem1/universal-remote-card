@@ -19,17 +19,6 @@ export class RemoteSlider extends BaseRemoteElement {
 
 	vertical: boolean = false;
 	thumbWidth: number = 48;
-	resizeObserver = new ResizeObserver((entries) => {
-		for (const entry of entries) {
-			this.featureWidth = this.vertical
-				? entry.contentRect.height
-				: entry.contentRect.width;
-			this.featureHeight = this.vertical
-				? entry.contentRect.width
-				: entry.contentRect.height;
-			this.setThumbOffset();
-		}
-	});
 
 	set _value(value: string | number | boolean | undefined) {
 		value = Math.max(
@@ -111,11 +100,12 @@ export class RemoteSlider extends BaseRemoteElement {
 	}
 
 	setThumbOffset() {
-		const maxOffset = (this.featureWidth - this.thumbWidth) / 2;
+		const width = this.vertical ? this.clientHeight : this.clientWidth;
+		const maxOffset = (width - this.thumbWidth) / 2;
 		this.thumbOffset = Math.min(
 			Math.max(
 				Math.round(
-					((this.featureWidth - this.thumbWidth) /
+					((width - this.thumbWidth) /
 						(this.range[1] - this.range[0])) *
 						((this.value as number) -
 							(this.range[0] + this.range[1]) / 2),
@@ -137,32 +127,19 @@ export class RemoteSlider extends BaseRemoteElement {
 	}
 
 	setSliderStyles() {
-		let height, width;
-		const containerElement = this.shadowRoot?.querySelector('.container');
-		if (containerElement) {
-			const style = getComputedStyle(containerElement);
-			height = style.getPropertyValue('height');
-			width = style.getPropertyValue('width');
-		}
-
 		const tooltipLabel = `'${this.renderTemplate(
 			'{{ value }}{{ unit }}',
 		)}'`;
-		let tooltipTransform: string;
-		if (this.vertical) {
-			tooltipTransform = `translate(calc(-0.3 * ${
-				width ?? 'var(--height)'
-			} - 0.8em - 18px), calc(-1 * var(--thumb-offset)))`;
-		} else {
-			tooltipTransform = `translate(var(--thumb-offset), calc(-0.5 * ${
-				height ?? 'var(--height)'
-			} - 0.4em - 10px))`;
-		}
-
-		this.style.setProperty('--feature-height', `${this.featureHeight}px`);
-		this.style.setProperty('--feature-width', `${this.featureWidth}px`);
 		this.style.setProperty('--tooltip-label', tooltipLabel);
-		this.style.setProperty('--tooltip-transform', tooltipTransform);
+
+		this.style.setProperty(
+			'--feature-height',
+			`${this.vertical ? this.clientWidth : this.clientHeight}px`,
+		);
+		this.style.setProperty(
+			'--feature-width',
+			`${this.vertical ? this.clientHeight : this.clientWidth}px`,
+		);
 
 		this.style.setProperty(
 			'--thumb-offset',
@@ -170,11 +147,6 @@ export class RemoteSlider extends BaseRemoteElement {
 				this.thumbOffset
 			}px)`,
 		);
-
-		if (this.vertical) {
-			this.style.setProperty('width', 'fit-content');
-			this.style.setProperty('align-self', 'stretch');
-		}
 	}
 
 	buildBackground() {
@@ -242,6 +214,12 @@ export class RemoteSlider extends BaseRemoteElement {
 
 		this.vertical =
 			this.renderTemplate(this.config.vertical ?? false) == true;
+		if (this.vertical) {
+			this.setAttribute('vertical', '');
+		} else {
+			this.removeAttribute('vertical');
+		}
+
 		this.setThumbOffset();
 		this.setSliderState();
 		this.setSliderStyles();
@@ -254,7 +232,6 @@ export class RemoteSlider extends BaseRemoteElement {
 						this.renderTemplate(
 							this.config.tap_action?.action as string,
 						) == 'none',
-					vertical: this.vertical,
 				})}"
 				part="container"
 			>
@@ -325,16 +302,6 @@ export class RemoteSlider extends BaseRemoteElement {
 		}
 	}
 
-	connectedCallback(): void {
-		super.connectedCallback();
-		this.resizeObserver.observe(this);
-	}
-
-	disconnectedCallback(): void {
-		super.disconnectedCallback();
-		this.resizeObserver.disconnect();
-	}
-
 	static get styles(): CSSResult | CSSResult[] {
 		return [
 			super.styles as CSSResult,
@@ -365,6 +332,10 @@ export class RemoteSlider extends BaseRemoteElement {
 					--thumb-translate: var(--thumb-offset) 0;
 					--thumb-transition: translate 180ms ease-in-out,
 						background 180ms ease-in-out;
+					--tooltip-transform: translate(
+						var(--thumb-offset),
+						calc(-0.5 * var(--feature-height) - 0.4em - 10px)
+					);
 				}
 				:host(:focus-visible) {
 					box-shadow: 0 0 0 2px
@@ -508,12 +479,22 @@ export class RemoteSlider extends BaseRemoteElement {
 					scale: -1;
 				}
 
-				.vertical.container {
+				:host([vertical]) {
+					width: fit-content;
+					align-self: stretch;
+
+					--tooltip-transform: translate(
+						calc(-0.3 * var(--feature-height) - 0.8em - 18px),
+						calc(-1 * var(--thumb-offset))
+					);
+				}
+				:host([vertical]) .container {
 					height: var(--feature-width);
 					width: var(--height);
+
 					--thumb-translate: 0 calc(-1 * var(--thumb-offset));
 				}
-				.vertical .background {
+				:host([vertical]) .background {
 					transform: rotate(270deg);
 					width: var(--feature-width);
 					height: var(
@@ -521,21 +502,21 @@ export class RemoteSlider extends BaseRemoteElement {
 						var(--feature-height)
 					) !important;
 				}
-				.vertical input {
+				:host([vertical]) input {
 					transform: rotate(270deg);
 					height: var(--feature-height);
 					width: var(--feature-width);
 					touch-action: none;
 				}
-				.vertical .thumb {
+				:host([vertical]) .thumb {
 					transform: rotate(270deg);
 				}
-				.vertical .thumb .active {
+				:host([vertical]) .thumb .active {
 					width: 100vh;
 				}
 
-				:host([dir='rtl']) .vertical input,
-				:host([dir='rtl']) .vertical .thumb {
+				:host([dir='rtl'][vertical]) input,
+				:host([dir='rtl'][vertical]) .thumb {
 					transform: rotate(90deg);
 				}
 			`,
