@@ -764,6 +764,17 @@ export class BaseRemoteElement extends LitElement {
 		}
 	}
 
+	applyPrecision(value: number) {
+		if (
+			value != undefined &&
+			typeof value == 'number' &&
+			this.precision != undefined
+		) {
+			return Number(value).toFixed(this.precision);
+		}
+		return value;
+	}
+
 	renderTemplate(
 		str: string | number | boolean,
 		context?: object,
@@ -778,7 +789,7 @@ export class BaseRemoteElement extends LitElement {
 		}
 
 		context = {
-			value: this.value as string,
+			value: this.applyPrecision(this.value as number),
 			hold_secs: holdSecs ?? 0,
 			unit: this.unitOfMeasurement,
 			initialX: this.initialX,
@@ -798,19 +809,6 @@ export class BaseRemoteElement extends LitElement {
 			render: (str2: string) => this.renderTemplate(str2, context),
 			...context,
 		};
-
-		let value: string | number = context['value' as keyof typeof context];
-		if (
-			value != undefined &&
-			typeof value == 'number' &&
-			this.precision != undefined
-		) {
-			value = Number(value).toFixed(this.precision);
-			context = {
-				...context,
-				value: value,
-			};
-		}
 
 		try {
 			return renderTemplate(this.hass, str as string, context, false);
@@ -995,7 +993,10 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	updated() {
-		this.setAttribute('value', String(this.value));
+		this.setAttribute(
+			'value',
+			String(this.applyPrecision(this.value as number)),
+		);
 		this.setAttribute('unit', this.unitOfMeasurement);
 		if (this.pressed) {
 			this.setAttribute('pressed', '');

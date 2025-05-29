@@ -20,6 +20,8 @@ export class RemoteSlider extends BaseRemoteElement {
 	vertical: boolean = false;
 	thumbWidth: number = 48;
 
+	pressedTimeout?: ReturnType<typeof setTimeout>;
+
 	set _value(value: string | number | boolean | undefined) {
 		value = Math.max(
 			Math.min(Number(value) ?? this.range[0], this.range[1]),
@@ -33,8 +35,7 @@ export class RemoteSlider extends BaseRemoteElement {
 		this.value = value;
 	}
 
-	onPointerDown(e: PointerEvent) {
-		super.onPointerDown(e);
+	onInput(e: InputEvent) {
 		const slider = e.currentTarget as HTMLInputElement;
 
 		if (!this.swiping) {
@@ -46,7 +47,23 @@ export class RemoteSlider extends BaseRemoteElement {
 		}
 	}
 
+	onPointerDown(e: PointerEvent) {
+		super.onPointerDown(e);
+		const slider = e.currentTarget as HTMLInputElement;
+
+		// Delay pressed state to fix initial slider thumb transition
+		this.pressed = false;
+		this.pressedTimeout = setTimeout(() => (this.pressed = true), 150);
+
+		if (!this.swiping) {
+			clearTimeout(this.getValueFromHassTimer);
+			this.getValueFromHass = false;
+			this.sliderOn = true;
+		}
+	}
+
 	async onPointerUp(e: PointerEvent) {
+		clearTimeout(this.pressedTimeout);
 		super.onPointerUp(e);
 		this.setThumbOffset();
 		const slider = e.currentTarget as HTMLInputElement;
@@ -167,6 +184,7 @@ export class RemoteSlider extends BaseRemoteElement {
 				step=${this.step}
 				value="${this.range[0]}"
 				.value="${this.value}"
+				@input=${this.onInput}
 				@pointerdown=${this.onPointerDown}
 				@pointerup=${this.onPointerUp}
 				@pointermove=${this.onPointerMove}
