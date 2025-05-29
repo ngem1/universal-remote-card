@@ -407,6 +407,7 @@ export class RemoteTouchpad extends BaseRemoteElement {
 					flex-direction: column;
 					flex-wrap: nowrap;
 					justify-content: space-between;
+					pointer-events: all;
 					transition: box-shadow 180ms ease-in-out;
 				}
 				toucharea:focus-visible {

@@ -1384,16 +1384,14 @@ custom_actions:
       hold_action:
         action: repeat
     styles: |-
-      :host {
-       width: 174px;
-        --icon-color: rgba(128,128,128,0.5);
-      }
       .circlepad {
+        width: 174px;
         border: 1px solid #444;
         background: radial-gradient(circle at top left, #202020 15%, #303030 100%);
+        --icon-color: rgba(128,128,128,0.5);
       }
 
-      #center {
+      #center::part(button) {
         background: radial-gradient(circle at top left, #303030 15%, #101010 100%);
         border: 1px solid rgba(0, 0, 0, 0.5);
       }

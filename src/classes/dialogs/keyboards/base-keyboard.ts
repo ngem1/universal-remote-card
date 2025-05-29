@@ -199,6 +199,7 @@ export class BaseKeyboard extends BaseDialog {
 			querySelectorAsync(this.shadowRoot!, 'textarea').then(
 				(textarea) => {
 					this.textarea = textarea as HTMLTextAreaElement;
+					this.textarea.value = '';
 					this.enabledTimer = setTimeout(
 						() => (this.enabled = true),
 						100,
@@ -233,6 +234,7 @@ export class BaseKeyboard extends BaseDialog {
 					font-family: inherit;
 					font-weight: 500;
 					font-size: 30px;
+					pointer-events: all;
 				}
 			`,
 		];

@@ -1020,6 +1020,7 @@ export class BaseRemoteElement extends LitElement {
 				overflow: visible;
 				font-size: inherit;
 				color: inherit;
+				pointer-events: none;
 				-webkit-tap-highlight-color: transparent;
 				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 			}

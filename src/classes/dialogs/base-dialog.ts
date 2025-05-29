@@ -60,6 +60,7 @@ export class BaseDialog extends LitElement {
 					--mdc-theme-primary,
 					var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))
 				);
+				pointer-events: all;
 				opacity: 0;
 				transition: opacity 100ms ease-in-out;
 			}
