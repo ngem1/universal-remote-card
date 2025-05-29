@@ -19,7 +19,7 @@ export class RemoteCirclepad extends BaseRemoteElement {
 
 	render() {
 		return html`
-			<div class="circlepad">
+			<div class="circlepad" part="circlepad">
 				<remote-button
 					class="direction"
 					id="up"
