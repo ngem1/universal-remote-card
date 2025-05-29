@@ -119,6 +119,7 @@ export class RemoteSlider extends BaseRemoteElement {
 	setThumbOffset() {
 		const width = this.vertical ? this.clientHeight : this.clientWidth;
 		const maxOffset = (width - this.thumbWidth) / 2;
+
 		this.thumbOffset = Math.min(
 			Math.max(
 				Math.round(
@@ -131,6 +132,11 @@ export class RemoteSlider extends BaseRemoteElement {
 			),
 			maxOffset,
 		);
+
+		this.style.setProperty(
+			'--thumb-offset',
+			`${(this.rtl && !this.vertical ? -1 : 1) * this.thumbOffset}px`,
+		);
 	}
 
 	setSliderState() {
@@ -141,22 +147,6 @@ export class RemoteSlider extends BaseRemoteElement {
 					this.hass.states[this.entityId as string]?.state,
 				)
 			) || ((this.value as number) ?? this.range[0]) > this.range[0];
-	}
-
-	setSliderStyles() {
-		this.style.setProperty(
-			'--feature-height',
-			`${this.vertical ? this.clientWidth : this.clientHeight}px`,
-		);
-		this.style.setProperty(
-			'--feature-width',
-			`${this.vertical ? this.clientHeight : this.clientWidth}px`,
-		);
-
-		this.style.setProperty(
-			'--thumb-offset',
-			`${(this.rtl && !this.vertical ? -1 : 1) * this.thumbOffset}px`,
-		);
 	}
 
 	buildBackground() {
@@ -231,9 +221,21 @@ export class RemoteSlider extends BaseRemoteElement {
 			this.removeAttribute('vertical');
 		}
 
+		this.style.setProperty(
+			'--feature-height',
+			`${this.vertical ? this.clientWidth : this.clientHeight}px`,
+		);
+		this.style.setProperty(
+			'--feature-width',
+			`${this.vertical ? this.clientHeight : this.clientWidth}px`,
+		);
+		this.style.setProperty(
+			'--tooltip-label',
+			`'${this.renderTemplate('{{ value }}{{ unit }}')}'`,
+		);
+
 		this.setThumbOffset();
 		this.setSliderState();
-		this.setSliderStyles();
 
 		return html`
 			<div
@@ -347,7 +349,6 @@ export class RemoteSlider extends BaseRemoteElement {
 						var(--thumb-offset),
 						calc(-0.5 * var(--feature-height) - 0.4em - 10px)
 					);
-					--tooltip-label: attr(value) attr(unit);
 				}
 				:host(:focus-visible) {
 					box-shadow: 0 0 0 2px
