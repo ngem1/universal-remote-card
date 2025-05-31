@@ -136,7 +136,10 @@ export class RemoteCirclepad extends BaseRemoteElement {
 			super.styles as CSSResult,
 			css`
 				:host {
+					aspect-ratio: 1 / 1;
+					width: 340px;
 					max-width: 100%;
+					overflow: hidden;
 
 					--size: min(48px, 12vw);
 					--icon-color: #c4c7c5;
@@ -144,13 +147,10 @@ export class RemoteCirclepad extends BaseRemoteElement {
 
 				.circlepad {
 					all: inherit;
-					aspect-ratio: 1 / 1;
-					width: 340px;
 					border-radius: 999px;
 					display: flex;
 					flex-direction: column;
 					background: #1f1f1f;
-					overflow: hidden;
 				}
 				:host(:focus-visible) .circlepad {
 					box-shadow: 0 0 0 2px
