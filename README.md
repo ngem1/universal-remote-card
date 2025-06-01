@@ -846,7 +846,7 @@ custom_actions:
     left:
       tap_action:
         action: key
-        key: up
+        key: left
       hold_action:
         action: repeat
     right:
