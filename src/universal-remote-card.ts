@@ -327,6 +327,11 @@ class UniversalRemoteCard extends LitElement {
 		}
 
 		context = {
+			config: this.config,
+			...context,
+		};
+
+		context = {
 			render: (str2: string) => this.renderTemplate(str2, context),
 			...context,
 		};
