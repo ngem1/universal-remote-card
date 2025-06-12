@@ -2307,12 +2307,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 		const context = {
 			config: {
 				...this.config,
-				entity: renderTemplate(
-					this.hass,
+				entity: this.renderTemplate(
 					this.config.remote_id ??
 						this.config.media_player_id ??
 						this.config.keyboard_id ??
 						'',
+					{},
 				),
 				attribute: 'state',
 			},
@@ -2320,14 +2320,13 @@ export class UniversalRemoteCardEditor extends LitElement {
 
 		this.buildPeopleList();
 		this.fetchCustomActionsFromFile(
-			renderTemplate(
-				this.hass,
+			this.renderTemplate(
 				this.config.custom_actions_file ?? '',
+				{},
 			) as string,
 		);
 
-		const platform = renderTemplate(
-			this.hass,
+		const platform = this.renderTemplate(
 			this.config.platform ?? 'Android TV',
 			context,
 		) as Platform;
