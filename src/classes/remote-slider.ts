@@ -48,7 +48,6 @@ export class RemoteSlider extends BaseRemoteElement {
 
 	onPointerDown(e: PointerEvent) {
 		super.onPointerDown(e);
-		const slider = e.currentTarget as HTMLInputElement;
 
 		// Delay pressed state to fix initial slider thumb transition
 		this.pressed = false;

@@ -17,6 +17,14 @@ export const Platforms = [
 	'Generic Remote',
 ] as const;
 export type Platform = (typeof Platforms)[number];
+export const SearchPlatforms: Platform[] = [
+	'Android TV',
+	'Sony BRAVIA',
+	'Fire TV',
+	'Roku',
+	'Kodi',
+] as const;
+export type SearchPlatform = (typeof SearchPlatforms)[number];
 
 export const RemotePlatforms: Platform[] = [
 	'Android TV',

@@ -5,10 +5,12 @@ import { property, state } from 'lit/decorators.js';
 import { dump, load } from 'js-yaml';
 import {
 	ADBKeyboardPlatforms,
+	Action,
 	DevicePlatforms,
 	HomeAssistant,
 	MediaPlayerPlatforms,
 	RemotePlatforms,
+	SearchPlatforms,
 } from './models/interfaces';
 
 import {
@@ -1141,13 +1143,13 @@ export class UniversalRemoteCardEditor extends LitElement {
 			(this.activeEntry as IElementConfig)?.[actionType]?.action ??
 				'none',
 			context,
-		) as string;
+		) as Action;
 		const platform = this.renderTemplate(
 			(this.activeEntry as IElementConfig)?.[actionType]?.platform ??
 				this.PLATFORM ??
 				'Android TV',
 			context,
-		) as string;
+		) as Platform;
 
 		return html`<div class="action-options">
 			${this.buildSelector(label, actionType, selector)}
@@ -1322,74 +1324,168 @@ export class UniversalRemoteCardEditor extends LitElement {
 						})}`
 				: ''}
 			${['keyboard', 'textbox', 'search'].includes(action)
-				? html`<div class="actions-form">
-							${this.buildSelector(
-								'Keyboard ID',
-								`${actionType}.keyboard_id`,
-								{
-									entity: {
-										filter: {
-											domain: ['remote', 'media_player'],
-										},
-									},
+				? html`${this.buildSelector(
+							'Platform',
+							`${actionType}.platform`,
+							{
+								select: {
+									mode: 'dropdown',
+									options:
+										action == 'search'
+											? SearchPlatforms
+											: KeyboardPlatforms,
+									reorder: false,
 								},
-								autofill ? this.config.keyboard_id : undefined,
-							)}
-							${this.buildSelector(
-								'Platform',
-								`${actionType}.platform`,
-								{
-									select: {
-										mode: 'dropdown',
-										options: KeyboardPlatforms,
-										reorder: false,
-									},
-								},
-								autofill
-									? KeyboardPlatforms.includes(
-											this.config
-												.platform as KeyboardPlatform,
-									  )
-										? this.PLATFORM
-										: 'Android TV'
-									: 'Android TV',
-							)}
-						</div>
-						${['Android TV', 'Roku'].includes(platform)
-							? html`<div class="actions-form">
-									${this.buildSelector(
-										'Remote ID',
-										`${actionType}.remote_id`,
-										{
-											entity: {
-												filter: {
-													domain: 'remote',
-												},
-											},
-										},
-										autofill
-											? this.config.remote_id
-											: undefined,
-									)}
-									${'Roku' == platform
-										? this.buildSelector(
-												'Media Player ID',
-												`${actionType}.media_player_id`,
-												{
-													entity: {
-														filter: {
-															domain: 'media_player',
+							},
+							autofill
+								? KeyboardPlatforms.includes(
+										this.config
+											.platform as KeyboardPlatform,
+								  )
+									? this.PLATFORM
+									: 'Android TV'
+								: 'Android TV',
+						)}
+						<div class="actions-form">
+							${(() => {
+								let options = html``;
+								switch (action) {
+									case 'search':
+										switch (platform) {
+											case 'Android TV':
+											case 'Sony BRAVIA':
+											case 'Fire TV':
+												options = this.buildSelector(
+													'Keyboard ID',
+													`${actionType}.keyboard_id`,
+													{
+														entity: {
+															filter: {
+																domain: [
+																	'remote',
+																	'media_player',
+																],
+															},
 														},
 													},
-												},
-												autofill
-													? this.config
-															.media_player_id
-													: undefined,
-										  )
-										: ''}
-							  </div>`
-							: ''}
+													autofill
+														? this.config
+																.keyboard_id
+														: undefined,
+												);
+												break;
+											case 'Roku':
+											case 'Kodi':
+												options = this.buildSelector(
+													'Media Player ID',
+													`${actionType}.media_player_id`,
+													{
+														entity: {
+															filter: {
+																domain: 'media_player',
+															},
+														},
+													},
+													autofill
+														? this.config
+																.media_player_id
+														: undefined,
+												);
+												break;
+											case 'Unified Remote':
+												options = this.buildSelector(
+													'Remote/Device Name',
+													'device',
+													{
+														text: {},
+													},
+													autofill
+														? this.config.device
+														: undefined,
+												);
+												break;
+											default:
+												break;
+										}
+										break;
+									case 'keyboard':
+									case 'textbox':
+									default:
+										switch (platform) {
+											case 'Android TV':
+											case 'Roku':
+												options = this.buildSelector(
+													'Remote ID',
+													`${actionType}.remote_id`,
+													{
+														entity: {
+															filter: {
+																domain: 'remote',
+															},
+														},
+													},
+													autofill
+														? this.config.remote_id
+														: undefined,
+												);
+												break;
+											case 'Sony BRAVIA':
+											case 'Fire TV':
+												options = this.buildSelector(
+													'Keyboard ID',
+													`${actionType}.keyboard_id`,
+													{
+														entity: {
+															filter: {
+																domain: [
+																	'remote',
+																	'media_player',
+																],
+															},
+														},
+													},
+													autofill
+														? this.config
+																.keyboard_id
+														: undefined,
+												);
+												break;
+											case 'LG webOS':
+											case 'Kodi':
+												options = this.buildSelector(
+													'Media Player ID',
+													`${actionType}.media_player_id`,
+													{
+														entity: {
+															filter: {
+																domain: 'media_player',
+															},
+														},
+													},
+													autofill
+														? this.config
+																.media_player_id
+														: undefined,
+												);
+												break;
+											case 'Unified Remote':
+												options = this.buildSelector(
+													'Remote/Device Name',
+													'device',
+													{
+														text: {},
+													},
+													autofill
+														? this.config.device
+														: undefined,
+												);
+												break;
+										}
+										break;
+								}
+								return options;
+							})()}
+						</div>
 						${this.buildSelector(
 							'Prompt',
 							`${actionType}.keyboard_prompt`,
