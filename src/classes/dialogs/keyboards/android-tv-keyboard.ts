@@ -12,6 +12,13 @@ export class AndroidTVKeyboard extends ADBKeyboard {
 		insertLineBreak: 'ENTER',
 	};
 
+	sendText(text: string) {
+		this.hass.callService('remote', 'send_command', {
+			entity_id: this.action.remote_id,
+			command: `text:${text}`,
+		});
+	}
+
 	sendKey(key: string) {
 		this.hass.callService('remote', 'send_command', {
 			entity_id: this.action.remote_id,
