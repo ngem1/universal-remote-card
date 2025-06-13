@@ -40,6 +40,8 @@ export class BaseKeyboard extends BaseDialog {
 		const text = e.data ?? '';
 		if (text && inputType == 'insertText') {
 			this.sendText(text);
+		} else if (text && inputType == 'insertCompositionText') {
+			this.sendText(text.slice(-1));
 		} else if (!this.onKeyDownFired) {
 			const key = this.inputMap[inputType ?? ''];
 			if (key) {
