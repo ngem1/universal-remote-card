@@ -18,6 +18,7 @@ export class BaseKeyboard extends BaseDialog {
 
 	closeOnEnter: boolean = true;
 	replaceOnSend: boolean = false;
+	searchReady: boolean = true;
 
 	sendText(_text: string) {}
 	sendKey(_text: string) {}

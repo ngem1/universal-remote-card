@@ -1,8 +1,9 @@
+import { PropertyValues } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { ADBKeyboard } from './adb-keyboard';
+import { BaseKeyboard } from './base-keyboard';
 
 @customElement('android-tv-keyboard')
-export class AndroidTVKeyboard extends ADBKeyboard {
+export class AndroidTVKeyboard extends BaseKeyboard {
 	keyMap = {
 		Backspace: 'DEL',
 		Enter: 'ENTER',
@@ -24,5 +25,44 @@ export class AndroidTVKeyboard extends ADBKeyboard {
 			entity_id: this.action.remote_id,
 			command: key,
 		});
+	}
+
+	sendSearch(text: string) {
+		if (!this.searchReady) {
+			setTimeout(() => {
+				this.sendSearch(text);
+			}, 100);
+			return;
+		}
+
+		this.hass.callService('remote', 'send_command', {
+			entity_id: this.action.remote_id,
+			command: [`text:${text}`, 'ENTER'],
+			delay_secs: 0.4,
+		});
+	}
+
+	updated(changedProperties: PropertyValues) {
+		super.updated(changedProperties);
+		if (
+			changedProperties.has('open') &&
+			!changedProperties.get('open') &&
+			this.open &&
+			this.action.action == 'search'
+		) {
+			this.searchReady = false;
+			this.hass
+				.callService('remote', 'send_command', {
+					entity_id: this.action.remote_id,
+					command: [
+						'SEARCH',
+						'DPAD_LEFT',
+						'DPAD_LEFT',
+						'DPAD_CENTER',
+					],
+					delay_secs: 1,
+				})
+				.then(() => (this.searchReady = true));
+		}
 	}
 }

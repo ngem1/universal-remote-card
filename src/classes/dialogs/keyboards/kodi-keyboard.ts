@@ -33,6 +33,13 @@ export class KodiKeyboard extends BaseKeyboard {
 	}
 
 	sendSearch(text: string) {
+		if (!this.searchReady) {
+			setTimeout(() => {
+				this.sendSearch(text);
+			}, 100);
+			return;
+		}
+
 		this.hass.callService('kodi', 'call_method', {
 			entity_id: this.action.media_player_id,
 			method: 'Input.SendText',
@@ -46,13 +53,17 @@ export class KodiKeyboard extends BaseKeyboard {
 		if (
 			changedProperties.has('open') &&
 			!changedProperties.get('open') &&
+			this.open &&
 			this.action.action == 'search'
 		) {
-			this.hass.callService('kodi', 'call_method', {
-				entity_id: this.action.media_player_id,
-				method: 'Addons.ExecuteAddon',
-				addonid: 'script.globalsearch',
-			});
+			this.searchReady = false;
+			this.hass
+				.callService('kodi', 'call_method', {
+					entity_id: this.action.media_player_id,
+					method: 'Addons.ExecuteAddon',
+					addonid: 'script.globalsearch',
+				})
+				.then(() => (this.searchReady = true));
 		}
 	}
 }

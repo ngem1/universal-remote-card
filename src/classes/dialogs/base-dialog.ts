@@ -4,7 +4,7 @@ import { HomeAssistant } from '../../models/interfaces';
 
 export class BaseDialog extends LitElement {
 	@property() hass!: HomeAssistant;
-	@property() open!: boolean;
+	@property() open: boolean = false;
 
 	buildDialogButton(text: string, handler: (e: MouseEvent) => void) {
 		return html`<div class="button">

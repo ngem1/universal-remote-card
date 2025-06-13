@@ -57,7 +57,11 @@ export class ADBKeyboard extends BaseKeyboard {
 
 	updated(changedProperties: PropertyValues) {
 		super.updated(changedProperties);
-		if (changedProperties.has('open') && !changedProperties.get('open')) {
+		if (
+			changedProperties.has('open') &&
+			!changedProperties.get('open') &&
+			this.open
+		) {
 			switch ((this.action.keyboard_id ?? '').split('.')[0]) {
 				case 'media_player':
 					this.domain = 'androidtv';
