@@ -32,7 +32,6 @@ export class BaseKeyboard extends BaseDialog {
 	}
 
 	onInput(e: InputEvent) {
-		console.log(e);
 		e.stopImmediatePropagation();
 		this.forceCursorToEnd();
 
@@ -56,7 +55,6 @@ export class BaseKeyboard extends BaseDialog {
 	}
 
 	onKeyDown(e: KeyboardEvent) {
-		console.debug(e);
 		e.stopImmediatePropagation();
 		this.forceCursorToEnd();
 
