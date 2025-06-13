@@ -1281,6 +1281,20 @@ export class UniversalRemoteCardEditor extends LitElement {
 				: ''}
 			${action == 'source'
 				? html`<div class="actions-form">
+							${this.buildSelector(
+								'Platform',
+								`${actionType}.platform`,
+								{
+									select: {
+										mode: 'dropdown',
+										options: Platforms,
+										reorder: false,
+									},
+								},
+								autofill
+									? this.PLATFORM ?? 'Android TV'
+									: 'Android TV',
+							)}
 							${['Android TV'].includes(platform)
 								? this.buildSelector(
 										'Remote ID',
@@ -1310,20 +1324,6 @@ export class UniversalRemoteCardEditor extends LitElement {
 											? this.config.media_player_id
 											: undefined,
 								  )}
-							${this.buildSelector(
-								'Platform',
-								`${actionType}.platform`,
-								{
-									select: {
-										mode: 'dropdown',
-										options: Platforms,
-										reorder: false,
-									},
-								},
-								autofill
-									? this.PLATFORM ?? 'Android TV'
-									: 'Android TV',
-							)}
 						</div>
 						${this.buildSelector('Source', `${actionType}.source`, {
 							text: {},
