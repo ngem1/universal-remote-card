@@ -6,8 +6,9 @@ import { IElementConfig } from '../../interfaces';
 export const philipsTVDefaultKeys: IElementConfig[] = [
 	{
 		type: 'button',
-		name: 'standby',
-		tap_action: { action: 'key', key: 'Standby' },
+		name: 'power',
+		tap_action: { action: 'key', key: 'PowerOn' },
+		hold_action: { action: 'key', key: 'PowerOff' },
 		icon: 'mdi:power',
 	},
 	{
@@ -21,6 +22,12 @@ export const philipsTVDefaultKeys: IElementConfig[] = [
 		name: 'power_off',
 		tap_action: { action: 'key', key: 'PowerOff' },
 		icon: 'mdi:power-off',
+	},
+	{
+		type: 'button',
+		name: 'standby',
+		tap_action: { action: 'key', key: 'Standby' },
+		icon: 'mdi:power-standby',
 	},
 	{
 		type: 'button',

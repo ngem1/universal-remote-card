@@ -11,8 +11,16 @@ import { IElementConfig } from '../../interfaces';
 export const unifiedRemoteDefaultKeys: IElementConfig[] = [
 	{
 		type: 'button',
-		name: 'monitor_off',
+		name: 'monitor',
 		tap_action: {
+			action: 'perform-action',
+			perform_action: 'unified_remote.call',
+			data: {
+				remote_id: 'Unified.Monitor',
+				action: 'turn_on',
+			},
+		},
+		hold_action: {
 			action: 'perform-action',
 			perform_action: 'unified_remote.call',
 			data: {
@@ -20,7 +28,7 @@ export const unifiedRemoteDefaultKeys: IElementConfig[] = [
 				action: 'turn_off',
 			},
 		},
-		icon: 'mdi:monitor-off',
+		icon: 'mdi:monitor',
 	},
 	{
 		type: 'button',
@@ -34,6 +42,19 @@ export const unifiedRemoteDefaultKeys: IElementConfig[] = [
 			},
 		},
 		icon: 'mdi:monitor',
+	},
+	{
+		type: 'button',
+		name: 'monitor_off',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'unified_remote.call',
+			data: {
+				remote_id: 'Unified.Monitor',
+				action: 'turn_off',
+			},
+		},
+		icon: 'mdi:monitor-off',
 	},
 	{
 		type: 'button',

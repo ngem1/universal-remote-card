@@ -6,6 +6,13 @@ import { IElementConfig } from '../../interfaces';
 export const appleTVDefaultKeys: IElementConfig[] = [
 	{
 		type: 'button',
+		name: 'power',
+		tap_action: { action: 'key', key: 'wakeup' },
+		hold_action: { action: 'key', key: 'suspend' },
+		icon: 'mdi:power',
+	},
+	{
+		type: 'button',
 		name: 'wakeup',
 		tap_action: {
 			action: 'key',
