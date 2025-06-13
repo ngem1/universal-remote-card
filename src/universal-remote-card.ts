@@ -727,12 +727,15 @@ class UniversalRemoteCard extends LitElement {
 	}
 
 	async onKey(e: KeyboardEvent) {
+		if (this.shadowRoot?.querySelector('remote-dialog[open]')) {
+			return;
+		}
+
 		const button = this.shadowRoot?.querySelector(
 			`[key="${e.key}"]`,
 		) as RemoteButton;
 		const direction = e.type == 'keydown' ? 'Down' : 'Up';
-
-		if (button && !this.shadowRoot?.querySelector('remote-dialog[open]')) {
+		if (button) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
 			if (!e.repeat) {
