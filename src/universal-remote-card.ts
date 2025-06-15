@@ -790,10 +790,10 @@ class UniversalRemoteCard extends LitElement {
 				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 			}
 
-			.row {
+			.row,
+			.column {
 				display: flex;
 				flex-wrap: nowrap;
-				flex-direction: row;
 				width: -moz-available;
 				width: -webkit-fill-available;
 				width: fill-available;
@@ -803,17 +803,11 @@ class UniversalRemoteCard extends LitElement {
 				justify-content: space-evenly;
 				align-items: center;
 			}
+			.row {
+				flex-direction: row;
+			}
 			.column {
-				display: flex;
-				flex-wrap: nowrap;
 				flex-direction: column;
-				width: -moz-available;
-				width: -webkit-fill-available;
-				width: fill-available;
-				flex: 1;
-				padding: 4px;
-				justify-content: space-evenly;
-				align-items: center;
 			}
 
 			.empty-button {
