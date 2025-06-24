@@ -18,9 +18,9 @@ _Formerly called Android TV Card_
 A super customizable universal remote card iterating on the work of several other projects. Featuring:
 
 - Configuration UI.
-- Out of the box support for [several platforms](#media-platform-and-entity-ids) with default keys and sources lists.
-  - Android TV (with keyboard via ADB)
-  - Sony BRAVIA (with keyboard via ADB)
+- Out of the box support for [many platforms](#media-platform-and-entity-ids) with default key and source lists.
+  - Android TV (with keyboard)
+  - Sony BRAVIA (with keyboard)
   - Fire TV (with keyboard)
   - Roku (with keyboard)
   - LG webOS (with keyboard)
@@ -33,7 +33,7 @@ A super customizable universal remote card iterating on the work of several othe
   - Generic Remote
 - Support for multiple buttons, circlepads, touchpads, and sliders using default or user defined actions.
 - Complete [Home Assistant actions](https://www.home-assistant.io/dashboards/actions/) support.
-- [Keyboard and search](#keyboard-textbox-and-search) dialog actions for most platforms.
+- [Keyboard and search](#keyboard-and-search) dialog actions for most platforms.
 - [Template](#a-note-on-templating) support for almost all fields using ha-nunjucks.
 - Toggleable haptics.
 - User configurable remote [layout](#layout).
@@ -55,7 +55,7 @@ Platform, entity ID, and timing fields set in the general tab will be used for d
 
 ## Media Platform and Entity IDs
 
-This card supports several media platforms with default key and source lists. Different platforms require different entities. Some platforms require custom integrations or have additional configuration notes and are called out below the table.
+This card supports several media platforms with default key and source lists. Different platforms require different fields as listed below. Some platforms require custom integrations or have additional configuration notes and are called out below the table.
 
 | Platform                                                                   | Remote ID                                   | Media Player ID                                                                                                                        | Keyboard ID                                                                                                 | Remote/Device Name              |
 | -------------------------------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------- |
@@ -74,21 +74,21 @@ This card supports several media platforms with default key and source lists. Di
 
 ### Sony BRAVIA - Different APIs on Different Models
 
-Some Sony BRAVIA TVs do not support the Android TV Remote API but do have their own proprietary API. The correct integration should be chosen based on your television. If you use the Sony BRAVIA platform, then you will also want to set up the Android Debug Bridge integration and provide its remote or entity ID in the Keyboard ID field in order to use the keyboard and search actions.
+Some Sony BRAVIA TVs do not support the Android TV Remote API, but do have their own proprietary API. The correct integration should be chosen based on which one your television supports. If you use the Sony BRAVIA platform, then you will also want to set up the Android Debug Bridge integration and provide its remote or media player entity ID in the Keyboard ID field in order to use the keyboard and search actions.
 
 ### Fire TV - Android Debug Bridge
 
-Fire TV is a heavily modified fork of Android TV. It uses the Android Debug Bridge integration for all interactions. If your Android TV does not support the Android TV Remote API, you can use this platform and the Android Debug Bridge integration instead.
+Fire TV is a heavily modified fork of Android TV. It uses the Android Debug Bridge integration for all interactions. If your Android TV does not support the Android TV Remote API, you can use this platform with the Android Debug Bridge integration instead.
 
-Amazon does have future plans to switch from the Android TV fork to a new operating system, at which point this integration will not work with newer Fire TVs.
+Amazon does have future plans to switch from their Android TV fork base to an entirely new operating system, at which point this integration will not work with newer Fire TVs.
 
 ### Samsung TV - Sources Using Custom Integration
 
-The Home Assistant Samsung TV integration does not allow you to change sources. To do so you need to setup the [SamsungTV Smart Component custom integration](https://github.com/ollo69/ha-samsungtv-smart) and provide it's media player entity ID to this card.
+The Home Assistant Samsung TV integration does not allow you to change sources. To do so you need to setup the [SamsungTV Smart Component custom integration](https://github.com/ollo69/ha-samsungtv-smart) and provide its media player entity ID to this card.
 
 ### Unified Remote - Custom Integration
 
-Unlike most platforms, Unified Remote relies entirely on [a custom integration](https://github.com/DaviPtrs/hass-unified-remote), which is used to control a [Unified Remote server](https://www.unifiedremote.com/) on your PC. This custom integration does not create any entities, but does provide us with the action `unified_remote.call`, which can be used to call any Unified Remote API. It requires that you install the integration and setup your computer hosts [as described here in its README](https://github.com/DaviPtrs/hass-unified-remote?tab=readme-ov-file#home-assistant). You can then use the host name or IP address in the remote/device name field in the configuration UI.
+Unified Remote relies entirely on [a custom integration](https://github.com/DaviPtrs/hass-unified-remote), which is used to control a [Unified Remote server](https://www.unifiedremote.com/) on your PC. This custom integration does not create any entities, but does provide us with the action `unified_remote.call` which can be used to call any Unified Remote API. It requires that you install the integration and optionally setup your computer hosts [as described here in its README](https://github.com/DaviPtrs/hass-unified-remote?tab=readme-ov-file#home-assistant). You can then use the host name or IP address in the remote/device name field in the configuration UI.
 
 ### Generic Remote - Shorthand for IR/RF Commands
 
@@ -111,13 +111,13 @@ Double tap and hold actions have user adjustable timings to change how they are 
 
 ### Hold Time
 
-Hold actions are triggered by holding down on a button for a defined amount of time and then releasing. The default amount of time is 500ms. You can change this by setting `Hold time` in the hold action to a different number.
+Hold actions are triggered by holding down on a button for a defined amount of time and then releasing. The default amount of time is 500ms. You can change this by setting `Hold time` in the general tab or a custom element hold action to a different number.
 
 ### Repeat and Repeat Delay
 
-By setting a hold action to `repeat`, the tap action will repeat while the button is held down. The default delay between repeats is 100ms. You can change this by setting `Repeat delay` in the hold action to a different number.
+By setting a hold action to `repeat`, the tap action will repeat while a button or touchpad direction is held down. The default delay between repeats is 100ms. You can change this by setting `Repeat delay` in the general tab or a custom element hold action to a different number.
 
-The following default keys have hold actions set to `repeat` by default. You can disable this by creating a custom element for them and setting their hold actions to `none` or a different action. The touchpad direction actions also are set to repeat when held, and can similarly be disabled or remapped by creating a custom element for the touchpad and changing it's hold action.
+The following default keys have their hold actions set to `repeat` by default. You can disable this by creating a custom element for them and setting their hold actions to `none` or a different action. The circlepad and touchpad direction actions also are set to repeat when held, and can similarly be disabled or remapped by creating a custom element for the touchpad and changing it's hold action.
 
 - up
 - down
@@ -131,7 +131,7 @@ The following default keys have hold actions set to `repeat` by default. You can
 
 ### Double Tap Window
 
-Double tap actions have a default window of 200ms to trigger before a single tap action is triggered instead. You can change this by setting `Double tap window` in the double tap action to a different number.
+Double tap actions have a default window of 200ms to trigger before a single tap action is triggered instead. You can change this by setting `Double tap window` in the general tab or a custom element double tap action to a different number.
 
 **Note**: Setting `Double tap window` above or too close to `Hold time` can result in undesirable behavior, as the hold timer expires before the double tap timer does. If you increase the `Double tap window` you should also increase `Hold time` to not be too close to it by at least 100ms if not more. In a custom element without a hold action defined, you can set `Hold behavior` explicitly to `Nothing` to render the `Hold time` field.
 
@@ -139,11 +139,11 @@ Double tap actions have a default window of 200ms to trigger before a single tap
 
 ### CSS Styles
 
-Styles can be set and changed for all remote sub-elements using regular CSS and templating. CSS styles have to be encapsulated in a CSS selector like the following.
+Styles can be set and changed for the remote card and all sub-elements using regular CSS and templating. CSS styles have to be encapsulated in a CSS selector like the following.
 
 | CSS Selector       | Element                         |
 | ------------------ | ------------------------------- |
-| :host              | Global values.                  |
+| :host              | The card or sub-element host.   |
 | .row               | All rows.                       |
 | .column            | All columns.                    |
 | .button-pad        | All default button pads.        |
@@ -528,19 +528,19 @@ Touchpads also support multi-touch mode, which fires alternate actions when more
 
 Touchpads also support an alternate drag mode. This action is called whenever movement is detected on the touchpad, and works best with mouse movement actions like Unified Remote's `Relmtech.Basic Input delta`. The touchpad X and Y movement can be added to actions using templates using `deltaX` and `deltaY`. Because this action fires every time movement is detected on the touchpad, you may find that it fires too often, or not often enough. You can either use math to modify the values of `deltaX` and `deltaY` within the action data templates, or introduce a delay in which movement will be ignored after a drag action is fired using the configuration UI option `Sampling delay` to tweak the speed of your drag movements and action fire rate. The drag action can also be used in multi-touch mode. Enabling this action disables direction swipe actions, but not center default actions.
 
-### Keyboard, Textbox, and Search
+### Keyboard and Search
 
 This card supports sending text to the following platforms:
 
-| Platform                        | Seamless      | Bulk | Search |
-| ------------------------------- | ------------- | ---- | ------ |
-| Android TV                      | Yes, inserts  | Yes  | Yes    |
-| Sony BRAVIA                     | Yes, inserts  | Yes  | Yes    |
-| Fire TV                         | Yes, inserts  | Yes  | Yes    |
-| Roku                            | Yes, inserts  | Yes  | Yes    |
-| LG webOS                        | Yes, replaces | Yes  | No     |
-| Kodi                            | Yes, replaces | Yes  | Yes    |
-| Unified Remote (PC, Mac, Linux) | Yes, inserts  | Yes  | No     |
+| Platform                        | Keyboard | Search |
+| ------------------------------- | -------- | ------ |
+| Android TV                      | Inserts  | Yes    |
+| Sony BRAVIA                     | Inserts  | Yes    |
+| Fire TV                         | Inserts  | Yes    |
+| Roku                            | Inserts  | Yes    |
+| LG webOS                        | Replaces | No     |
+| Kodi                            | Replaces | Yes    |
+| Unified Remote (PC, Mac, Linux) | Inserts  | No     |
 
 If the user defined general platform is listed above, then any action set to a keyboard action (that has autofill enabled) will inherit it. Otherwise it will default to `Android TV`. Keyboard support for more platforms can be added if there is a way to do so through their Home Assistant (or community made) integrations.
 
@@ -580,7 +580,7 @@ Send a global search query to your media platform using the action or default bu
 
 ### Keyboard Interactions and Accessability
 
-Not to be confused with keyboard input to platforms. You can control the elements of this card with your keyboard. By default you can focus on any element in the remote by tabbing to or click on it and then actuating it with the arrow or space/enter keys. For easier input, any arrow or space/enter keys you type while focused on the remote card itself will be sent to the first circlepad or touchpad in the remote. You can also assign any key to any button using the `Keyboard Key` field at the bottom of the interactions pane. This button will then actuate when you press this key. All actions are supported when using keyboard interactions. Multi touch actions can be forwarded to touchpads by holding down the shift key.
+Not to be confused with keyboard input to platforms. You can control the elements of this card with your keyboard. By default you can focus on any element in the remote by tabbing to or click on it and then actuating it with the arrow or space/enter keys. You can also assign any key to any button using the `Keyboard Key` field at the bottom of the interactions pane. This button will then actuate when you press this key. All actions are supported when using keyboard interactions. For easier navigational input, any arrow or space/enter keys you type while focused on the remote card itself will be sent to the first circlepad or touchpad in the remote if not assigned to a button.Multi touch actions can be forwarded to touchpads by holding down the shift key.
 
 ## Icons
 
