@@ -858,12 +858,12 @@ export class BaseRemoteElement extends LitElement {
 				iconElement = html` <ha-icon .icon="${icon}"></ha-icon> `;
 			} else {
 				const iconConfig =
-					(this.icons ?? []).filter(
+					(this.icons ?? []).find(
 						(customIcon: IIconConfig) => customIcon.name == icon,
-					)[0] ??
-					defaultIcons.filter(
+					) ??
+					defaultIcons.find(
 						(defaultIcon: IIconConfig) => defaultIcon.name == icon,
-					)[0];
+					);
 				iconElement = html`
 					<ha-svg-icon
 						.path=${iconConfig?.path ?? icon}

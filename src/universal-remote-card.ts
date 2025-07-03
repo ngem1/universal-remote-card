@@ -292,9 +292,9 @@ class UniversalRemoteCard extends LitElement {
 			...(this.config.custom_actions ?? []),
 			...(this.customActionsFromFile ?? []),
 		];
-		const customActions = customActionsList.filter(
+		const customActions = customActionsList.find(
 			(customActions) => customActions.name == name,
-		)[0];
+		);
 		if (customActions) {
 			if (
 				customActions.autofill_entity_id ??
@@ -307,13 +307,11 @@ class UniversalRemoteCard extends LitElement {
 		}
 
 		const defaultActions = this.updateElementConfig(
-			this.DEFAULT_KEYS.filter(
-				(defaultKeys) => defaultKeys.name == name,
-			)[0] ??
-				this.DEFAULT_SOURCES.filter(
+			this.DEFAULT_KEYS.find((defaultKeys) => defaultKeys.name == name) ??
+				this.DEFAULT_SOURCES.find(
 					(defaultSources) => defaultSources.name == name,
-				)[0] ??
-				{},
+				) ??
+				({} as IElementConfig),
 		);
 		return structuredClone(defaultActions);
 	}

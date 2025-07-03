@@ -650,12 +650,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 		) as string;
 		if (!icon.includes(':')) {
 			const iconConfig =
-				(this.config.custom_icons ?? []).filter(
+				(this.config.custom_icons ?? []).find(
 					(customIcon: IIconConfig) => customIcon.name == icon,
-				)[0] ??
-				defaultIcons.filter(
+				) ??
+				defaultIcons.find(
 					(defaultIcon: IIconConfig) => defaultIcon.name == icon,
-				)[0];
+				);
 			icon = iconConfig?.path ?? icon;
 		}
 
@@ -1080,12 +1080,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 		let customIcon;
 		if (icon && !icon.includes(':')) {
 			const iconConfig =
-				(this.config.custom_icons ?? []).filter(
+				(this.config.custom_icons ?? []).find(
 					(customIcon: IIconConfig) => customIcon.name == icon,
-				)[0] ??
-				defaultIcons.filter(
+				) ??
+				defaultIcons.find(
 					(defaultIcon: IIconConfig) => defaultIcon.name == icon,
-				)[0];
+				);
 			icon = iconConfig?.path ?? icon;
 			customIcon = html`<ha-svg-icon
 				.path=${icon}
@@ -2013,12 +2013,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 		);
 		const customActions = customActionNames.map(
 			(name) =>
-				this.config.custom_actions?.filter(
+				this.config.custom_actions?.find(
 					(entry) => entry.name == name,
-				)[0] ??
-				this.customActionsFromFile?.filter(
+				) ??
+				this.customActionsFromFile?.find(
 					(entry) => entry.name == name,
-				)[0] ??
+				) ??
 				({ type: 'button', name: '' } as IElementConfig),
 		);
 
@@ -2596,11 +2596,11 @@ export class UniversalRemoteCardEditor extends LitElement {
 							...(this.customActionsFromFile ?? []),
 							...this.DEFAULT_KEYS,
 							...this.DEFAULT_SOURCES,
-						].filter(
+						].find(
 							(defaultActions) =>
 								defaultActions.name == parentName,
-						)[0],
-					) ?? {};
+						),
+					) ?? ({} as IElementConfig);
 				const defaultActions =
 					parentActions[childName as DirectionAction];
 				entry = {
@@ -2614,12 +2614,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 							...(this.customActionsFromFile ?? []),
 							...this.DEFAULT_KEYS,
 							...this.DEFAULT_SOURCES,
-						].filter(
+						].find(
 							(defaultActions) =>
 								defaultActions.name ==
 								this.renderTemplate(entry.name, context),
-						)[0],
-					) ?? {};
+						),
+					) ?? ({} as IElementConfig);
 				entry = {
 					...actions,
 					...entry,
@@ -2902,9 +2902,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 			const tapAction =
 				slider.tap_action ??
 				structuredClone(
-					this.DEFAULT_KEYS.filter(
+					this.DEFAULT_KEYS.find(
 						(defaultKey) => defaultKey.name == 'slider',
-					)[0].tap_action,
+					)?.tap_action,
 				);
 			if (tapAction) {
 				const data = tapAction.data ?? {};
@@ -2924,9 +2924,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 		}
 		if (updateSlider) {
 			const defaultSlider = structuredClone(
-				this.DEFAULT_KEYS.filter(
+				this.DEFAULT_KEYS.find(
 					(defaultKey) => defaultKey.name == 'slider',
-				)[0],
+				),
 			);
 			if (sliderIndex > -1) {
 				customActions[sliderIndex] = {
@@ -3006,14 +3006,14 @@ export class UniversalRemoteCardEditor extends LitElement {
 			updateTouchpad = true;
 		}
 		const defaultTouchpad = structuredClone(
-			this.DEFAULT_KEYS.filter(
+			this.DEFAULT_KEYS.find(
 				(defaultKey) => defaultKey.name == 'touchpad',
-			)[0],
-		);
+			),
+		) as IElementConfig;
 		if (updatedConfig.rows.toString().includes('touchpad')) {
-			const centerCustomAction = customActions.filter(
+			const centerCustomAction = customActions.find(
 				(customAction) => customAction.name == 'center',
-			)[0];
+			);
 			if (centerCustomAction) {
 				for (const actionType of ActionTypes) {
 					if (centerCustomAction[actionType]) {
@@ -3028,9 +3028,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 				updateTouchpad = true;
 			}
 			for (const direction of DirectionActions) {
-				const customAction = customActions.filter(
+				const customAction = customActions.find(
 					(customAction) => customAction.name == direction,
-				)[0];
+				);
 				if (
 					!touchpad[direction] &&
 					customAction &&
@@ -3261,21 +3261,21 @@ export class UniversalRemoteCardEditor extends LitElement {
 		// Obsolete template field
 		if ('template' in entry) {
 			const templateActions =
-				customActions?.filter(
+				customActions?.find(
 					(customActions) =>
 						entry['template' as keyof IElementConfig] ==
 						customActions.name,
-				)[0] ??
-				this.DEFAULT_KEYS.filter(
+				) ??
+				this.DEFAULT_KEYS.find(
 					(defaultKeys) =>
 						entry['template' as keyof IElementConfig] ==
 						defaultKeys.name,
-				)[0] ??
-				this.DEFAULT_SOURCES.filter(
+				) ??
+				this.DEFAULT_SOURCES.find(
 					(defaultSources) =>
 						entry['template' as keyof IElementConfig] ==
 						defaultSources.name,
-				)[0] ??
+				) ??
 				{};
 			customAction = mergeDeep(
 				structuredClone(templateActions),
