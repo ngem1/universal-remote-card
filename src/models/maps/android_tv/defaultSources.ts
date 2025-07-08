@@ -90,7 +90,7 @@ export const androidTVDefaultSources: IElementConfig[] = [
 	{
 		type: 'button',
 		name: 'hulu',
-		tap_action: { action: 'source', source: 'hulu://' }, // BROKEN
+		tap_action: { action: 'source', source: 'com.hulu.livingroomplus' },
 		icon: 'mdi:hulu',
 	},
 	{
