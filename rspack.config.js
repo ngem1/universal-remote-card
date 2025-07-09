@@ -1,3 +1,4 @@
+/* eslint-env es6 */
 const path = require('path');
 const { execSync } = require('child_process');
 
