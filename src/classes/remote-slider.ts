@@ -4,7 +4,6 @@ import { classMap } from 'lit/directives/class-map.js';
 
 import { RANGE_MAX, RANGE_MIN, STEP, STEP_COUNT } from '../models/constants';
 import { ISliderConfig } from '../models/interfaces';
-import { getNumericPixels } from '../utils/styles';
 import { BaseRemoteElement } from './base-remote-element';
 
 @customElement('remote-slider')
@@ -18,7 +17,6 @@ export class RemoteSlider extends BaseRemoteElement {
 	step: number = STEP;
 
 	vertical: boolean = false;
-	thumbWidth: number = 48;
 
 	pressedTimeout?: ReturnType<typeof setTimeout>;
 
@@ -113,13 +111,14 @@ export class RemoteSlider extends BaseRemoteElement {
 
 	setThumbOffset() {
 		const width = this.vertical ? this.clientHeight : this.clientWidth;
-		const maxOffset = (width - this.thumbWidth) / 2;
+		const thumbWidth =
+			this.shadowRoot?.querySelector('.thumb')?.clientWidth ?? 48;
+		const maxOffset = (width - thumbWidth) / 2;
 
 		this.thumbOffset = Math.min(
 			Math.max(
 				Math.round(
-					((width - this.thumbWidth) /
-						(this.range[1] - this.range[0])) *
+					((width - thumbWidth) / (this.range[1] - this.range[0])) *
 						((this.value as number) -
 							(this.range[0] + this.range[1]) / 2),
 				),
@@ -236,10 +235,6 @@ export class RemoteSlider extends BaseRemoteElement {
 			<div
 				class="container ${classMap({
 					off: !this.sliderOn,
-					'read-only':
-						this.renderTemplate(
-							this.config.tap_action?.action as string,
-						) == 'none',
 				})}"
 				part="container"
 			>
@@ -254,37 +249,19 @@ export class RemoteSlider extends BaseRemoteElement {
 	updated() {
 		super.updated();
 
-		// Ensure that both the input range and div thumbs are the same size
-		const thumb = this.shadowRoot?.querySelector('.thumb') as HTMLElement;
-		const style = getComputedStyle(thumb);
-		const userThumbWidth = style.getPropertyValue('--thumb-width');
-
-		if (userThumbWidth) {
-			const pixels = getNumericPixels(userThumbWidth);
-			if (!isNaN(pixels)) {
-				this.thumbWidth = pixels;
-			}
-			return;
-		}
-
-		const pixels = thumb?.clientWidth || thumb?.clientHeight;
-
-		// Ensure that thumb width is valid, as it can return an invalid massive number at high dpi
+		// Set readonly if action is none
 		if (
-			pixels &&
-			!isNaN(pixels) &&
-			pixels < document.body.clientHeight &&
-			pixels < document.body.clientWidth
+			this.renderTemplate(this.config.tap_action?.action as string) ==
+			'none'
 		) {
-			this.thumbWidth = pixels;
-			this.style.setProperty('--thumb-width', `${this.thumbWidth}px`);
+			this.setAttribute('readonly', '');
+		} else {
+			this.removeAttribute('readonly');
 		}
 	}
 
 	async onKey(e: KeyboardEvent) {
-		const keys = this.vertical
-			? ['ArrowDown', 'ArrowUp']
-			: ['ArrowLeft', 'ArrowRight'];
+		const keys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'];
 		if (keys.includes(e.key)) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
@@ -294,7 +271,8 @@ export class RemoteSlider extends BaseRemoteElement {
 				this._value = Math.min(
 					Math.max(
 						parseFloat((this.value ?? this.range[0]) as string) +
-							(e.key == keys[!this.vertical && this.rtl ? 1 : 0]
+							((e.key == 'ArrowLeft') != this.rtl ||
+							e.key == 'ArrowDown'
 								? -1
 								: 1) *
 								this.step,
@@ -398,14 +376,14 @@ export class RemoteSlider extends BaseRemoteElement {
 					appearance: none;
 					-webkit-appearance: none;
 					height: var(--height, 48px);
-					width: var(--thumb-width, 12px);
+					width: var(--thumb-width, 48px);
 					opacity: 0;
 				}
 				::-moz-range-thumb {
 					appearance: none;
 					-moz-appearance: none;
 					height: var(--height, 48px);
-					width: var(--thumb-width, 12px);
+					width: var(--thumb-width, 48px);
 					opacity: 0;
 				}
 
@@ -427,7 +405,7 @@ export class RemoteSlider extends BaseRemoteElement {
 					height: 100%;
 					width: 100vw;
 					position: absolute;
-					right: calc(var(--thumb-width) / 2);
+					right: calc(var(--thumb-width, 48px) / 2);
 					background: inherit;
 				}
 
@@ -473,12 +451,13 @@ export class RemoteSlider extends BaseRemoteElement {
 				:host([pressed]) {
 					--thumb-transition: background 180ms ease-in-out;
 				}
+				:host(:focus-visible) .tooltip,
 				:host([pressed]) .tooltip {
 					transition: opacity 540ms ease-in-out 0s;
 					opacity: 1;
 				}
 
-				.read-only input {
+				:host([readonly]) input {
 					pointer-events: none;
 					cursor: default;
 				}

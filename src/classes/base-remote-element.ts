@@ -995,6 +995,8 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	updated() {
+		this.setAttribute('value', String(this.value ?? ''));
+
 		if (this.pressed) {
 			this.setAttribute('pressed', '');
 		} else {
