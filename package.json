@@ -1,6 +1,6 @@
 {
 	"name": "universal-remote-card",
-	"version": "4.6.3",
+	"version": "4.6.4",
 	"description": "Universal Remote Card",
 	"main": "./dist/universal-remote-card.min.js",
 	"scripts": {
@@ -40,8 +40,8 @@
 		"lit": "latest"
 	},
 	"devDependencies": {
-		"@rspack/cli": "^1.4.5",
-		"@rspack/core": "^1.4.5",
+		"@rspack/cli": "latest",
+		"@rspack/core": "latest",
 		"@types/js-yaml": "latest",
 		"@typescript-eslint/eslint-plugin": "latest",
 		"@typescript-eslint/parser": "latest",

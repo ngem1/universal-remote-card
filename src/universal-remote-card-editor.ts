@@ -122,11 +122,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 		switch (this.baseTabIndex) {
 			case 3:
 				entries = structuredClone(this.config.custom_icons ?? []);
-				oldEntry = entries[this.entryIndex] as IIconConfig;
-				updatedEntry = {
-					...oldEntry,
-					...entry,
-				};
+				updatedEntry = entry;
 				break;
 			case 2:
 			default:
@@ -143,14 +139,8 @@ export class UniversalRemoteCardEditor extends LitElement {
 						if (this.directionTabIndex != 2) {
 							updatedEntry = {
 								...oldEntry,
-								[this.DIRECTION_TABS[this.directionTabIndex]]: {
-									...oldEntry[
-										this.DIRECTION_TABS[
-											this.directionTabIndex
-										] as DirectionAction
-									],
-									...entry,
-								},
+								[this.DIRECTION_TABS[this.directionTabIndex]]:
+									entry,
 							};
 							break;
 						}
@@ -158,10 +148,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 					case 'slider':
 					case 'button':
 					default:
-						updatedEntry = {
-							...oldEntry,
-							...entry,
-						};
+						updatedEntry = entry;
 				}
 				break;
 		}
@@ -305,8 +292,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 		if (this.entryIndex > -1 && this.activeEntry) {
 			if (css != (this.activeEntry as IElementConfig)?.styles) {
 				this.entryChanged({
+					...this.activeEntry,
 					styles: css,
-				} as unknown as IElementConfig);
+				} as IElementConfig);
 			}
 		} else {
 			if (css != this.config.styles) {
@@ -330,6 +318,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 					return;
 				}
 				this.entryChanged({
+					...this.activeEntry,
 					[actionType]: actionObj,
 				} as unknown as IElementConfig);
 				this.errors = undefined;
@@ -345,13 +334,12 @@ export class UniversalRemoteCardEditor extends LitElement {
 		const evalString = e.detail.value;
 		if (this.activeEntry) {
 			this.entryChanged({
-				type: (this.activeEntry as IElementConfig).type,
-				name: this.activeEntry.name,
+				...this.activeEntry,
 				[actionType]: {
 					...(this.activeEntry as IElementConfig)[actionType],
 					eval: evalString,
 				},
-			});
+			} as IElementConfig);
 		}
 	}
 

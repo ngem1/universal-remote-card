@@ -552,8 +552,6 @@ You can change the prompt text that appears before you type anything using the `
 
 <img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/editor_actions_interactions_keyboard_prompt.png" width="600"/>
 
-<img src="https://raw.githubusercontent.com/Nerwyn/universal-remote-card/main/assets/keyboard_dialog_custom_prompt.png" width="600"/>
-
 For Sony BRAVIA, you need to include the Android Debug Bridge integration remote or media player entity ID in the keyboard ID field at the general or action level as it is used to send keys. All other integrations (including Fire TV which uses ADB for everything) will use the user provided remote and/or media player IDs for keyboard input. If you wish to use the ADB text input or search methods for Android TV instead of the newer Android TV Remote API methods, create custom elements for them with the corresponding actions and change the platform to `Fire TV`.
 
 For Roku make sure to include both the remote and media player IDs at the general or action level, as the remote is used for normal keyboard entry while the media player is used for search.
