@@ -167,6 +167,9 @@ export class BaseRemoteElement extends LitElement {
 				case 'key':
 					this.key(action, actionType);
 					break;
+				case 'fire-dom-event':
+					this.fireDomEvent(action);
+					break;
 				case 'eval':
 					this.eval(action);
 					break;
