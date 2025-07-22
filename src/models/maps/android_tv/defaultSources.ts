@@ -84,7 +84,7 @@ export const androidTVDefaultSources: IElementConfig[] = [
 	{
 		type: 'button',
 		name: 'globoplay',
-		tap_action: { action: 'source', source: 'com.globo.globotv' },
+		tap_action: { action: 'source', source: 'https://globoplay.globo.com/' },
 		icon: 'globoplay',
 	},
 	{
