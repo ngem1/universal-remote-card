@@ -1641,14 +1641,12 @@ custom_actions:
       action: eval
       eval: >-
         const card = this.parentNode.parentNode;
-
-        const opacity = card.style.getPropertyValue('--volume-opacity');
-
-        card.style.setProperty('--volume-opacity', opacity == 0 ? 100 : 0,
-        'important');
-
-        card.style.setProperty('--volume-pointer-events', opacity == 0 ? 'all' :
-        'none', 'important');
+        const volume = card.querySelector("#volume")
+        if (volume.hasAttribute("enabled")) {
+          volume.removeAttribute("enabled")
+        } else {
+          volume.setAttribute("enabled", "")
+        }
   - type: slider
     name: volume
     value_attribute: volume_level
@@ -1661,7 +1659,6 @@ custom_actions:
     vertical: true
     styles: |-
       :host {
-        opacity: var(--volume-opacity);
         position: absolute;
         height: var(--max-album-height, 50vh);
         width: 50px;
@@ -1670,12 +1667,21 @@ custom_actions:
         --tooltip-label: "{{ (100 * value) | int }}%";
         --icon-color: var(--background-color);
         transition: all 0.1s ease-out;
+        opacity: 0;
       }
+
       .background {
         opacity: 0.5;
       }
-      .slider {
-        pointer-events: var(--volume-pointer-events);
+      input {
+        pointer-events: none;
+      }
+
+      :host([enabled]) {
+        opacity: 1;
+      }
+      :host([enabled]) input {
+        pointer-events: all;
       }
     autofill_entity_id: true
   - type: button
@@ -1801,7 +1807,7 @@ custom_actions:
         background: white;
         opacity: 0.2;
       }
-      .slider {
+      input {
         margin: 0;
       }
       @media (hover: hover) {
@@ -1834,8 +1840,6 @@ grid_options:
 styles: |-
   ha-card {
     overflow: hidden;
-    --volume-opacity: 0;
-    --volume-pointer-events: none;
     --size: 32px;
     --icon-color: #b3b3b3;
     --active-color: #1cb955;
