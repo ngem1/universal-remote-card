@@ -791,14 +791,10 @@ export class UniversalRemoteCardEditor extends LitElement {
 		switch (this.baseTabIndex) {
 			case 3:
 				return html`
-					<ha-button
-						@click=${this.addEntry}
-						outlined
-						class="add-list-item"
-						.label="${'Add svg icon'}"
+					<ha-button @click=${this.addEntry} class="add-list-item">
+						<ha-icon .icon=${'mdi:plus'} slot="start"></ha-icon>Add
+						svg icon</ha-button
 					>
-						<ha-icon .icon=${'mdi:plus'} slot="icon"></ha-icon>
-					</ha-button>
 				`;
 			case 2:
 			default:
@@ -809,13 +805,10 @@ export class UniversalRemoteCardEditor extends LitElement {
 						@action=${this.addEntry}
 						@closed=${(e: Event) => e.stopPropagation()}
 					>
-						<ha-button
-							slot="trigger"
-							outlined
-							.label="${'Add remote element'}"
+						<ha-button slot="trigger">
+							<ha-icon .icon=${'mdi:plus'} slot="start"></ha-icon
+							>Add remote element</ha-button
 						>
-							<ha-icon .icon=${'mdi:plus'} slot="icon"></ha-icon>
-						</ha-button>
 						${RemoteElementTypes.map(
 							(entryType) => html`
 								<ha-list-item .value=${entryType}>
@@ -2268,13 +2261,10 @@ export class UniversalRemoteCardEditor extends LitElement {
 							)}
 						</div>
 					</div>
-					<ha-button
-						@click=${this.handleUpdateDeprecatedConfig}
-						outlined
-						.label="${'Update old config'}"
+					<ha-button @click=${this.handleUpdateDeprecatedConfig}>
+						<ha-icon .icon=${'mdi:cog'} slot="start"></ha-icon
+						>Update old config</ha-button
 					>
-						<ha-icon .icon=${'mdi:cog'} slot="icon"></ha-icon>
-					</ha-button>
 				</div>
 			</div>
 		`;
@@ -3326,6 +3316,9 @@ export class UniversalRemoteCardEditor extends LitElement {
 			ha-button {
 				width: fit-content;
 				--mdc-icon-size: 100%;
+			}
+			ha-button::part(label) {
+				text-transform: capitalize;
 			}
 			ha-list-item {
 				text-transform: capitalize;

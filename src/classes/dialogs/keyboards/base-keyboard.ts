@@ -35,7 +35,6 @@ export class BaseKeyboard extends BaseDialog {
 	onInput(e: InputEvent) {
 		e.stopImmediatePropagation();
 		this.forceCursorToEnd();
-		console.log(e);
 
 		const inputType = e.inputType ?? '';
 		const text = e.data ?? '';
@@ -59,7 +58,6 @@ export class BaseKeyboard extends BaseDialog {
 	onKeyDown(e: KeyboardEvent) {
 		e.stopImmediatePropagation();
 		this.forceCursorToEnd();
-		console.log(e);
 
 		const inKey = e.key;
 		const outKey = this.keyMap[inKey ?? ''];
@@ -83,7 +81,6 @@ export class BaseKeyboard extends BaseDialog {
 
 	onPaste(e: ClipboardEvent) {
 		e.stopImmediatePropagation();
-		console.log(e);
 
 		const text = e.clipboardData?.getData('Text');
 		if (text) {
