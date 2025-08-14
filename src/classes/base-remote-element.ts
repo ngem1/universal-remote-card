@@ -398,7 +398,7 @@ export class BaseRemoteElement extends LitElement {
 	}
 
 	toggleSingle(entityId: string) {
-		const turnOn = ['closed', 'locked', 'off'].includes(
+		const turnOn = ['closed', 'closing', 'locked', 'off'].includes(
 			this.hass.states[entityId].state,
 		);
 		let domain = entityId.split('.')[0];
