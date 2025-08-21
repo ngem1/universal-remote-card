@@ -373,6 +373,18 @@ export const kodiDefaultKeys: IElementConfig[] = [
 	},
 	{
 		type: 'button',
+		name: 'power',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'GUI.ActivateWindow',
+				window: 'shutdownmenu',
+			},
+			icon: 'mdi:power',
+	},
+	{
+		type: 'button',
 		name: 'fast_forward',
 		tap_action: {
 			action: 'perform-action',
