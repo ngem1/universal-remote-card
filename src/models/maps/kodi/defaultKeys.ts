@@ -371,4 +371,213 @@ export const kodiDefaultKeys: IElementConfig[] = [
 		},
 		icon: 'mdi:information-variant-circle',
 	},
+	{
+		type: 'button',
+		name: 'fast_forward',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Input.ExecuteAction',
+				action: 'fastforward',
+			},
+			icon: 'mdi:fast-forward',
+	},
+	{
+		type: 'button',
+		name: 'rewind',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Input.ExecuteAction',
+				action: 'rewind',
+			},
+			icon: 'mdi:rewind',
+	},
+	{
+		type: 'button',
+		name: 'channel_up',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Input.ExecuteAction',
+				action: 'channelup',
+			},
+			icon: 'mdi:arrow-up-bold-circle',
+	},
+	{
+		type: 'button',
+		name: 'channel_down',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Input.ExecuteAction',
+				action: 'channeldown',
+			},
+			icon: 'mdi:arrow-down-bold-circle',
+	},
+	{
+		type: 'button',
+		name: 'guide',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'GUI.ActivateWindow',
+				window: 'tvguide',
+			},
+			icon: 'mdi:television-guide',
+	},
+	{
+		type: 'button',
+		name: 'crunchyroll',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'plugin.video.crunchyroll',
+			},
+			icon: 'crunchyroll',
+	},
+	{
+		type: 'button',
+		name: 'discoveryplus',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'plugin.video.discoveryplus',
+			},
+			icon: 'discovery',
+	},
+	{
+		type: 'button',
+		name: 'disney',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'slyguy.disney.plus',
+			},
+			icon: 'disney',
+	},
+	{
+		type: 'button',
+		name: 'espn',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'slyguy.espn',
+',
+			},
+			icon: 'espn',
+	},
+	{
+		type: 'button',
+		name: 'hulu',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'slyguy.hulu',
+',
+			},
+			icon: 'mdi:hulu',
+	},
+	{
+		type: 'button',
+		name: 'max',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'slyguy.max',
+',
+			},
+			icon: 'max',
+	},
+	{
+		type: 'button',
+		name: 'netflix',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'plugin.video.netflix',
+',
+			},
+			icon: 'mdi:netflix',
+	},
+	{
+		type: 'button',
+		name: 'paramount',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'slyguy.paramount.plus',
+',
+			},
+			icon: 'paramount',
+	},
+	{
+		type: 'button',
+		name: 'peacock',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'plugin.video.skyott',
+			},
+			icon: 'peacock',
+	},
+	{
+		type: 'button',
+		name: 'primevideo',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'plugin.video.amazon-test',
+			},
+			icon: 'primevideo',
+	},
+	{
+		type: 'button',
+		name: 'twitch',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'plugin.video.twitch',
+			},
+			icon: 'mdi:twitch',
+	},
+	{
+		type: 'button',
+		name: 'youtube',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Addons.ExecuteAddon',
+				addonid: 'plugin.video.youtube',
+			},
+			icon: 'mdi:youtube',
+	},
 ];
