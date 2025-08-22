@@ -8,6 +8,7 @@ import './dialogs/keyboards/kodi-keyboard';
 import './dialogs/keyboards/roku-keyboard';
 import './dialogs/keyboards/unified-remote-keyboard';
 import './dialogs/keyboards/webos-keyboard';
+import './dialogs/keyboards/apple-tv-keyboard';
 
 @customElement('remote-dialog')
 export class RemoteDialog extends LitElement {
@@ -64,6 +65,13 @@ export class RemoteDialog extends LitElement {
 		const open = this.open && this.fadedIn;
 		if (this.config) {
 			switch (this.config?.platform as KeyboardPlatform) {
+				case 'Apple TV':
+          			content = html`<apple-tv-keyboard
+			            .hass=${this.hass}
+			            .action=${this.config ?? {}}
+			            .open=${open}
+			   		></apple-tv-keyboard>`;
+					break;
 				case 'Unified Remote':
 					content = html`<unified-remote-keyboard
 						.hass=${this.hass}
@@ -230,3 +238,4 @@ export class RemoteDialog extends LitElement {
 		`;
 	}
 }
+
