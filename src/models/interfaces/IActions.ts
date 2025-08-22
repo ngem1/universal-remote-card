@@ -6,6 +6,7 @@ export const KeyboardPlatforms = [
 	'LG webOS',
 	'Kodi',
 	'Unified Remote',
+	'Apple TV',
 ] as const;
 export type KeyboardPlatform = (typeof KeyboardPlatforms)[number];
 export const Platforms = [
