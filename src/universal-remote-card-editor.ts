@@ -1338,6 +1338,7 @@ export class UniversalRemoteCardEditor extends LitElement {
 								let options = html``;
 								switch (keyboardPlatform) {
 									case 'Android TV':
+									case 'Apple TV':
 										options = this.buildSelector(
 											'Remote ID',
 											`${actionType}.remote_id`,
