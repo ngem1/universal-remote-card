@@ -1,9 +1,8 @@
 import { IElementConfig } from '../../interfaces';
 
 /**
- * This is a list of common streaming apps, their icons, and the deep links to open them in Android TV, mostly collected from the following Home Assistant Community Forum guide.
- * Not all have been tested, if any do not work please let me know!
- * https://community.home-assistant.io/t/android-tv-remote-app-links-deep-linking-guide/567921
+ * https://www.home-assistant.io/integrations/kodi/#action-kodicall_method
+ * https://kodi.wiki/view/JSON-RPC_API/v13
  */
 export const kodiDefaultSources: IElementConfig[] = [
 	{
@@ -16,6 +15,7 @@ export const kodiDefaultSources: IElementConfig[] = [
 				method: 'Addons.ExecuteAddon',
 				addonid: 'plugin.video.crunchyroll',
 			},
+		},
 		icon: 'crunchyroll',
 	},
 	{
@@ -28,6 +28,7 @@ export const kodiDefaultSources: IElementConfig[] = [
 				method: 'Addons.ExecuteAddon',
 				addonid: 'plugin.video.discoveryplus',
 			},
+		},
 		icon: 'discovery',
 	},
 	{
@@ -40,6 +41,7 @@ export const kodiDefaultSources: IElementConfig[] = [
 				method: 'Addons.ExecuteAddon',
 				addonid: 'slyguy.disney.plus',
 			},
+		},
 		icon: 'disney',
 	},
 	{
@@ -51,8 +53,8 @@ export const kodiDefaultSources: IElementConfig[] = [
 			data: {
 				method: 'Addons.ExecuteAddon',
 				addonid: 'slyguy.espn',
-
 			},
+		},
 		icon: 'espn',
 	},
 	{
@@ -64,8 +66,8 @@ export const kodiDefaultSources: IElementConfig[] = [
 			data: {
 				method: 'Addons.ExecuteAddon',
 				addonid: 'slyguy.hulu',
-
 			},
+		},
 		icon: 'mdi:hulu',
 	},
 	{
@@ -77,8 +79,8 @@ export const kodiDefaultSources: IElementConfig[] = [
 			data: {
 				method: 'Addons.ExecuteAddon',
 				addonid: 'slyguy.max',
-
 			},
+		},
 		icon: 'max',
 	},
 	{
@@ -90,8 +92,8 @@ export const kodiDefaultSources: IElementConfig[] = [
 			data: {
 				method: 'Addons.ExecuteAddon',
 				addonid: 'plugin.video.netflix',
-
 			},
+		},
 		icon: 'mdi:netflix',
 	},
 	{
@@ -103,8 +105,8 @@ export const kodiDefaultSources: IElementConfig[] = [
 			data: {
 				method: 'Addons.ExecuteAddon',
 				addonid: 'slyguy.paramount.plus',
-
 			},
+		},
 		icon: 'paramount',
 	},
 	{
@@ -117,6 +119,7 @@ export const kodiDefaultSources: IElementConfig[] = [
 				method: 'Addons.ExecuteAddon',
 				addonid: 'plugin.video.skyott',
 			},
+		},
 		icon: 'peacock',
 	},
 	{
@@ -129,6 +132,7 @@ export const kodiDefaultSources: IElementConfig[] = [
 				method: 'Addons.ExecuteAddon',
 				addonid: 'plugin.video.amazon-test',
 			},
+		},
 		icon: 'primevideo',
 	},
 	{
@@ -141,6 +145,7 @@ export const kodiDefaultSources: IElementConfig[] = [
 				method: 'Addons.ExecuteAddon',
 				addonid: 'plugin.video.twitch',
 			},
+		},
 		icon: 'mdi:twitch',
 	},
 	{
@@ -153,7 +158,8 @@ export const kodiDefaultSources: IElementConfig[] = [
 				method: 'Addons.ExecuteAddon',
 				addonid: 'plugin.video.youtube',
 			},
+		},
 		icon: 'mdi:youtube',
 	},
-	
 ];
+

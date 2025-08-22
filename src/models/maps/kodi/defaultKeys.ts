@@ -15,7 +15,8 @@ export const kodiDefaultKeys: IElementConfig[] = [
 				method: 'GUI.ActivateWindow',
 				window: 'shutdownmenu',
 			},
-			icon: 'mdi:power',
+		},
+		icon: 'mdi:power',
 	},
 	{
 		type: 'button',
@@ -339,7 +340,8 @@ export const kodiDefaultKeys: IElementConfig[] = [
 				method: 'Input.ExecuteAction',
 				action: 'rewind',
 			},
-			icon: 'mdi:rewind',
+		},
+		icon: 'mdi:rewind',
 	},
 	{
 		type: 'button',
@@ -351,7 +353,8 @@ export const kodiDefaultKeys: IElementConfig[] = [
 				method: 'Input.ExecuteAction',
 				action: 'fastforward',
 			},
-			icon: 'mdi:fast-forward',
+		},
+		icon: 'mdi:fast-forward',
 	},
 	{
 		type: 'button',
@@ -381,7 +384,8 @@ export const kodiDefaultKeys: IElementConfig[] = [
 				method: 'Input.ExecuteAction',
 				action: 'channelup',
 			},
-			icon: 'mdi:arrow-up-bold-circle',
+		},
+		icon: 'mdi:arrow-up-bold-circle',
 	},
 	{
 		type: 'button',
@@ -393,7 +397,8 @@ export const kodiDefaultKeys: IElementConfig[] = [
 				method: 'Input.ExecuteAction',
 				action: 'channeldown',
 			},
-			icon: 'mdi:arrow-down-bold-circle',
+		},
+		icon: 'mdi:arrow-down-bold-circle',
 	},
 	{
 		type: 'button',
@@ -441,7 +446,8 @@ export const kodiDefaultKeys: IElementConfig[] = [
 				method: 'GUI.ActivateWindow',
 				window: 'tvguide',
 			},
-			icon: 'mdi:television-guide',
+		},
+		icon: 'mdi:television-guide',
 	},
-	
 ];
+
