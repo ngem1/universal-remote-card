@@ -7,6 +7,18 @@ import { IElementConfig } from '../../interfaces';
 export const kodiDefaultKeys: IElementConfig[] = [
 	{
 		type: 'button',
+		name: 'power',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'GUI.ActivateWindow',
+				window: 'shutdownmenu',
+			},
+			icon: 'mdi:power',
+	},
+	{
+		type: 'button',
 		name: 'home',
 		tap_action: {
 			action: 'key',
@@ -319,6 +331,30 @@ export const kodiDefaultKeys: IElementConfig[] = [
 	},
 	{
 		type: 'button',
+		name: 'rewind',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Input.ExecuteAction',
+				action: 'rewind',
+			},
+			icon: 'mdi:rewind',
+	},
+	{
+		type: 'button',
+		name: 'fast_forward',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Input.ExecuteAction',
+				action: 'fastforward',
+			},
+			icon: 'mdi:fast-forward',
+	},
+	{
+		type: 'button',
 		name: 'keyboard',
 		tap_action: { action: 'keyboard' },
 		icon: 'mdi:keyboard',
@@ -334,6 +370,30 @@ export const kodiDefaultKeys: IElementConfig[] = [
 		name: 'search',
 		tap_action: { action: 'search' },
 		icon: 'mdi:kodi',
+	},
+	{
+		type: 'button',
+		name: 'channel_up',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Input.ExecuteAction',
+				action: 'channelup',
+			},
+			icon: 'mdi:arrow-up-bold-circle',
+	},
+	{
+		type: 'button',
+		name: 'channel_down',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'Input.ExecuteAction',
+				action: 'channeldown',
+			},
+			icon: 'mdi:arrow-down-bold-circle',
 	},
 	{
 		type: 'button',
@@ -371,4 +431,17 @@ export const kodiDefaultKeys: IElementConfig[] = [
 		},
 		icon: 'mdi:information-variant-circle',
 	},
+	{
+		type: 'button',
+		name: 'guide',
+		tap_action: {
+			action: 'perform-action',
+			perform_action: 'kodi.call_method',
+			data: {
+				method: 'GUI.ActivateWindow',
+				window: 'tvguide',
+			},
+			icon: 'mdi:television-guide',
+	},
+	
 ];

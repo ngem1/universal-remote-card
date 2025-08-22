@@ -11,6 +11,7 @@ import {
 	genericRemoteDefaultKeys,
 	jellyfinTVDefaultKeys,
 	kodiDefaultKeys,
+	kodiDefaultSources,
 	philipsTVDefaultKeys,
 	rokuDefaultKeys,
 	rokuDefaultSources,
@@ -85,7 +86,7 @@ export function getDefaultActions(platform: Platform) {
 			break;
 		case 'Kodi':
 			defaultKeys = kodiDefaultKeys;
-			defaultSources = [];
+			defaultSources = kodiDefaultSources;
 			break;
 		case 'Roku':
 			defaultKeys = rokuDefaultKeys;
